@@ -18,6 +18,7 @@ namespace RogueTest
         public readonly Vector2 Position;
 
         public TileType TileType => _tileType;
+        public Vector2 Offset => _offset;
 
         public Tile(Character character, Vector2 position)
         {

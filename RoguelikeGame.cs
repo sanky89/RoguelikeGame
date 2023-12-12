@@ -43,7 +43,7 @@ namespace RogueTest
             Globals.Rows = Globals.GlyphsTexture.Width / Globals.TILE_SIZE;
             Globals.Columns = Globals.GlyphsTexture.Height / Globals.TILE_SIZE;
 
-            _mapConsole = new MapConsole("Map", 30, 50, ConsoleLocation.BottomLeft, BorderStyle.SingleLine, Color.Green);
+            _mapConsole = new MapConsole("Map", 20, 20, ConsoleLocation.TopLeft, BorderStyle.SingleLine, Color.Green);
             //_map = new Map(Vector2.Zero);
             _player = new Player(new Character(Glyphs.Face1, Color.Yellow), Vector2.Zero, _mapConsole.Map);
             _inventoryConsole = new Console("Inventory", 20, 38, ConsoleLocation.TopRight, BorderStyle.SingleLine, Color.Yellow);
