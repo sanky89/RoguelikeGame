@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace RogueTest
+namespace RoguelikeGame
 {
     public enum TileType
     {
@@ -37,6 +37,12 @@ namespace RogueTest
         public void SetOffset(int x, int y)
         {
             _offset = new Vector2(x, y);
+        }
+
+        public void UpdateTile(Character character, TileType tileType)
+        {
+            _character = character;
+            _tileType = tileType;
         }
 
         public void Draw()

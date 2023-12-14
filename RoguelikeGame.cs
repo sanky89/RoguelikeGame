@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace RogueTest
+namespace RoguelikeGame
 {
     public class RoguelikeGame : Game
     {
@@ -43,10 +43,10 @@ namespace RogueTest
             Globals.Rows = Globals.GlyphsTexture.Width / Globals.TILE_SIZE;
             Globals.Columns = Globals.GlyphsTexture.Height / Globals.TILE_SIZE;
 
-            _mapConsole = new MapConsole("Map", 20, 20, ConsoleLocation.TopLeft, BorderStyle.SingleLine, Color.Green);
+            _mapConsole = new MapConsole("Map", 80, 50, ConsoleLocation.TopLeft, BorderStyle.SingleLine, Color.Green);
             //_map = new Map(Vector2.Zero);
             _player = new Player(new Character(Glyphs.Face1, Color.Yellow), Vector2.Zero, _mapConsole.Map);
-            _inventoryConsole = new Console("Inventory", 20, 38, ConsoleLocation.TopRight, BorderStyle.SingleLine, Color.Yellow);
+            //_inventoryConsole = new Console("Inventory", 20, 38, ConsoleLocation.TopRight, BorderStyle.SingleLine, Color.Yellow);
         }
 
         protected override void Update(GameTime gameTime)
@@ -66,7 +66,7 @@ namespace RogueTest
             _spriteBatch.Begin();
             _mapConsole.Draw();
             //_map.Draw();
-            _inventoryConsole.Draw();
+            //_inventoryConsole.Draw();
             //_spriteBatch.DrawString(_font, "Test", new Vector2(600, 20), Color.Red);
             _spriteBatch.End();
 

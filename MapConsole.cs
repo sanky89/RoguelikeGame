@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RogueTest
+namespace RoguelikeGame
 {
     public class MapConsole : Console
     {

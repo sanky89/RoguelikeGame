@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using System.Diagnostics;
 
-namespace RogueTest
+namespace RoguelikeGame
 {
     public static class Globals
     {
