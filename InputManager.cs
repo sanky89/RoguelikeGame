@@ -79,17 +79,17 @@ namespace RoguelikeGame
             }
         }
 
-        private bool IsKeyReleased(Keys key)
+        public bool IsKeyReleased(Keys key)
         {
             return _currentKeyboardState.IsKeyUp(key) && _lastKeyboardState.IsKeyDown(key);
         }
 
-        private bool IsKeyPressed(Keys key)
+        public bool IsKeyPressed(Keys key)
         {
             return _currentKeyboardState.IsKeyDown(key) && _lastKeyboardState.IsKeyUp(key);
         }
 
-        private bool IsKeyDown(Keys key)
+        public bool IsKeyDown(Keys key)
         {
             return _currentKeyboardState.IsKeyDown(key);
         }

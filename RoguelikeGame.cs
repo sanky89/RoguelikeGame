@@ -56,6 +56,10 @@ namespace RoguelikeGame
             {
                 Exit();
             }
+            if(Globals.InputManager.IsKeyReleased(Keys.M))
+            {
+                _mapConsole.Map.RegenerateMap();
+            }
             base.Update(gameTime);
         }
 

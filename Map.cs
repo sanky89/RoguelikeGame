@@ -15,11 +15,11 @@ namespace RoguelikeGame
 
     public class Map
     {
-        public const int ROWS = 60;
+        public const int ROWS = 40;
         public const int COLS = 100;
-        private const int MAX_ROOMS = 20;
+        private const int MAX_ROOMS = 12;
         private const int MIN_ROOM_SIZE = 8;
-        private const int MAX_ROOM_SIZE = 16;
+        private const int MAX_ROOM_SIZE = 12;
 
         private Tile[,] _tiles;
         private Player _player;
@@ -41,6 +41,18 @@ namespace RoguelikeGame
             Rooms = new List<Room>(MAX_ROOMS);
             //GenerateRandomWalls();
             GenerateRooms();
+            //GenerateTwoRooms();
+        }
+
+        public void RegenerateMap()
+        {
+            colStartIndex = 0;
+            rowStartIndex = 0;
+            Rooms.Clear();
+            Array.Clear(_tiles, 0, _tiles.Length);
+            _tiles = new Tile[COLS, ROWS];
+            GenerateRooms();
+            _player.SetInitialMapPosition(_position + Rooms[0].GetRandomPointInsideRoom());
         }
 
         public void SetPlayer(Player player)
@@ -199,12 +211,11 @@ namespace RoguelikeGame
 
         private void GenerateRooms()
         {
-            int[,] walls = new int[COLS, ROWS];
             for (int y = 0; y < ROWS; y++)
             {
                 for (int x = 0; x < COLS; x++)
                 {
-                    _tiles[x,y] = new Tile(new Character(Glyphs.Fill, Color.RosyBrown), new Vector2(x + (int)_position.X + 1, y + (int)_position.Y + 1), TileType.Solid);
+                    _tiles[x,y] = new Tile(new Character(Glyphs.Fill, Color.SaddleBrown), new Vector2(x + (int)_position.X + 1, y + (int)_position.Y + 1), TileType.Solid);
                 } 
             }
             
@@ -244,16 +255,77 @@ namespace RoguelikeGame
                 }
             }
 
-            Rooms.Sort((a,b) => a.RoomRect.X.CompareTo(b.RoomRect.X));
+            Rooms.Sort((a,b) => a.RoomRect.Right.CompareTo(b.RoomRect.Right));
+            GenerateCorridors();
+        }
 
-/*            for (int y = 0; y < ROWS; y++)
+        private void GenerateTwoRooms()
+        {
+            for (int y = 0; y < ROWS; y++)
             {
                 for (int x = 0; x < COLS; x++)
                 {
-                    System.Console.Write(walls[x, y]);
+                    _tiles[x, y] = new Tile(new Character(Glyphs.Fill, Color.RosyBrown), new Vector2(x + (int)_position.X + 1, y + (int)_position.Y + 1), TileType.Solid);
                 }
-                System.Console.Write("\n");
-            }*/
+            }
+
+            Room room1 = new Room(0, 10, 40, 10);
+            Room room2 = new Room(10, 30, 10, 10);
+            Rooms.Add(room1);
+            Rooms.Add(room2);
+            foreach (var room in Rooms)
+            {
+                for (int y = room.RoomRect.Y; y < room.RoomRect.Bottom; y++)
+                {
+                    for (int x = room.RoomRect.X; x < room.RoomRect.Right; x++)
+                    {
+                        _tiles[x, y].UpdateTile(new Character(Glyphs.Period, Color.DarkGreen), TileType.Walkable);
+                    }
+                }
+            }
+            GenerateCorridors();
+        }
+
+        private void GenerateCorridors()
+        {
+            for (int r = 0; r < Rooms.Count-1; r++)
+            {
+
+                Room room1 = Rooms[r];
+                Room room2 = Rooms[r+1];
+                var start = room1.GetRandomPointInsideRoom();
+                var end = room2.GetRandomPointInsideRoom();
+                if (end.X < start.X)
+                {
+                    var temp = start;
+                    start = end;
+                    end = temp;
+                }
+
+                for (int i = (int)start.X; i <= (int)end.X; i++)
+                {
+                    _tiles[i, (int)start.Y].UpdateTile(new Character(Glyphs.Period, Color.DarkGreen), TileType.Walkable);
+                }
+
+                int yStart = 0;
+                if (end.Y < start.Y)
+                {
+                    var temp = start;
+                    start = end;
+                    end = temp;
+                    yStart = (int)start.X;
+                }
+                else
+                {
+                    yStart = (int)end.X;
+                }
+
+                for (int i = (int)start.Y; i <= (int)end.Y; i++)
+                {
+                    _tiles[yStart, i].UpdateTile(new Character(Glyphs.Period, Color.DarkGreen), TileType.Walkable);
+                }
+            }
+
         }
 
         private void GenerateRandomWalls()
