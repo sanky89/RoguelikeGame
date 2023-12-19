@@ -14,11 +14,11 @@ namespace RoguelikeGame
 
     public class Map
     {
-        public const int ROWS = 40;
-        public const int COLS = 100;
-        private const int MAX_ROOMS = 12;
+        public const int ROWS = 100;
+        public const int COLS = 80;
+        private const int MAX_ROOMS = 25;
         private const int MIN_ROOM_SIZE = 8;
-        private const int MAX_ROOM_SIZE = 12;
+        private const int MAX_ROOM_SIZE = 16;
 
         private Tile[,] _tiles;
         private Player _player;
@@ -31,6 +31,8 @@ namespace RoguelikeGame
         public int rowStartIndex = 0;
         public List<Room> Rooms;
 
+        private Room _startingRoom;
+
         public Map(Vector2 position, int viewportWidth, int viewportHeight)
         {
             _tiles = new Tile[COLS, ROWS];
@@ -40,25 +42,24 @@ namespace RoguelikeGame
             Rooms = new List<Room>(MAX_ROOMS);
             //GenerateRandomWalls();
             GenerateRooms();
-            //GenerateTwoRooms();
         }
 
         public void RegenerateMap()
         {
             colStartIndex = 0;
             rowStartIndex = 0;
+            _startingRoom = null;
             Rooms.Clear();
             Array.Clear(_tiles, 0, _tiles.Length);
             _tiles = new Tile[COLS, ROWS];
             GenerateRooms();
-            _player.SetInitialMapPosition(_position + Rooms[0].GetRandomPointInsideRoom());
-
+            DropPlayerInRandomRoom();
         }
 
         public void SetPlayer(Player player)
         {
             _player = player;
-            _player.SetInitialMapPosition(_position + Rooms[0].GetRandomPointInsideRoom());
+            DropPlayerInRandomRoom();
         }
 
         public bool CanMove(int x, int y)
@@ -139,6 +140,29 @@ namespace RoguelikeGame
                     _tiles[x, y].SetOffset(-colStartIndex, -rowStartIndex);
                 }
             }
+        }
+
+        private void DropPlayerInRandomRoom()
+        {
+            Random r = new Random();
+            _startingRoom = Rooms[r.Next(MAX_ROOMS - 1)];
+            int startingRoomRightEdge = _startingRoom.PaddedRoomRect.Right + 1;
+            int startingRoomBottomEdge = _startingRoom.PaddedRoomRect.Bottom + 1;
+            int diffX = startingRoomRightEdge - ViewportWidth;
+            int diffY = startingRoomBottomEdge - ViewportHeight;
+            while (diffX >= 0)
+            {
+                ScrollMap(Direction.LEFT);
+                diffX--;
+            }
+            while (diffY >= 0)
+            {
+                ScrollMap(Direction.UP);
+                diffY--;
+            }
+            var point = _startingRoom.GetRandomPointInsideRoom();
+            Vector2 scrolledPosition = new Vector2(point.X - colStartIndex, point.Y - rowStartIndex);
+            _player.SetInitialMapPosition(_position + scrolledPosition);
         }
 
         private void GenerateRooms()
