@@ -47,7 +47,7 @@ namespace RoguelikeGame
                     break;
             }
 
-            System.Console.WriteLine($"{(int)_position.X + _map.colStartIndex}");
+           // System.Console.WriteLine($"{(int)_position.X + _map.colStartIndex}");
             if (_map.CanMove((int)(_position.X + dx), (int)(_position.Y + dy)))
             {
                 if (dx > 0 && (_map.ViewportWidth - (int)_position.X) <= 5 &&
@@ -76,8 +76,6 @@ namespace RoguelikeGame
                 _position.Y += dy;
 
             }
-
-            System.Console.WriteLine($"Player Pos: {_position.X}, {_position.Y}");
         }
 
         public override void Draw(SpriteBatch spriteBatch, Texture2D texture)

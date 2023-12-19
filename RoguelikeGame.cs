@@ -60,6 +60,10 @@ namespace RoguelikeGame
             {
                 _mapConsole.Map.RegenerateMap();
             }
+            if (Globals.InputManager.IsKeyReleased(Keys.Space))
+            {
+                _mapConsole.Map.ScrollMap(Direction.LEFT);
+            }
             base.Update(gameTime);
         }
 

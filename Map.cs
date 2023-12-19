@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 
@@ -53,6 +52,7 @@ namespace RoguelikeGame
             _tiles = new Tile[COLS, ROWS];
             GenerateRooms();
             _player.SetInitialMapPosition(_position + Rooms[0].GetRandomPointInsideRoom());
+
         }
 
         public void SetPlayer(Player player)
@@ -92,23 +92,6 @@ namespace RoguelikeGame
                 for (int x = colStartIndex; x < COLS; x++)
                 {
                     DrawMapTile(x, y);
-                }
-            }
-        }
-
-        public void ScrollLeft()
-        {
-            colStartIndex++;
-            if (colStartIndex >= COLS-1)
-            {
-                colStartIndex = COLS-1;
-            }
-            //System.Console.WriteLine($"colStartIndex: {colStartIndex}");
-            for (int y = 0; y < ROWS; y++)
-            {
-                for (int x = 0; x < COLS; x++)
-                {
-                    _tiles[x, y].SetOffset(-colStartIndex, 0);
                 }
             }
         }
@@ -154,57 +137,6 @@ namespace RoguelikeGame
                 for (int x = 0; x < COLS; x++)
                 {
                     _tiles[x, y].SetOffset(-colStartIndex, -rowStartIndex);
-                }
-            }
-        }
-
-        public void ScrollRight()
-        {
-            colStartIndex--;
-            if(colStartIndex < 0)
-            {
-                colStartIndex = 0;
-            }
-            //System.Console.WriteLine($"colStartIndex: {colStartIndex}");
-            for (int y = 0; y < ROWS; y++)
-            {
-                for (int x = 0; x < COLS; x++)
-                {
-                    _tiles[x, y].SetOffset(-colStartIndex, 0);
-                }
-            }
-        }
-
-        public void ScrollUp()
-        {
-            rowStartIndex--;
-            if (rowStartIndex < 0)
-            {
-                rowStartIndex = 0;
-            }
-            //System.Console.WriteLine($"colStartIndex: {colStartIndex}");
-            for (int y = 0; y < ROWS; y++)
-            {
-                for (int x = 0; x < COLS; x++)
-                {
-                    _tiles[x, y].SetOffset(-colStartIndex, 0);
-                }
-            }
-        }
-
-        public void ScrollDown()
-        {
-            colStartIndex--;
-            if (colStartIndex < 0)
-            {
-                colStartIndex = 0;
-            }
-            //System.Console.WriteLine($"colStartIndex: {colStartIndex}");
-            for (int y = 0; y < ROWS; y++)
-            {
-                for (int x = 0; x < COLS; x++)
-                {
-                    _tiles[x, y].SetOffset(-colStartIndex, 0);
                 }
             }
         }
@@ -256,6 +188,7 @@ namespace RoguelikeGame
             }
 
             Rooms.Sort((a,b) => a.RoomRect.Right.CompareTo(b.RoomRect.Right));
+
             GenerateCorridors();
         }
 
@@ -269,8 +202,8 @@ namespace RoguelikeGame
                 }
             }
 
-            Room room1 = new Room(0, 10, 40, 10);
-            Room room2 = new Room(10, 30, 10, 10);
+            Room room1 = new Room(30, 10, 10, 10);
+            Room room2 = new Room(30, 30, 10, 10);
             Rooms.Add(room1);
             Rooms.Add(room2);
             foreach (var room in Rooms)
@@ -290,7 +223,6 @@ namespace RoguelikeGame
         {
             for (int r = 0; r < Rooms.Count-1; r++)
             {
-
                 Room room1 = Rooms[r];
                 Room room2 = Rooms[r+1];
                 var start = room1.GetRandomPointInsideRoom();
@@ -302,28 +234,25 @@ namespace RoguelikeGame
                     end = temp;
                 }
 
-                for (int i = (int)start.X; i <= (int)end.X; i++)
+                var turningPoint = new Vector2(end.X, start.Y);
+
+                for (int i = (int)start.X; i <= (int)turningPoint.X; i++)
                 {
                     _tiles[i, (int)start.Y].UpdateTile(new Character(Glyphs.Period, Color.DarkGreen), TileType.Walkable);
                 }
 
-                int yStart = 0;
-                if (end.Y < start.Y)
+                int incr = end.Y < start.Y ? -1 : 1;
+                for (int i = (int)start.Y;; i+=incr)
                 {
-                    var temp = start;
-                    start = end;
-                    end = temp;
-                    yStart = (int)start.X;
+                    if (i == (int)end.Y)
+                    {
+                        break;
+                    }
+                    _tiles[(int)turningPoint.X, i].UpdateTile(new Character(Glyphs.Period, Color.DarkGreen), TileType.Walkable);
                 }
-                else
-                {
-                    yStart = (int)end.X;
-                }
-
-                for (int i = (int)start.Y; i <= (int)end.Y; i++)
-                {
-                    _tiles[yStart, i].UpdateTile(new Character(Glyphs.Period, Color.DarkGreen), TileType.Walkable);
-                }
+                //_tiles[(int)start.X, (int)start.Y].UpdateTile(new Character(Glyphs.AUpper, Color.Yellow), TileType.Walkable);
+                //_tiles[(int)end.X, (int)end.Y].UpdateTile(new Character(Glyphs.BUpper, Color.Yellow), TileType.Walkable);
+                //_tiles[(int)turningPoint.X, (int)turningPoint.Y].UpdateTile(new Character(Glyphs.XUpper, Color.Yellow), TileType.Walkable);
             }
 
         }
