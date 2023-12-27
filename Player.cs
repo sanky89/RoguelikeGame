@@ -6,8 +6,11 @@ namespace RoguelikeGame
 {
     public class Player : Entity
     {
-        public int X => (int)_position.X; 
+        public const int FOV_SIZE = 20;
+        public int X => (int)_position.X;
         public int Y => (int)_position.Y;
+        public int MapX { get; private set; }
+        public int MapY { get; private set; }
 
         private Map _map;
 
@@ -18,10 +21,14 @@ namespace RoguelikeGame
             Globals.InputManager.KeyPressed += HandleKeyPressed;
         }
 
-        public void SetInitialMapPosition(Vector2 pos)
+        public void SetInitialMapPosition(Vector2 pos, int x, int y)
         {
             _position.X = pos.X;
             _position.Y = pos.Y;
+            MapX = x;
+            MapY = y;
+            System.Console.WriteLine($"Position: {pos.X}, {pos.Y} Map Index: {MapX}, {MapY}");
+            _map.UpdateFov(MapX, MapY);
         }
 
         private void HandleKeyPressed(InputAction action)
@@ -50,6 +57,10 @@ namespace RoguelikeGame
            // System.Console.WriteLine($"{(int)_position.X + _map.colStartIndex}");
             if (_map.CanMove((int)(_position.X + dx), (int)(_position.Y + dy)))
             {
+                MapX += dx;
+                MapY += dy;
+                _map.UpdateFov(MapX, MapY);
+                //Fov = new Rectangle(MapX - FOV_SIZE / 2, MapY - FOV_SIZE / 2, FOV_SIZE, FOV_SIZE);
                 if (dx > 0 && (_map.ViewportWidth - (int)_position.X) <= 5 &&
                     (int)_position.X + _map.colStartIndex <= Map.COLS - 5)
                 {
@@ -74,7 +85,7 @@ namespace RoguelikeGame
                 }
                 _position.X += dx;
                 _position.Y += dy;
-
+                System.Console.WriteLine($"Position: {_position.X}, {_position.Y} Map Index: {MapX}, {MapY}");
             }
         }
 

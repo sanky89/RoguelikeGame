@@ -15,7 +15,7 @@ namespace RoguelikeGame
         public MapConsole(string title, int width, int height, ConsoleLocation location, BorderStyle border, Color borderColor) : 
             base(title, width, height, location, border, borderColor)
         {
-            Map = new Map(new Vector2(_x, _y), width, height);
+            Map = new Map(new Vector2(_x+1, _y+1), width, height);
         }
 
         public override void Draw()

@@ -19,12 +19,11 @@ namespace RoguelikeGame
 
         public TileType TileType => _tileType;
         public Vector2 Offset => _offset;
+        public bool Visible { get; set; }
+        public bool Visited { get; set; }
 
-        public Tile(Character character, Vector2 position)
+        public Tile(Character character, Vector2 position) : this(character, position, TileType.Walkable)
         {
-            _character = character;
-            Position = position;
-            _tileType = TileType.Walkable;
         }
 
         public Tile(Character character, Vector2 position, TileType tileType)
@@ -32,6 +31,7 @@ namespace RoguelikeGame
             _character = character;
             Position = position;
             _tileType = tileType;
+            Visible = false;
         }
 
         public void SetOffset(int x, int y)
@@ -45,8 +45,21 @@ namespace RoguelikeGame
             _tileType = tileType;
         }
 
+        public void Draw(Color color)
+        {
+            if(!Visible && !Visited)
+            {
+                return;
+            }
+            Globals.SpriteBatch.Draw(Globals.GlyphsTexture, (Position + _offset) * Globals.TILE_SIZE * Globals.SCALE, _character.GetSourceRect(), color, 0f, Vector2.Zero, Globals.SCALE, SpriteEffects.None, 0);
+        }
+
         public void Draw()
         {
+            if (!Visible && !Visited)
+            {
+                return;
+            }
             Globals.SpriteBatch.Draw(Globals.GlyphsTexture, (Position + _offset) * Globals.TILE_SIZE * Globals.SCALE, _character.GetSourceRect(), _character.Color, 0f, Vector2.Zero, Globals.SCALE, SpriteEffects.None, 0);
         }
     }
