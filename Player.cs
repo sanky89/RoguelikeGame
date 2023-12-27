@@ -13,10 +13,13 @@ namespace RoguelikeGame
         public int MapY { get; private set; }
 
         private Map _map;
+        private Fov _fov;
 
         public Player(Character character, Vector2 position, Map map) : base( character, position)
         {
             _map = map;
+            _fov = new Fov(_map);
+
             _map.SetPlayer(this);
             Globals.InputManager.KeyPressed += HandleKeyPressed;
         }
@@ -28,7 +31,7 @@ namespace RoguelikeGame
             MapX = x;
             MapY = y;
             System.Console.WriteLine($"Position: {pos.X}, {pos.Y} Map Index: {MapX}, {MapY}");
-            _map.UpdateFov(MapX, MapY);
+            _fov.UpdateFov(MapX, MapY);
         }
 
         private void HandleKeyPressed(InputAction action)
@@ -59,7 +62,7 @@ namespace RoguelikeGame
             {
                 MapX += dx;
                 MapY += dy;
-                _map.UpdateFov(MapX, MapY);
+                _fov.UpdateFov(MapX, MapY);
                 //Fov = new Rectangle(MapX - FOV_SIZE / 2, MapY - FOV_SIZE / 2, FOV_SIZE, FOV_SIZE);
                 if (dx > 0 && (_map.ViewportWidth - (int)_position.X) <= 5 &&
                     (int)_position.X + _map.colStartIndex <= Map.COLS - 5)

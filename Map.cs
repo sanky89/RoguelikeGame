@@ -74,17 +74,47 @@ namespace RoguelikeGame
             x -= (int)(_position.X);
             y -= (int)(_position.Y);
 
-            if(x < 0 || y < 0 || x + colStartIndex >= COLS || y + rowStartIndex >= ROWS)
+            if (x < 0 || y < 0 || x + colStartIndex >= COLS || y + rowStartIndex >= ROWS)
             {
                 return false;
             }
             return _tiles[x + colStartIndex, y + rowStartIndex].TileType == TileType.Walkable;
         }
 
+        public void ToggleMapVisible(bool visible)
+        {
+            foreach (var tile in _tiles)
+            {
+                tile.Visible = visible;
+            }
+        }
+
+        public void ToggleTileVisible(int x, int y, bool visible)
+        {
+            _tiles[x, y].Visible = visible;
+        }
+
+        public TileType GetTileType(int x, int y)
+        {
+            if (!IsWithinMapRange(x, y))
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+            return _tiles[x, y].TileType;
+        }
+
+        public bool IsWithinMapRange(int x, int y)
+        {
+            return x >= colStartIndex && x < COLS &&
+                        y >= rowStartIndex && y < ROWS &&
+                        x + _tiles[x, y].Offset.X < ViewportWidth - 1 &&
+                        y + _tiles[x, y].Offset.Y < ViewportHeight - 1;
+        }
+
         public void DrawMapTile(int x, int y)
         {
-            if(x + _tiles[x,y].Offset.X < ViewportWidth-1 &&
-               y + _tiles[x, y].Offset.Y < ViewportHeight-1)
+            if (x + _tiles[x, y].Offset.X < ViewportWidth - 1 &&
+               y + _tiles[x, y].Offset.Y < ViewportHeight - 1)
             {
                 _tiles[x, y].Draw();
                 _player.Draw(Globals.SpriteBatch, Globals.GlyphsTexture);
@@ -176,13 +206,13 @@ namespace RoguelikeGame
             {
                 for (int x = 0; x < COLS; x++)
                 {
-                    _tiles[x,y] = new Tile(new Character(Glyphs.Fill, _darkWall), new Vector2(x + (int)_position.X, y + (int)_position.Y), TileType.Solid);
-                } 
+                    _tiles[x, y] = new Tile(new Character(Glyphs.Fill, _darkWall), new Vector2(x + (int)_position.X, y + (int)_position.Y), TileType.Solid);
+                }
             }
-            
+
             Random r = new Random();
             int count = 0;
-            while(count < MAX_ROOMS)
+            while (count < MAX_ROOMS)
             {
                 int width = r.Next(MIN_ROOM_SIZE, MAX_ROOM_SIZE);
                 int height = r.Next(MIN_ROOM_SIZE, MAX_ROOM_SIZE);
@@ -190,22 +220,22 @@ namespace RoguelikeGame
                 int y = r.Next(ROWS - height - 1);
                 Room room = new Room(x, y, width, height);
                 bool intersects = false;
-                foreach(var room1 in Rooms)
+                foreach (var room1 in Rooms)
                 {
-                    if(room.IntersectsWithPadding(room1))
+                    if (room.IntersectsWithPadding(room1))
                     {
                         intersects = true;
                         break;
                     }
                 }
-                if(!intersects)
+                if (!intersects)
                 {
                     Rooms.Add(room);
                     count++;
                 }
             }
 
-            foreach(var room in Rooms)
+            foreach (var room in Rooms)
             {
                 for (int y = room.RoomRect.Y; y < room.RoomRect.Bottom; y++)
                 {
@@ -216,7 +246,7 @@ namespace RoguelikeGame
                 }
             }
 
-            Rooms.Sort((a,b) => a.RoomRect.Right.CompareTo(b.RoomRect.Right));
+            Rooms.Sort((a, b) => a.RoomRect.Right.CompareTo(b.RoomRect.Right));
 
             GenerateCorridors();
         }
@@ -250,10 +280,10 @@ namespace RoguelikeGame
 
         private void GenerateCorridors()
         {
-            for (int r = 0; r < Rooms.Count-1; r++)
+            for (int r = 0; r < Rooms.Count - 1; r++)
             {
                 Room room1 = Rooms[r];
-                Room room2 = Rooms[r+1];
+                Room room2 = Rooms[r + 1];
                 var start = room1.GetRandomPointInsideRoom();
                 var end = room2.GetRandomPointInsideRoom();
                 if (end.X < start.X)
@@ -271,7 +301,7 @@ namespace RoguelikeGame
                 }
 
                 int incr = end.Y < start.Y ? -1 : 1;
-                for (int i = (int)start.Y;; i+=incr)
+                for (int i = (int)start.Y; ; i += incr)
                 {
                     if (i == (int)end.Y)
                     {
@@ -332,145 +362,5 @@ namespace RoguelikeGame
             }
         }
 
-        const int FOV_MAX = 10;
-
-        public void UpdateFov(int cx, int cy)
-        {
- 
-            foreach (var tile in _tiles)
-            {
-                tile.Visible = false;
-            }
-
-            _tiles[cx, cy].Visible = true;
-
-
-            for (int sector = 1; sector <= 8; sector++)
-            {
-                List<Shadow> shadows = new List<Shadow>();
-                float shadowStart = 0f;
-                float shadowEnd = 0f;
-                bool prevBlocking = false;
-
-                for (int y = 0; y < FOV_MAX; y++)
-                {
-                    prevBlocking = false;
-                    for (int x = 0; x <= y; x++)
-                    {
-                        var mapPoint = GetMapPointForLocalFov(sector, cx, cy, x, y);
-                        int mapX = mapPoint.X;
-                        int mapY = mapPoint.Y;
-
-                        if (!IsWithinMapRange(mapX, mapY))
-                        {
-                            continue;
-                        }
-
-                        var slope = CalculateSlope(0, x, 0, y);
-                        //System.Console.WriteLine($"{x} {y} Slope = {slope}");
-                        if (InsideShadow(slope, shadows))
-                        {
-                            _tiles[mapX, mapY].Visible = false;
-                            _tiles[mapX, mapY].Visited = false;
-                            //_tiles[x, y].UpdateTile(new Character(Glyphs.Fill, Color.Red), TileType.Solid);
-                            continue;
-                        }
-                        //Check if its a wall
-                        if (_tiles[mapX, mapY].TileType == TileType.Solid)
-                        {
-                            _tiles[mapX, mapY].Visible = true;
-                            if (!prevBlocking)
-                            {
-                                //Start new shadow
-                                shadowStart = CalculateSlope(0, x, 0, y);
-                                prevBlocking = true;
-                            }
-                        }
-                        else //not a wall
-                        {
-                            _tiles[mapX, mapY].Visible = true;
-                            if (prevBlocking)
-                            {
-                                shadowEnd = CalculateSlope(0, x+0.5f, 0, y);
-                                Shadow s = new Shadow(shadowStart, shadowEnd);
-                                shadows.Add(s);
-                            }
-                        }
-                    }
-                    if (prevBlocking)
-                    {
-                        shadowEnd = CalculateSlope(0, y+0.5f, 0, y);
-                        Shadow s = new Shadow(shadowStart, shadowEnd);
-                        shadows.Add(s);
-                        //System.Console.WriteLine("open shadow");
-                    }
-                }
-            }
-        }
-
-        private Point GetMapPointForLocalFov(int sector, int cx, int cy, int x, int y)
-        {
-            return sector switch
-            {
-                1 => new Point(cx + x, cy - y),
-                2 => new Point(cx + y, cy - x),
-                3 => new Point(cx + y, cy + x),
-                4 => new Point(cx + x, cy + y),
-                5 => new Point(cx - x, cy + y),
-                6 => new Point(cx - y, cy + x),
-                7 => new Point(cx - y, cy - x),
-                8 => new Point(cx - x, cy - y),
-                _ => throw new ArgumentOutOfRangeException(nameof(sector))
-            };
-        }
-
-        private float CalculateSlope(float x1, float x2, float y1, float y2)
-        {
-            if(x2-x1 < 0)
-            {
-                return 0;
-            }
-            return (x2 - x1) / (y2 - y1);
-        }
-
-        private bool InsideShadow(float slope, List<Shadow> shadows)
-        {
-            foreach (var s in shadows)
-            {
-                if (slope >= s.startingSlope && slope <= s.endingSlope)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        private bool IsWithinMapRange(int x, int y)
-        {
-            return x >= colStartIndex && x < COLS &&
-                        y >= rowStartIndex && y < ROWS &&
-                        x + _tiles[x, y].Offset.X < ViewportWidth - 1 &&
-                        y + _tiles[x, y].Offset.Y < ViewportHeight - 1;
-        }
-
-        public void ToggleTilesVisible()
-        {
-            foreach (var tile in _tiles)
-            {
-                tile.Visible = true;
-            }
-        }
-    }
-
-    public struct Shadow
-    {
-        public float startingSlope;
-        public float endingSlope;
-
-        public Shadow(float start, float end)
-        {
-            startingSlope = start;
-            endingSlope = end;
-        }
     }
 }
