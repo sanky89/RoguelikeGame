@@ -9,10 +9,10 @@ namespace RoguelikeGame
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private Player _player;
-        SpriteFont _font;
-        Console _inventoryConsole;
-        MapConsole _mapConsole;
-        //Map _map;
+        private SpriteFont _font;
+        private Console _inventoryConsole;
+        private MapConsole _mapConsole;
+        private bool _showMap = false;
 
         public RoguelikeGame()
         {
@@ -63,6 +63,11 @@ namespace RoguelikeGame
             if (Globals.InputManager.IsKeyReleased(Keys.Space))
             {
                 _mapConsole.Map.ScrollMap(Direction.LEFT);
+            }
+            if (Globals.InputManager.IsKeyReleased(Keys.OemTilde))
+            {
+                _showMap = !_showMap;
+                _mapConsole.Map.ToggleMapVisible(_showMap);
             }
             base.Update(gameTime);
         }
