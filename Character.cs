@@ -1,9 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RoguelikeGame
 {
@@ -11,6 +6,7 @@ namespace RoguelikeGame
     {
         public Glyphs Glyph { get; private set; }
         public Color Color { get; private set; }
+        public Color ColorDark { get; private set; }
         public int GlyphRow => _glyphRow;
         public int GlyphCol => _glyphCol;
 
@@ -38,7 +34,7 @@ namespace RoguelikeGame
         {
             Glyph = glyph;
             Color = color;
-
+            ColorDark = Color * 0.2f;
             _glyphInt = (int)glyph;
             _glyphRow = _glyphInt / Globals.Columns;
             _glyphCol = _glyphInt % Globals.Columns;

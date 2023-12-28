@@ -30,7 +30,9 @@ namespace RoguelikeGame
         public void UpdateFov(int cx, int cy)
         {
             _map.ToggleMapVisible(false);
+
             _map.ToggleTileVisible(cx, cy, true);
+            _map.ToggleTileVisited(cx, cy, true);
 
             for (int sector = 1; sector <= 8; sector++)
             {
@@ -67,6 +69,7 @@ namespace RoguelikeGame
                         }
                         //If we reached here then the point is visible 
                         _map.ToggleTileVisible(mapX, mapY, true);
+                        _map.ToggleTileVisited(mapX, mapY, true);
                         //Check if its a wall
                         if (_map.GetTileType(mapX, mapY) == TileType.Solid)
                         {

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Xml;
 
 namespace RoguelikeGame
 {
@@ -21,20 +20,20 @@ namespace RoguelikeGame
         private const int MIN_ROOM_SIZE = 8;
         private const int MAX_ROOM_SIZE = 16;
 
+        public readonly int ViewportWidth;
+        public readonly int ViewportHeight;
+        
+        private List<Room> _rooms;
         private Tile[,] _tiles;
         private Player _player;
         private Vector2 _position;
-        public readonly int ViewportWidth;
-        public readonly int ViewportHeight;
         private bool _addWalls = true;
-
-        public int colStartIndex = 0;
-        public int rowStartIndex = 0;
-        public List<Room> Rooms;
-
+        private int _colStartIndex = 0;
+        private int _rowStartIndex = 0;
         private Room _startingRoom;
-        private Color _lightWall = new Color(129, 116, 107);
-        private Color _darkWall = new Color(15, 14, 11);
+
+        public int ColStartIndex => _colStartIndex;
+        public int RowStartIndex => _rowStartIndex;
 
         public Map(Vector2 position, int viewportWidth, int viewportHeight)
         {
@@ -42,9 +41,9 @@ namespace RoguelikeGame
             _position = position;
             ViewportWidth = viewportWidth;
             ViewportHeight = viewportHeight;
-            colStartIndex = 0;// (int)_position.X;
-            rowStartIndex = 0;// (int)_position.Y;
-            Rooms = new List<Room>(MAX_ROOMS);
+            _colStartIndex = 0;// (int)_position.X;
+            _rowStartIndex = 0;// (int)_position.Y;
+            _rooms = new List<Room>(MAX_ROOMS);
             //GenerateRandomWalls();
             GenerateRooms();
             //DrawTestRoom();
@@ -52,10 +51,10 @@ namespace RoguelikeGame
 
         public void RegenerateMap()
         {
-            colStartIndex = 0;// (int)_position.X;
-            rowStartIndex = 0;// (int)_position.Y;
+            _colStartIndex = 0;
+            _rowStartIndex = 0;
             _startingRoom = null;
-            Rooms.Clear();
+            _rooms.Clear();
             Array.Clear(_tiles, 0, _tiles.Length);
             _tiles = new Tile[COLS, ROWS];
             GenerateRooms();
@@ -74,11 +73,11 @@ namespace RoguelikeGame
             x -= (int)(_position.X);
             y -= (int)(_position.Y);
 
-            if (x < 0 || y < 0 || x + colStartIndex >= COLS || y + rowStartIndex >= ROWS)
+            if (x < 0 || y < 0 || x + _colStartIndex >= COLS || y + _rowStartIndex >= ROWS)
             {
                 return false;
             }
-            return _tiles[x + colStartIndex, y + rowStartIndex].TileType == TileType.Walkable;
+            return _tiles[x + _colStartIndex, y + _rowStartIndex].TileType == TileType.Walkable;
         }
 
         public void ToggleMapVisible(bool visible)
@@ -94,6 +93,19 @@ namespace RoguelikeGame
             _tiles[x, y].Visible = visible;
         }
 
+        public void ToggleMapVisited(bool visited)
+        {
+            foreach (var tile in _tiles)
+            {
+                tile.Visited = visited;
+            }
+        }
+
+        public void ToggleTileVisited(int x, int y, bool visited)
+        {
+            _tiles[x, y].Visited = visited;
+        }
+
         public TileType GetTileType(int x, int y)
         {
             if (!IsWithinMapRange(x, y))
@@ -105,8 +117,8 @@ namespace RoguelikeGame
 
         public bool IsWithinMapRange(int x, int y)
         {
-            return x >= colStartIndex && x < COLS &&
-                        y >= rowStartIndex && y < ROWS &&
+            return x >= _colStartIndex && x < COLS &&
+                        y >= _rowStartIndex && y < ROWS &&
                         x + _tiles[x, y].Offset.X < ViewportWidth - 1 &&
                         y + _tiles[x, y].Offset.Y < ViewportHeight - 1;
         }
@@ -123,9 +135,9 @@ namespace RoguelikeGame
 
         public void Draw()
         {
-            for (int y = rowStartIndex; y < ROWS; y++)
+            for (int y = _rowStartIndex; y < ROWS; y++)
             {
-                for (int x = colStartIndex; x < COLS; x++)
+                for (int x = _colStartIndex; x < COLS; x++)
                 {
                     DrawMapTile(x, y);
                 }
@@ -137,31 +149,31 @@ namespace RoguelikeGame
             switch (direction)
             {
                 case Direction.LEFT:
-                    colStartIndex++;
-                    if (colStartIndex >= COLS - 1)
+                    _colStartIndex++;
+                    if (_colStartIndex >= COLS - 1)
                     {
-                        colStartIndex = COLS - 1;
+                        _colStartIndex = COLS - 1;
                     }
                     break;
                 case Direction.RIGHT:
-                    colStartIndex--;
-                    if (colStartIndex < 0)
+                    _colStartIndex--;
+                    if (_colStartIndex < 0)
                     {
-                        colStartIndex = 0;
+                        _colStartIndex = 0;
                     }
                     break;
                 case Direction.UP:
-                    rowStartIndex++;
-                    if (rowStartIndex >= ROWS - 1)
+                    _rowStartIndex++;
+                    if (_rowStartIndex >= ROWS - 1)
                     {
-                        rowStartIndex = ROWS - 1;
+                        _rowStartIndex = ROWS - 1;
                     }
                     break;
                 case Direction.DOWN:
-                    rowStartIndex--;
-                    if (rowStartIndex < 0)
+                    _rowStartIndex--;
+                    if (_rowStartIndex < 0)
                     {
-                        rowStartIndex = 0;
+                        _rowStartIndex = 0;
                     }
                     break;
                 default:
@@ -172,7 +184,7 @@ namespace RoguelikeGame
             {
                 for (int x = 0; x < COLS; x++)
                 {
-                    _tiles[x, y].SetOffset(-colStartIndex, -rowStartIndex);
+                    _tiles[x, y].SetOffset(-_colStartIndex, -_rowStartIndex);
                 }
             }
         }
@@ -180,7 +192,7 @@ namespace RoguelikeGame
         private void DropPlayerInRandomRoom()
         {
             Random r = new Random();
-            _startingRoom = Rooms[r.Next(MAX_ROOMS - 1)];
+            _startingRoom = _rooms[r.Next(MAX_ROOMS - 1)];
             int startingRoomRightEdge = _startingRoom.PaddedRoomRect.Right + 1;
             int startingRoomBottomEdge = _startingRoom.PaddedRoomRect.Bottom + 1;
             int diffX = startingRoomRightEdge - ViewportWidth;
@@ -196,7 +208,7 @@ namespace RoguelikeGame
                 diffY--;
             }
             var point = _startingRoom.GetRandomPointInsideRoom();
-            Vector2 scrolledPosition = new Vector2(point.X - colStartIndex, point.Y - rowStartIndex);
+            Vector2 scrolledPosition = new Vector2(point.X - _colStartIndex, point.Y - _rowStartIndex);
             _player.SetInitialMapPosition(_position + scrolledPosition, (int)point.X, (int)point.Y);
         }
 
@@ -206,7 +218,8 @@ namespace RoguelikeGame
             {
                 for (int x = 0; x < COLS; x++)
                 {
-                    _tiles[x, y] = new Tile(new Character(Glyphs.Fill, _darkWall), new Vector2(x + (int)_position.X, y + (int)_position.Y), TileType.Solid);
+                    
+                    _tiles[x, y] = new Tile(new Character(Glyphs.DarkFill, Color.Brown), new Vector2(x + (int)_position.X, y + (int)_position.Y), TileType.Solid);
                 }
             }
 
@@ -220,7 +233,7 @@ namespace RoguelikeGame
                 int y = r.Next(ROWS - height - 1);
                 Room room = new Room(x, y, width, height);
                 bool intersects = false;
-                foreach (var room1 in Rooms)
+                foreach (var room1 in _rooms)
                 {
                     if (room.IntersectsWithPadding(room1))
                     {
@@ -230,23 +243,23 @@ namespace RoguelikeGame
                 }
                 if (!intersects)
                 {
-                    Rooms.Add(room);
+                    _rooms.Add(room);
                     count++;
                 }
             }
 
-            foreach (var room in Rooms)
+            foreach (var room in _rooms)
             {
                 for (int y = room.RoomRect.Y; y < room.RoomRect.Bottom; y++)
                 {
                     for (int x = room.RoomRect.X; x < room.RoomRect.Right; x++)
                     {
-                        _tiles[x, y].UpdateTile(new Character(Glyphs.Period, Color.DarkGreen), TileType.Walkable);
+                        _tiles[x, y].UpdateTile(new Character(Glyphs.Period, Color.Green), TileType.Walkable);
                     }
                 }
             }
 
-            Rooms.Sort((a, b) => a.RoomRect.Right.CompareTo(b.RoomRect.Right));
+            _rooms.Sort((a, b) => a.RoomRect.Right.CompareTo(b.RoomRect.Right));
 
             GenerateCorridors();
         }
@@ -263,15 +276,15 @@ namespace RoguelikeGame
 
             Room room1 = new Room(30, 10, 10, 10);
             Room room2 = new Room(30, 30, 10, 10);
-            Rooms.Add(room1);
-            Rooms.Add(room2);
-            foreach (var room in Rooms)
+            _rooms.Add(room1);
+            _rooms.Add(room2);
+            foreach (var room in _rooms)
             {
                 for (int y = room.RoomRect.Y; y < room.RoomRect.Bottom; y++)
                 {
                     for (int x = room.RoomRect.X; x < room.RoomRect.Right; x++)
                     {
-                        _tiles[x, y].UpdateTile(new Character(Glyphs.Period, Color.DarkGreen), TileType.Walkable);
+                        _tiles[x, y].UpdateTile(new Character(Glyphs.Period, Color.Green), TileType.Walkable);
                     }
                 }
             }
@@ -280,10 +293,10 @@ namespace RoguelikeGame
 
         private void GenerateCorridors()
         {
-            for (int r = 0; r < Rooms.Count - 1; r++)
+            for (int r = 0; r < _rooms.Count - 1; r++)
             {
-                Room room1 = Rooms[r];
-                Room room2 = Rooms[r + 1];
+                Room room1 = _rooms[r];
+                Room room2 = _rooms[r + 1];
                 var start = room1.GetRandomPointInsideRoom();
                 var end = room2.GetRandomPointInsideRoom();
                 if (end.X < start.X)
@@ -297,7 +310,7 @@ namespace RoguelikeGame
 
                 for (int i = (int)start.X; i <= (int)turningPoint.X; i++)
                 {
-                    _tiles[i, (int)start.Y].UpdateTile(new Character(Glyphs.Period, Color.DarkGreen), TileType.Walkable);
+                    _tiles[i, (int)start.Y].UpdateTile(new Character(Glyphs.Period, Color.Green), TileType.Walkable);
                 }
 
                 int incr = end.Y < start.Y ? -1 : 1;
@@ -307,13 +320,9 @@ namespace RoguelikeGame
                     {
                         break;
                     }
-                    _tiles[(int)turningPoint.X, i].UpdateTile(new Character(Glyphs.Period, Color.DarkGreen), TileType.Walkable);
+                    _tiles[(int)turningPoint.X, i].UpdateTile(new Character(Glyphs.Period, Color.Green), TileType.Walkable);
                 }
-                //_tiles[(int)start.X, (int)start.Y].UpdateTile(new Character(Glyphs.AUpper, Color.Yellow), TileType.Walkable);
-                //_tiles[(int)end.X, (int)end.Y].UpdateTile(new Character(Glyphs.BUpper, Color.Yellow), TileType.Walkable);
-                //_tiles[(int)turningPoint.X, (int)turningPoint.Y].UpdateTile(new Character(Glyphs.XUpper, Color.Yellow), TileType.Walkable);
             }
-
         }
 
         private void DrawTestRoom()
@@ -354,10 +363,9 @@ namespace RoguelikeGame
                     }
                     else
                     {
-                        var tile = new Tile(new Character(Glyphs.Period, Color.DarkGreen), new Vector2(x + (int)_position.X + 1, y + (int)_position.Y + 1));
+                        var tile = new Tile(new Character(Glyphs.Period, Color.Green), new Vector2(x + (int)_position.X + 1, y + (int)_position.Y + 1));
                         _tiles[x, y] = tile;
                     }
-
                 }
             }
         }

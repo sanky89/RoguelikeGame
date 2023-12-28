@@ -65,23 +65,23 @@ namespace RoguelikeGame
                 _fov.UpdateFov(MapX, MapY);
                 //Fov = new Rectangle(MapX - FOV_SIZE / 2, MapY - FOV_SIZE / 2, FOV_SIZE, FOV_SIZE);
                 if (dx > 0 && (_map.ViewportWidth - (int)_position.X) <= 5 &&
-                    (int)_position.X + _map.colStartIndex <= Map.COLS - 5)
+                    (int)_position.X + _map.ColStartIndex <= Map.COLS - 5)
                 {
                     dx = 0;
                     _map.ScrollMap(Direction.LEFT);
                 }
-                else if (dx < 0 && (int)_position.X <= 5 && _map.colStartIndex > 0)
+                else if (dx < 0 && (int)_position.X <= 5 && _map.ColStartIndex > 0)
                 {
                     dx = 0;
                     _map.ScrollMap(Direction.RIGHT);
                 }
                 else if (dy > 0 && (_map.ViewportHeight - (int)_position.Y) <= 5 &&
-                    (int)_position.Y + _map.rowStartIndex <= Map.ROWS - 5)
+                    (int)_position.Y + _map.RowStartIndex <= Map.ROWS - 5)
                 {
                     dy = 0;
                     _map.ScrollMap(Direction.UP);
                 }
-                else if (dy < 0 && (int)_position.Y <= 5 && _map.rowStartIndex > 0)
+                else if (dy < 0 && (int)_position.Y <= 5 && _map.RowStartIndex > 0)
                 {
                     dy = 0;
                     _map.ScrollMap(Direction.DOWN);
