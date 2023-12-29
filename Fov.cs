@@ -52,7 +52,8 @@ namespace RoguelikeGame
                         int mapY = mapPoint.Y;
 
                         //Check if the translated point is in the map range
-                        if (!_map.IsWithinMapRange(mapX, mapY))
+                        if (!_map.IsWithinMapRange(mapX, mapY) ||
+                            !IsWithinFovRange(x,y))
                         {
                             continue;
                         }
@@ -128,6 +129,11 @@ namespace RoguelikeGame
                 return 0;
             }
             return (x2 - x1) / (y2 - y1);
+        }
+
+        private bool IsWithinFovRange(int x, int y)
+        {
+            return x * x + y * y <= FOV_MAX * FOV_MAX;
         }
 
         private bool InsideShadow(float slope, List<Shadow> shadows)
