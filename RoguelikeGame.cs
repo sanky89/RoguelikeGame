@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace RoguelikeGame
 {
@@ -9,10 +10,10 @@ namespace RoguelikeGame
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private Player _player;
-        private SpriteFont _font;
-        private Console _inventoryConsole;
+        private Map _map;
         private MapConsole _mapConsole;
         private bool _showMap = false;
+        private int _turns = 0;
 
         public RoguelikeGame()
         {
@@ -31,6 +32,7 @@ namespace RoguelikeGame
             Globals.GraphicsDevice = GraphicsDevice;
             Globals.Content = Content;
             Globals.InputManager = new InputManager();
+            Globals.InputManager.KeyPressed += HandleAction;
             base.Initialize();
         }
 
@@ -44,7 +46,7 @@ namespace RoguelikeGame
             Globals.Columns = Globals.GlyphsTexture.Height / Globals.TILE_SIZE;
 
             _mapConsole = new MapConsole("Map", 80, 50, ConsoleLocation.TopLeft, BorderStyle.SingleLine, Color.Green);
-            //_map = new Map(Vector2.Zero);
+            _map = _mapConsole.Map;
             _player = new Player(new Character(Glyphs.Face1, Color.Yellow), Vector2.Zero, _mapConsole.Map);
             //_inventoryConsole = new Console("Inventory", 20, 38, ConsoleLocation.TopRight, BorderStyle.SingleLine, Color.Yellow);
         }
@@ -52,17 +54,11 @@ namespace RoguelikeGame
         protected override void Update(GameTime gameTime)
         {
             Globals.Update(gameTime);
-            if(Globals.InputManager.CheckAction(InputAction.ESCAPE))
-            {
-                Exit();
-            }
-            if(Globals.InputManager.IsKeyReleased(Keys.M))
+
+            //Debug actions
+            if (Globals.InputManager.IsKeyReleased(Keys.M))
             {
                 _mapConsole.Map.RegenerateMap();
-            }
-            if (Globals.InputManager.IsKeyReleased(Keys.Space))
-            {
-                _mapConsole.Map.ScrollMap(Direction.LEFT);
             }
             if (Globals.InputManager.IsKeyReleased(Keys.OemTilde))
             {
@@ -72,15 +68,36 @@ namespace RoguelikeGame
             base.Update(gameTime);
         }
 
+        private void HandleAction(InputAction inputAction)
+        {
+            switch (inputAction)
+            {
+                case InputAction.ESCAPE:
+                    Exit();
+                    break;
+                case InputAction.MOVE_LEFT:
+                case InputAction.MOVE_RIGHT:
+                case InputAction.MOVE_UP:
+                case InputAction.MOVE_DOWN:
+                    _player.PerformAction(inputAction);
+                    PerformTurn();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void PerformTurn()
+        {
+            _turns++;
+        }
+
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
 
             _spriteBatch.Begin();
             _mapConsole.Draw();
-            //_map.Draw();
-            //_inventoryConsole.Draw();
-            //_spriteBatch.DrawString(_font, "Test", new Vector2(600, 20), Color.Red);
             _spriteBatch.End();
 
             base.Draw(gameTime);

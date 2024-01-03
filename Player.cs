@@ -12,16 +12,14 @@ namespace RoguelikeGame
         public int MapX { get; private set; }
         public int MapY { get; private set; }
 
-        private Map _map;
         private Fov _fov;
+        private Map _map;
 
         public Player(Character character, Vector2 position, Map map) : base( character, position)
         {
             _map = map;
             _fov = new Fov(_map);
-
             _map.SetPlayer(this);
-            Globals.InputManager.KeyPressed += HandleKeyPressed;
         }
 
         public void SetInitialMapPosition(Vector2 pos, int x, int y)
@@ -34,7 +32,7 @@ namespace RoguelikeGame
             _fov.UpdateFov(MapX, MapY);
         }
 
-        private void HandleKeyPressed(InputAction action)
+        public void PerformAction(InputAction action)
         {
             int dx = 0;
             int dy = 0;
@@ -63,7 +61,7 @@ namespace RoguelikeGame
                 MapX += dx;
                 MapY += dy;
                 _fov.UpdateFov(MapX, MapY);
-                //Fov = new Rectangle(MapX - FOV_SIZE / 2, MapY - FOV_SIZE / 2, FOV_SIZE, FOV_SIZE);
+
                 if (dx > 0 && (_map.ViewportWidth - (int)_position.X) <= 5 &&
                     (int)_position.X + _map.ColStartIndex <= Map.COLS - 5)
                 {
@@ -89,14 +87,6 @@ namespace RoguelikeGame
                 _position.X += dx;
                 _position.Y += dy;
                 System.Console.WriteLine($"Position: {_position.X}, {_position.Y} Map Index: {MapX}, {MapY}");
-            }
-        }
-
-        public override void Draw(SpriteBatch spriteBatch, Texture2D texture)
-        {
-            if(X < _map.ViewportWidth && Y < _map.ViewportHeight)
-            {
-                base.Draw(spriteBatch, texture);
             }
         }
     }
