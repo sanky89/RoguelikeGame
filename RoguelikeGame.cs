@@ -10,7 +10,6 @@ namespace RoguelikeGame
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private Player _player;
-        private Map _map;
         private MapConsole _mapConsole;
         private bool _showMap = false;
         private int _turns = 0;
@@ -45,10 +44,13 @@ namespace RoguelikeGame
             Globals.Rows = Globals.GlyphsTexture.Width / Globals.TILE_SIZE;
             Globals.Columns = Globals.GlyphsTexture.Height / Globals.TILE_SIZE;
 
-            _mapConsole = new MapConsole("Map", 80, 50, ConsoleLocation.TopLeft, BorderStyle.SingleLine, Color.Green);
-            _map = _mapConsole.Map;
-            _player = new Player(new Character(Glyphs.Face1, Color.Yellow), Vector2.Zero, _mapConsole.Map);
-            //_inventoryConsole = new Console("Inventory", 20, 38, ConsoleLocation.TopRight, BorderStyle.SingleLine, Color.Yellow);
+            _player = new Player(new Character(Glyphs.Face1, Color.Yellow), Vector2.Zero);
+
+            var mapConsoleWidth = 80;
+            var mapConsoleHeight = 50;
+            _mapConsole = new MapConsole( "Map", mapConsoleWidth, mapConsoleHeight, ConsoleLocation.TopLeft, BorderStyle.SingleLine, Color.Green);
+            Globals.Map = new Map(_mapConsole.Position + Vector2.One, mapConsoleWidth, mapConsoleHeight, _player);
+            Globals.Map.GenerateMap();
         }
 
         protected override void Update(GameTime gameTime)

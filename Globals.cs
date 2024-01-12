@@ -21,6 +21,7 @@ namespace RoguelikeGame
         public static float ElapsedTime { get; set; }
         public static Texture2D GlyphsTexture { get; set; }
         public static SpriteFont Font { get; set; }
+        public static Map Map {get; set;}
 
         public static int Rows { get; set; }
         public static int Columns { get; set; }

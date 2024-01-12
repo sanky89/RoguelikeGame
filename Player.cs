@@ -13,13 +13,9 @@ namespace RoguelikeGame
         public int MapY { get; private set; }
 
         private Fov _fov;
-        private Map _map;
 
-        public Player(Character character, Vector2 position, Map map) : base( character, position)
+        public Player(Character character, Vector2 position) : base( character, position)
         {
-            _map = map;
-            _fov = new Fov(_map);
-            _map.SetPlayer(this);
         }
 
         public void SetInitialMapPosition(Vector2 pos, int x, int y)
@@ -29,6 +25,7 @@ namespace RoguelikeGame
             MapX = x;
             MapY = y;
             System.Console.WriteLine($"Position: {pos.X}, {pos.Y} Map Index: {MapX}, {MapY}");
+            _fov = new Fov(Globals.Map);
             _fov.UpdateFov(MapX, MapY);
         }
 
@@ -55,34 +52,34 @@ namespace RoguelikeGame
                     break;
             }
 
-           // System.Console.WriteLine($"{(int)_position.X + _map.colStartIndex}");
-            if (_map.CanMove((int)(_position.X + dx), (int)(_position.Y + dy)))
+           // System.Console.WriteLine($"{(int)_position.X + Globals.Map.colStartIndex}");
+            if (Globals.Map.CanMove((int)(_position.X + dx), (int)(_position.Y + dy)))
             {
                 MapX += dx;
                 MapY += dy;
                 _fov.UpdateFov(MapX, MapY);
 
-                if (dx > 0 && (_map.ViewportWidth - (int)_position.X) <= 5 &&
-                    (int)_position.X + _map.ColStartIndex <= Map.COLS - 5)
+                if (dx > 0 && (Globals.Map.ViewportWidth - (int)_position.X) <= 5 &&
+                    (int)_position.X + Globals.Map.ColStartIndex <= Map.COLS - 5)
                 {
                     dx = 0;
-                    _map.ScrollMap(Direction.LEFT);
+                    Globals.Map.ScrollMap(Direction.LEFT);
                 }
-                else if (dx < 0 && (int)_position.X <= 5 && _map.ColStartIndex > 0)
+                else if (dx < 0 && (int)_position.X <= 5 && Globals.Map.ColStartIndex > 0)
                 {
                     dx = 0;
-                    _map.ScrollMap(Direction.RIGHT);
+                    Globals.Map.ScrollMap(Direction.RIGHT);
                 }
-                else if (dy > 0 && (_map.ViewportHeight - (int)_position.Y) <= 5 &&
-                    (int)_position.Y + _map.RowStartIndex <= Map.ROWS - 5)
+                else if (dy > 0 && (Globals.Map.ViewportHeight - (int)_position.Y) <= 5 &&
+                    (int)_position.Y + Globals.Map.RowStartIndex <= Map.ROWS - 5)
                 {
                     dy = 0;
-                    _map.ScrollMap(Direction.UP);
+                    Globals.Map.ScrollMap(Direction.UP);
                 }
-                else if (dy < 0 && (int)_position.Y <= 5 && _map.RowStartIndex > 0)
+                else if (dy < 0 && (int)_position.Y <= 5 && Globals.Map.RowStartIndex > 0)
                 {
                     dy = 0;
-                    _map.ScrollMap(Direction.DOWN);
+                    Globals.Map.ScrollMap(Direction.DOWN);
                 }
                 _position.X += dx;
                 _position.Y += dy;

@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
+using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace RoguelikeGame
 {
@@ -35,18 +37,22 @@ namespace RoguelikeGame
         public int ColStartIndex => _colStartIndex;
         public int RowStartIndex => _rowStartIndex;
 
-        public Map(Vector2 position, int viewportWidth, int viewportHeight)
+        public Map(Vector2 position, int viewportWidth, int viewportHeight, Player player)
         {
             _tiles = new Tile[COLS, ROWS];
             _position = position;
             ViewportWidth = viewportWidth;
             ViewportHeight = viewportHeight;
-            _colStartIndex = 0;// (int)_position.X;
-            _rowStartIndex = 0;// (int)_position.Y;
+            _colStartIndex = 0;
+            _rowStartIndex = 0;
             _rooms = new List<Room>(MAX_ROOMS);
-            //GenerateRandomWalls();
+            _player = player;
+        }
+
+        public void GenerateMap()
+        {
             GenerateRooms();
-            //DrawTestRoom();
+            DropPlayerInRandomRoom();
         }
 
         public void RegenerateMap()
