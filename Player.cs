@@ -18,6 +18,15 @@ namespace RoguelikeGame
         {
         }
 
+        public void SetMapPosition(int x, int y)
+        {
+            MapX = x;
+            MapY = y;
+            System.Console.WriteLine($"Map Position: {MapX}, {MapY}");
+            _fov = new Fov(Globals.Map);
+            _fov.UpdateFov(MapX, MapY);
+        }
+
         public void SetInitialMapPosition(Vector2 pos, int x, int y)
         {
             _position.X = pos.X;
@@ -52,14 +61,17 @@ namespace RoguelikeGame
                     break;
             }
 
-           // System.Console.WriteLine($"{(int)_position.X + Globals.Map.colStartIndex}");
-            if (Globals.Map.CanMove((int)(_position.X + dx), (int)(_position.Y + dy)))
+            // System.Console.WriteLine($"{(int)_position.X + Globals.Map.colStartIndex}");
+            var newX = MapX + dx;
+            var newY = MapY + dy;
+            if (Globals.Map.CanMove(newX, newY))
             {
+
                 MapX += dx;
                 MapY += dy;
                 _fov.UpdateFov(MapX, MapY);
 
-                if (dx > 0 && (Globals.Map.ViewportWidth - (int)_position.X) <= 5 &&
+/*                if (dx > 0 && (Globals.Map.ViewportWidth - (int)_position.X) <= 5 &&
                     (int)_position.X + Globals.Map.ColStartIndex <= Map.COLS - 5)
                 {
                     dx = 0;
@@ -80,10 +92,8 @@ namespace RoguelikeGame
                 {
                     dy = 0;
                     Globals.Map.ScrollMap(Direction.DOWN);
-                }
-                _position.X += dx;
-                _position.Y += dy;
-                System.Console.WriteLine($"Position: {_position.X}, {_position.Y} Map Index: {MapX}, {MapY}");
+                }*/
+                System.Console.WriteLine($"Map Index: {MapX}, {MapY}");
             }
         }
     }

@@ -5,12 +5,15 @@ namespace RoguelikeGame
 {
     public class Entity
     {
-        public int Id { get; set; }
 
         protected Character _character;
         protected Vector2 _position;
 
         public Vector2 Position => _position;
+        public int Id { get; set; }
+        public Color Color => _character.Color;
+        public Rectangle SourceRect => _character.GetSourceRect();
+
         public Entity(Character character, Vector2 position)
         {
             _character = character;

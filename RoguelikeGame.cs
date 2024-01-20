@@ -46,11 +46,11 @@ namespace RoguelikeGame
 
             _player = new Player(new Character(Glyphs.Face1, Color.Yellow), Vector2.Zero);
 
-            var mapConsoleWidth = 80;
-            var mapConsoleHeight = 50;
-            _mapConsole = new MapConsole( "Map", mapConsoleWidth, mapConsoleHeight, ConsoleLocation.TopLeft, BorderStyle.SingleLine, Color.Green);
-            Globals.Map = new Map(_mapConsole.Position + Vector2.One, mapConsoleWidth, mapConsoleHeight, _player);
+            Globals.Map = new Map(_player);
             Globals.Map.GenerateMap();
+            var mapConsoleWidth = 90;
+            var mapConsoleHeight = 58;
+            _mapConsole = new MapConsole( "Map", mapConsoleWidth, mapConsoleHeight, ConsoleLocation.TopLeft, BorderStyle.SingleLine, Color.Green);
         }
 
         protected override void Update(GameTime gameTime)
@@ -60,12 +60,28 @@ namespace RoguelikeGame
             //Debug actions
             if (Globals.InputManager.IsKeyReleased(Keys.M))
             {
-                _mapConsole.Map.RegenerateMap();
+                Globals.Map.RegenerateMap();
             }
             if (Globals.InputManager.IsKeyReleased(Keys.OemTilde))
             {
                 _showMap = !_showMap;
-                _mapConsole.Map.ToggleMapVisible(_showMap);
+                Globals.Map.ToggleMapVisible(_showMap);
+            }
+            if (Globals.InputManager.IsKeyDown(Keys.LeftShift) && Globals.InputManager.IsKeyPressed(Keys.OemPeriod))
+            {
+                _mapConsole.ScrollMap(Direction.LEFT);
+            }
+            if (Globals.InputManager.IsKeyDown(Keys.LeftShift) && Globals.InputManager.IsKeyPressed(Keys.OemComma))
+            {
+                _mapConsole.ScrollMap(Direction.RIGHT);
+            }
+            if (Globals.InputManager.IsKeyDown(Keys.LeftShift) && Globals.InputManager.IsKeyPressed(Keys.OemSemicolon))
+            {
+                _mapConsole.ScrollMap(Direction.UP);
+            }
+            if (Globals.InputManager.IsKeyDown(Keys.LeftShift) && Globals.InputManager.IsKeyPressed(Keys.OemQuestion))
+            {
+                _mapConsole.ScrollMap(Direction.DOWN);
             }
             base.Update(gameTime);
         }
