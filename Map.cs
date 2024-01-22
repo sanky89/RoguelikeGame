@@ -16,9 +16,9 @@ namespace RoguelikeGame
 
     public class Map
     {
-        public const int ROWS = 64;
-        public const int COLS = 100;
-        private const int MAX_ROOMS = 10;
+        public const int ROWS = 80;
+        public const int COLS = 140;
+        private const int MAX_ROOMS = 20;
         private const int MIN_ROOM_SIZE = 8;
         private const int MAX_ROOM_SIZE = 16;
         
@@ -27,12 +27,16 @@ namespace RoguelikeGame
         private Player _player;
         private Room _startingRoom;
         public Player Player => _player;
+        public Entity Monster => _monster;
+
+        private Entity _monster;
 
         public Map(Player player)
         {
             _tiles = new Tile[COLS, ROWS];
             _rooms = new List<Room>(MAX_ROOMS);
             _player = player;
+            _monster = new Entity(new Character(Glyphs.ZUpper, Color.Red), Vector2.Zero);
         }
 
         public Tile GetTileAtIndex(int x, int y)
@@ -48,6 +52,15 @@ namespace RoguelikeGame
         {
             GenerateRooms();
             DropPlayerInRandomRoom();
+            DropMonsterInRandomRoom();
+        }
+
+        private void DropMonsterInRandomRoom()
+        {
+            Random r = new Random();
+            var room = _rooms[r.Next(MAX_ROOMS - 1)];
+            var point = room.GetRandomPointInsideRoom();
+            _monster.SetMapPosition(point.X, point.Y);
         }
 
         public void RegenerateMap()
@@ -69,6 +82,8 @@ namespace RoguelikeGame
 
         public bool CanMove(int x, int y)
         {
+            if (x < 0 || y < 0 || x >= COLS || y >= ROWS) return false;
+
             return _tiles[x, y].TileType == TileType.Walkable;
         }
 
@@ -118,10 +133,21 @@ namespace RoguelikeGame
             return x == _player.MapX && y == _player.MapY;
         }
 
+        public bool IsMonsterTile(int x, int y)
+        {
+            return x == _monster.MapX && y == _monster.MapY;
+        }
+
         private void DropPlayerInRandomRoom()
         {
             Random r = new Random();
             _startingRoom = _rooms[r.Next(MAX_ROOMS - 1)];
+            if(_startingRoom.RoomRect.Right > Globals.MAP_CONSOLE_WIDTH || 
+               _startingRoom.RoomRect.Bottom > Globals.MAP_CONSOLE_HEIGHT)
+            {
+                DropPlayerInRandomRoom();
+                return;
+            }    
             var point = _startingRoom.GetRandomPointInsideRoom();
             _player.SetMapPosition(point.X, point.Y);
         }
@@ -133,7 +159,7 @@ namespace RoguelikeGame
                 for (int x = 0; x < COLS; x++)
                 {
                     
-                    _tiles[x, y] = new Tile(new Character(Glyphs.Spade, Color.DarkGreen), TileType.Solid);
+                    _tiles[x, y] = new Tile(new Character(Glyphs.MediumFill, Color.DarkGray), TileType.Solid);
                 }
             }
 
@@ -174,6 +200,12 @@ namespace RoguelikeGame
             }
 
             _rooms.Sort((a, b) => a.RoomRect.Right.CompareTo(b.RoomRect.Right));
+            int i = 0;
+            foreach(var room in _rooms)
+            {
+                System.Console.WriteLine($"Room {i} - " + room.RoomRect.Right);
+                i++;
+            }
 
             GenerateCorridors();
         }

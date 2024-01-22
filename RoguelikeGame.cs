@@ -48,9 +48,7 @@ namespace RoguelikeGame
 
             Globals.Map = new Map(_player);
             Globals.Map.GenerateMap();
-            var mapConsoleWidth = 90;
-            var mapConsoleHeight = 58;
-            _mapConsole = new MapConsole( "Map", mapConsoleWidth, mapConsoleHeight, ConsoleLocation.TopLeft, BorderStyle.SingleLine, Color.Green);
+            _mapConsole = new MapConsole( "Map", Globals.MAP_CONSOLE_WIDTH, Globals.MAP_CONSOLE_HEIGHT, ConsoleLocation.TopLeft, BorderStyle.SingleLine, Color.Green);
         }
 
         protected override void Update(GameTime gameTime)
@@ -94,20 +92,29 @@ namespace RoguelikeGame
                     Exit();
                     break;
                 case InputAction.MOVE_LEFT:
+                    PerformTurn(inputAction, Direction.LEFT);
+                    break;
                 case InputAction.MOVE_RIGHT:
+                    PerformTurn(inputAction, Direction.RIGHT);
+                    break;
                 case InputAction.MOVE_UP:
+                    PerformTurn(inputAction, Direction.UP);
+                    break;
                 case InputAction.MOVE_DOWN:
-                    _player.PerformAction(inputAction);
-                    PerformTurn();
+                    PerformTurn(inputAction, Direction.DOWN);
                     break;
                 default:
                     break;
             }
         }
 
-        private void PerformTurn()
+        private void PerformTurn(InputAction inputAction, Direction scrollDirection)
         {
-            _turns++;
+            if (_player.PerformAction(inputAction))
+            { 
+                _mapConsole.CheckScrollMap(scrollDirection);
+                _turns++;
+            }
         }
 
         protected override void Draw(GameTime gameTime)

@@ -16,6 +16,26 @@ namespace RoguelikeGame
            
         }
 
+        public void CheckScrollMap(Direction direction)
+        {
+            if(direction == Direction.RIGHT && Width - Globals.Map.Player.MapX <= 5)
+            {
+                ScrollMap(Direction.RIGHT);
+            }
+            if (direction == Direction.LEFT && offset.X + Globals.Map.Player.MapX <= 5)
+            {
+                ScrollMap(Direction.LEFT);
+            }
+            if (direction == Direction.UP && offset.Y + Globals.Map.Player.MapY <= 5)
+            {
+                ScrollMap(Direction.DOWN);
+            }
+            if (direction == Direction.DOWN && Height - Globals.Map.Player.MapY <= 5)
+            {
+                ScrollMap(Direction.UP);
+            }
+        }
+
         public void ScrollMap(Direction direction)
         {
             switch (direction)
@@ -53,7 +73,9 @@ namespace RoguelikeGame
             {
                 for (int x = startX; x < endX; x++)
                 {
-                    if(Globals.Map.IsPlayerTile(x,y))
+                    var tile = Globals.Map.GetTileAtIndex(x, y);
+
+                    if (Globals.Map.IsPlayerTile(x,y))
                     {
                         Globals.SpriteBatch.Draw(Globals.GlyphsTexture, 
                             (Position + offset + new Vector2(x, y)) * Globals.TILE_SIZE * Globals.SCALE,
@@ -65,9 +87,26 @@ namespace RoguelikeGame
                             SpriteEffects.None,
                             0);
                     }
+                    else if(Globals.Map.IsMonsterTile(x, y))
+                    {
+                        if (!tile.Visible && !tile.Visited)
+                        {
+                            continue;
+                        }
+
+                        Globals.SpriteBatch.Draw(Globals.GlyphsTexture,
+                            (Position + offset + new Vector2(x, y)) * Globals.TILE_SIZE * Globals.SCALE,
+                            Globals.Map.Monster.SourceRect,
+                            Globals.Map.Monster.Color,
+                            0f,
+                            Vector2.Zero,
+                            Globals.SCALE,
+                            SpriteEffects.None,
+                            0);
+                    }
                     else
                     {
-                        var tile = Globals.Map.GetTileAtIndex(x, y);
+                        
 
                         if (!tile.Visible && !tile.Visited)
                         {
