@@ -1,5 +1,4 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace RoguelikeGame
 {
@@ -22,7 +21,19 @@ namespace RoguelikeGame
         public bool Visible { get; set; }
         public bool Visited { get; set; }
 
-        private Color _displayColor;
+        public Color DisplayColor
+        {
+            get
+            {
+                if(Visible)
+                {
+                    return _character.Color;
+                }
+                return _character.ColorDark;
+            }
+        }
+
+        public Rectangle SourceRect => _character.GetSourceRect();
 
         public Tile(Character character, Vector2 position) : this(character, position, TileType.Walkable)
         {
@@ -35,7 +46,14 @@ namespace RoguelikeGame
             _tileType = tileType;
             Visible = false;
             Visited = false;
-            _displayColor = _character.Color;
+        }
+
+        public Tile(Character character, TileType tileType)
+        {
+            _character = character;
+            _tileType = tileType;
+            Visible = false;
+            Visited = false;
         }
 
         public void SetOffset(int x, int y)
@@ -47,24 +65,6 @@ namespace RoguelikeGame
         {
             _character = character;
             _tileType = tileType;
-        }
-
-        public void Draw()
-        {
-            if (!Visible && !Visited)
-            {
-                return;
-            }
-            if(Visible)
-            {
-                _displayColor = _character.Color;
-            }
-            else if(Visited)
-            {
-                _displayColor = _character.ColorDark;
-            }
-
-            Globals.SpriteBatch.Draw(Globals.GlyphsTexture, (Position + _offset) * Globals.TILE_SIZE * Globals.SCALE, _character.GetSourceRect(), _displayColor, 0f, Vector2.Zero, Globals.SCALE, SpriteEffects.None, 0);
         }
     }
 }

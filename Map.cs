@@ -16,49 +16,55 @@ namespace RoguelikeGame
 
     public class Map
     {
-        public const int ROWS = 100;
-        public const int COLS = 80;
-        private const int MAX_ROOMS = 25;
+        public const int ROWS = 80;
+        public const int COLS = 140;
+        private const int MAX_ROOMS = 20;
         private const int MIN_ROOM_SIZE = 8;
         private const int MAX_ROOM_SIZE = 16;
-
-        public readonly int ViewportWidth;
-        public readonly int ViewportHeight;
         
         private List<Room> _rooms;
         private Tile[,] _tiles;
         private Player _player;
-        private Vector2 _position;
-        private bool _addWalls = true;
-        private int _colStartIndex = 0;
-        private int _rowStartIndex = 0;
         private Room _startingRoom;
+        public Player Player => _player;
+        public Entity Monster => _monster;
 
-        public int ColStartIndex => _colStartIndex;
-        public int RowStartIndex => _rowStartIndex;
+        private Entity _monster;
 
-        public Map(Vector2 position, int viewportWidth, int viewportHeight, Player player)
+        public Map(Player player)
         {
             _tiles = new Tile[COLS, ROWS];
-            _position = position;
-            ViewportWidth = viewportWidth;
-            ViewportHeight = viewportHeight;
-            _colStartIndex = 0;
-            _rowStartIndex = 0;
             _rooms = new List<Room>(MAX_ROOMS);
             _player = player;
+            _monster = new Entity(new Character(Glyphs.ZUpper, Color.Red), Vector2.Zero);
+        }
+
+        public Tile GetTileAtIndex(int x, int y)
+        {
+            if(!IsWithinMapRange(x,y))
+            {
+                throw new ArgumentOutOfRangeException($"Index out of range {x}, {y}");
+            }
+            return _tiles[x, y];
         }
 
         public void GenerateMap()
         {
             GenerateRooms();
             DropPlayerInRandomRoom();
+            DropMonsterInRandomRoom();
+        }
+
+        private void DropMonsterInRandomRoom()
+        {
+            Random r = new Random();
+            var room = _rooms[r.Next(MAX_ROOMS - 1)];
+            var point = room.GetRandomPointInsideRoom();
+            _monster.SetMapPosition(point.X, point.Y);
         }
 
         public void RegenerateMap()
         {
-            _colStartIndex = 0;
-            _rowStartIndex = 0;
             _startingRoom = null;
             _rooms.Clear();
             Array.Clear(_tiles, 0, _tiles.Length);
@@ -76,14 +82,9 @@ namespace RoguelikeGame
 
         public bool CanMove(int x, int y)
         {
-            x -= (int)(_position.X);
-            y -= (int)(_position.Y);
+            if (x < 0 || y < 0 || x >= COLS || y >= ROWS) return false;
 
-            if (x < 0 || y < 0 || x + _colStartIndex >= COLS || y + _rowStartIndex >= ROWS)
-            {
-                return false;
-            }
-            return _tiles[x + _colStartIndex, y + _rowStartIndex].TileType == TileType.Walkable;
+            return _tiles[x, y].TileType == TileType.Walkable;
         }
 
         public void ToggleMapVisible(bool visible)
@@ -123,99 +124,32 @@ namespace RoguelikeGame
 
         public bool IsWithinMapRange(int x, int y)
         {
-            return x >= _colStartIndex && x < COLS &&
-                        y >= _rowStartIndex && y < ROWS &&
-                        x + _tiles[x, y].Offset.X < ViewportWidth - 1 &&
-                        y + _tiles[x, y].Offset.Y < ViewportHeight - 1;
+            return x >= 0 && x < COLS &&
+                        y >= 0 && y < ROWS;
         }
 
-        public void DrawMapTile(int x, int y)
+        public bool IsPlayerTile(int x, int y)
         {
-            if (x + _tiles[x, y].Offset.X < ViewportWidth - 1 &&
-               y + _tiles[x, y].Offset.Y < ViewportHeight - 1)
-            {
-                _tiles[x, y].Draw();
-                _player.Draw(Globals.SpriteBatch, Globals.GlyphsTexture);
-            }
+            return x == _player.MapX && y == _player.MapY;
         }
 
-        public void Draw()
+        public bool IsMonsterTile(int x, int y)
         {
-            for (int y = _rowStartIndex; y < ROWS; y++)
-            {
-                for (int x = _colStartIndex; x < COLS; x++)
-                {
-                    DrawMapTile(x, y);
-                }
-            }
-        }
-
-        public void ScrollMap(Direction direction)
-        {
-            switch (direction)
-            {
-                case Direction.LEFT:
-                    _colStartIndex++;
-                    if (_colStartIndex >= COLS - 1)
-                    {
-                        _colStartIndex = COLS - 1;
-                    }
-                    break;
-                case Direction.RIGHT:
-                    _colStartIndex--;
-                    if (_colStartIndex < 0)
-                    {
-                        _colStartIndex = 0;
-                    }
-                    break;
-                case Direction.UP:
-                    _rowStartIndex++;
-                    if (_rowStartIndex >= ROWS - 1)
-                    {
-                        _rowStartIndex = ROWS - 1;
-                    }
-                    break;
-                case Direction.DOWN:
-                    _rowStartIndex--;
-                    if (_rowStartIndex < 0)
-                    {
-                        _rowStartIndex = 0;
-                    }
-                    break;
-                default:
-                    break;
-            }
-
-            for (int y = 0; y < ROWS; y++)
-            {
-                for (int x = 0; x < COLS; x++)
-                {
-                    _tiles[x, y].SetOffset(-_colStartIndex, -_rowStartIndex);
-                }
-            }
+            return x == _monster.MapX && y == _monster.MapY;
         }
 
         private void DropPlayerInRandomRoom()
         {
             Random r = new Random();
             _startingRoom = _rooms[r.Next(MAX_ROOMS - 1)];
-            int startingRoomRightEdge = _startingRoom.PaddedRoomRect.Right + 1;
-            int startingRoomBottomEdge = _startingRoom.PaddedRoomRect.Bottom + 1;
-            int diffX = startingRoomRightEdge - ViewportWidth;
-            int diffY = startingRoomBottomEdge - ViewportHeight;
-            while (diffX >= 0)
+            if(_startingRoom.RoomRect.Right > Globals.MAP_CONSOLE_WIDTH || 
+               _startingRoom.RoomRect.Bottom > Globals.MAP_CONSOLE_HEIGHT)
             {
-                ScrollMap(Direction.LEFT);
-                diffX--;
-            }
-            while (diffY >= 0)
-            {
-                ScrollMap(Direction.UP);
-                diffY--;
-            }
+                DropPlayerInRandomRoom();
+                return;
+            }    
             var point = _startingRoom.GetRandomPointInsideRoom();
-            Vector2 scrolledPosition = new Vector2(point.X - _colStartIndex, point.Y - _rowStartIndex);
-            _player.SetInitialMapPosition(_position + scrolledPosition, (int)point.X, (int)point.Y);
+            _player.SetMapPosition(point.X, point.Y);
         }
 
         private void GenerateRooms()
@@ -225,7 +159,7 @@ namespace RoguelikeGame
                 for (int x = 0; x < COLS; x++)
                 {
                     
-                    _tiles[x, y] = new Tile(new Character(Glyphs.DarkFill, Color.Brown), new Vector2(x + (int)_position.X, y + (int)_position.Y), TileType.Solid);
+                    _tiles[x, y] = new Tile(new Character(Glyphs.MediumFill, Color.DarkGray), TileType.Solid);
                 }
             }
 
@@ -266,6 +200,12 @@ namespace RoguelikeGame
             }
 
             _rooms.Sort((a, b) => a.RoomRect.Right.CompareTo(b.RoomRect.Right));
+            int i = 0;
+            foreach(var room in _rooms)
+            {
+                System.Console.WriteLine($"Room {i} - " + room.RoomRect.Right);
+                i++;
+            }
 
             GenerateCorridors();
         }
@@ -276,7 +216,7 @@ namespace RoguelikeGame
             {
                 for (int x = 0; x < COLS; x++)
                 {
-                    _tiles[x, y] = new Tile(new Character(Glyphs.Fill, Color.RosyBrown), new Vector2(x + (int)_position.X + 1, y + (int)_position.Y + 1), TileType.Solid);
+                    _tiles[x, y] = new Tile(new Character(Glyphs.Fill, Color.RosyBrown), TileType.Solid);
                 }
             }
 
@@ -312,32 +252,32 @@ namespace RoguelikeGame
                     end = temp;
                 }
 
-                var turningPoint = new Vector2(end.X, start.Y);
+                var turningPoint = new Point(end.X, start.Y);
 
-                for (int i = (int)start.X; i <= (int)turningPoint.X; i++)
+                for (int i = start.X; i <= turningPoint.X; i++)
                 {
-                    _tiles[i, (int)start.Y].UpdateTile(new Character(Glyphs.Period, Color.Green), TileType.Walkable);
+                    _tiles[i, start.Y].UpdateTile(new Character(Glyphs.Period, Color.Green), TileType.Walkable);
                 }
 
                 int incr = end.Y < start.Y ? -1 : 1;
-                for (int i = (int)start.Y; ; i += incr)
+                for (int i = start.Y; ; i += incr)
                 {
-                    if (i == (int)end.Y)
+                    if (i == end.Y)
                     {
                         break;
                     }
-                    _tiles[(int)turningPoint.X, i].UpdateTile(new Character(Glyphs.Period, Color.Green), TileType.Walkable);
+                    _tiles[turningPoint.X, i].UpdateTile(new Character(Glyphs.Period, Color.Green), TileType.Walkable);
                 }
             }
         }
 
-        private void DrawTestRoom()
+        private void GenerateTestRoom()
         {
             for (int y = 0; y < ROWS; y++)
             {
                 for (int x = 0; x < COLS; x++)
                 {
-                    _tiles[x, y] = new Tile(new Character(Glyphs.Period, Color.Green), new Vector2(x + (int)_position.X + 1, y + (int)_position.Y + 1), TileType.Walkable);
+                    _tiles[x, y] = new Tile(new Character(Glyphs.Period, Color.Green), TileType.Walkable);
                 }
             }
 
@@ -362,15 +302,13 @@ namespace RoguelikeGame
             {
                 for (int x = 0; x < COLS; x++)
                 {
-                    if ((_addWalls && r.NextDouble() < 0.1f) || (x == 0 || y == 0 || x == COLS - 1 || y == ROWS - 1))
+                    if ((r.NextDouble() < 0.1f) || (x == 0 || y == 0 || x == COLS - 1 || y == ROWS - 1))
                     {
-                        var wall = new Tile(new Character(Glyphs.Fill, Color.RosyBrown), new Vector2(x + (int)_position.X + 1, y + (int)_position.Y + 1), TileType.Solid);
-                        _tiles[x, y] = wall;
+                        _tiles[x, y] = new Tile(new Character(Glyphs.Fill, Color.RosyBrown), TileType.Solid);
                     }
                     else
                     {
-                        var tile = new Tile(new Character(Glyphs.Period, Color.Green), new Vector2(x + (int)_position.X + 1, y + (int)_position.Y + 1));
-                        _tiles[x, y] = tile;
+                        _tiles[x, y] = new Tile(new Character(Glyphs.Period, Color.Green), TileType.Walkable);
                     }
                 }
             }

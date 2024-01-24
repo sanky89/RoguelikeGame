@@ -5,12 +5,17 @@ namespace RoguelikeGame
 {
     public class Entity
     {
-        public int Id { get; set; }
 
         protected Character _character;
         protected Vector2 _position;
 
         public Vector2 Position => _position;
+        public int Id { get; set; }
+        public Color Color => _character.Color;
+        public Rectangle SourceRect => _character.GetSourceRect();
+        public int MapX { get; protected set; }
+        public int MapY { get; protected set; }
+
         public Entity(Character character, Vector2 position)
         {
             _character = character;
@@ -22,6 +27,12 @@ namespace RoguelikeGame
         public virtual void Draw(SpriteBatch spriteBatch, Texture2D texture)
         {
             spriteBatch.Draw(texture, _position * Globals.TILE_SIZE * Globals.SCALE, _character.GetSourceRect(), _character.Color, 0f, Vector2.Zero, Globals.SCALE, SpriteEffects.None, 0);
+        }
+
+        public virtual void SetMapPosition(int x, int y)
+        {
+            MapX = x;
+            MapY = y;
         }
     }
 }

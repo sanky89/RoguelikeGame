@@ -46,11 +46,9 @@ namespace RoguelikeGame
 
             _player = new Player(new Character(Glyphs.Face1, Color.Yellow), Vector2.Zero);
 
-            var mapConsoleWidth = 80;
-            var mapConsoleHeight = 50;
-            _mapConsole = new MapConsole( "Map", mapConsoleWidth, mapConsoleHeight, ConsoleLocation.TopLeft, BorderStyle.SingleLine, Color.Green);
-            Globals.Map = new Map(_mapConsole.Position + Vector2.One, mapConsoleWidth, mapConsoleHeight, _player);
+            Globals.Map = new Map(_player);
             Globals.Map.GenerateMap();
+            _mapConsole = new MapConsole( "Map", Globals.MAP_CONSOLE_WIDTH, Globals.MAP_CONSOLE_HEIGHT, ConsoleLocation.TopLeft, BorderStyle.SingleLine, Color.Green);
         }
 
         protected override void Update(GameTime gameTime)
@@ -60,12 +58,28 @@ namespace RoguelikeGame
             //Debug actions
             if (Globals.InputManager.IsKeyReleased(Keys.M))
             {
-                _mapConsole.Map.RegenerateMap();
+                Globals.Map.RegenerateMap();
             }
             if (Globals.InputManager.IsKeyReleased(Keys.OemTilde))
             {
                 _showMap = !_showMap;
-                _mapConsole.Map.ToggleMapVisible(_showMap);
+                Globals.Map.ToggleMapVisible(_showMap);
+            }
+            if (Globals.InputManager.IsKeyDown(Keys.LeftShift) && Globals.InputManager.IsKeyPressed(Keys.OemPeriod))
+            {
+                _mapConsole.ScrollMap(Direction.LEFT);
+            }
+            if (Globals.InputManager.IsKeyDown(Keys.LeftShift) && Globals.InputManager.IsKeyPressed(Keys.OemComma))
+            {
+                _mapConsole.ScrollMap(Direction.RIGHT);
+            }
+            if (Globals.InputManager.IsKeyDown(Keys.LeftShift) && Globals.InputManager.IsKeyPressed(Keys.OemSemicolon))
+            {
+                _mapConsole.ScrollMap(Direction.UP);
+            }
+            if (Globals.InputManager.IsKeyDown(Keys.LeftShift) && Globals.InputManager.IsKeyPressed(Keys.OemQuestion))
+            {
+                _mapConsole.ScrollMap(Direction.DOWN);
             }
             base.Update(gameTime);
         }
@@ -78,20 +92,29 @@ namespace RoguelikeGame
                     Exit();
                     break;
                 case InputAction.MOVE_LEFT:
+                    PerformTurn(inputAction, Direction.LEFT);
+                    break;
                 case InputAction.MOVE_RIGHT:
+                    PerformTurn(inputAction, Direction.RIGHT);
+                    break;
                 case InputAction.MOVE_UP:
+                    PerformTurn(inputAction, Direction.UP);
+                    break;
                 case InputAction.MOVE_DOWN:
-                    _player.PerformAction(inputAction);
-                    PerformTurn();
+                    PerformTurn(inputAction, Direction.DOWN);
                     break;
                 default:
                     break;
             }
         }
 
-        private void PerformTurn()
+        private void PerformTurn(InputAction inputAction, Direction scrollDirection)
         {
-            _turns++;
+            if (_player.PerformAction(inputAction))
+            { 
+                _mapConsole.CheckScrollMap(scrollDirection);
+                _turns++;
+            }
         }
 
         protected override void Draw(GameTime gameTime)

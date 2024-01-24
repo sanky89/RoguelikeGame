@@ -35,10 +35,10 @@ namespace RoguelikeGame
             return PaddedRoomRect.Intersects(other.PaddedRoomRect);
         }
 
-        public Vector2 GetRandomPointInsideRoom()
+        public Point GetRandomPointInsideRoom()
         {
             Random random = new Random();
-            return new Vector2(random.Next(RoomRect.X + 1, RoomRect.Right), random.Next(RoomRect.Y + 1, RoomRect.Bottom));
+            return new Point(random.Next(RoomRect.X + 1, RoomRect.Right), random.Next(RoomRect.Y + 1, RoomRect.Bottom));
         }
     }
 }
