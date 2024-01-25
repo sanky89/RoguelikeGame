@@ -12,7 +12,7 @@ namespace RoguelikeGame
         public const int RENDER_TARGET_WIDTH = 1280;
         public const int RENDER_TARGET_HEIGHT = 720;
         public const int  MAP_CONSOLE_WIDTH = 90;
-        public const int MAP_CONSOLE_HEIGHT = 58;
+        public const int MAP_CONSOLE_HEIGHT = 50;
         public const int TILE_SIZE = 12;
         public const float SCALE = 1f;
 
