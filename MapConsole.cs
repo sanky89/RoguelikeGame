@@ -87,13 +87,8 @@ namespace RoguelikeGame
                             SpriteEffects.None,
                             0);
                     }
-                    else if(Globals.Map.IsMonsterTile(x, y))
+                    else if(Globals.Map.IsMonsterTile(x, y) && tile.Visible)
                     {
-                        if (!tile.Visible && !tile.Visited)
-                        {
-                            continue;
-                        }
-
                         Globals.SpriteBatch.Draw(Globals.GlyphsTexture,
                             (Position + offset + new Vector2(x, y)) * Globals.TILE_SIZE * Globals.SCALE,
                             Globals.Map.Monster.SourceRect,
@@ -106,8 +101,6 @@ namespace RoguelikeGame
                     }
                     else
                     {
-                        
-
                         if (!tile.Visible && !tile.Visited)
                         {
                             continue;

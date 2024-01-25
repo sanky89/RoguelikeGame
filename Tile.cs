@@ -12,11 +12,10 @@ namespace RoguelikeGame
     public class Tile
     {
         private Character _character;
-        private TileType _tileType;
         private Vector2 _offset = Vector2.Zero;
         public readonly Vector2 Position;
 
-        public TileType TileType => _tileType;
+        public TileType TileType { get; set; }
         public Vector2 Offset => _offset;
         public bool Visible { get; set; }
         public bool Visited { get; set; }
@@ -43,7 +42,7 @@ namespace RoguelikeGame
         {
             _character = character;
             Position = position;
-            _tileType = tileType;
+            TileType = tileType;
             Visible = false;
             Visited = false;
         }
@@ -51,7 +50,7 @@ namespace RoguelikeGame
         public Tile(Character character, TileType tileType)
         {
             _character = character;
-            _tileType = tileType;
+            TileType = tileType;
             Visible = false;
             Visited = false;
         }
@@ -64,7 +63,7 @@ namespace RoguelikeGame
         public void UpdateTile(Character character, TileType tileType)
         {
             _character = character;
-            _tileType = tileType;
+            TileType = tileType;
         }
     }
 }
