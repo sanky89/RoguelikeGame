@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace RoguelikeGame
@@ -27,16 +26,15 @@ namespace RoguelikeGame
         private Player _player;
         private Room _startingRoom;
         public Player Player => _player;
-        public Entity Monster => _monster;
 
-        private Entity _monster;
+        public List<Entity> Monsters;
 
         public Map(Player player)
         {
             _tiles = new Tile[COLS, ROWS];
             _rooms = new List<Room>();
             _player = player;
-            _monster = new Entity(new Character(Glyphs.ZUpper, Color.Red), Vector2.Zero);
+            Monsters = new List<Entity>();
         }
 
         public Tile GetTileAtIndex(int x, int y)
@@ -52,16 +50,21 @@ namespace RoguelikeGame
         {
             GenerateRooms();
             DropPlayerInRandomRoom();
-            DropMonsterInRandomRoom();
+            for (int i = 0; i < 20; i++)
+            {
+                DropMonsterInRandomRoom();
+            }
         }
 
         private void DropMonsterInRandomRoom()
         {
             Random r = new Random();
             var room = _rooms[r.Next(_rooms.Count - 1)];
-            var point = _startingRoom.GetRandomPointInsideRoom();
-            _monster.SetMapPosition(point.X, point.Y);
+            var point = room.GetRandomPointInsideRoom();
+            var monster = new Entity(new Character(Glyphs.ZUpper, Color.Red), Vector2.Zero);
+            monster.SetMapPosition(point.X, point.Y);
             SetTileType(point.X, point.Y, TileType.Solid);
+            Monsters.Add(monster);
         }
 
         public void RegenerateMap()
@@ -86,11 +89,24 @@ namespace RoguelikeGame
             _tiles[x, y].TileType = type;
         }
 
-        public bool CanMove(int x, int y)
+        public ActionResult CanMove(int x, int y)
         {
-            if (x < 0 || y < 0 || x >= COLS || y >= ROWS) return false;
+            if (x < 0 || y < 0 || x >= COLS || y >= ROWS)
+            { 
+                return ActionResult.None; 
+            }
 
-            return _tiles[x, y].TileType == TileType.Walkable;
+            var tile = _tiles[x, y];
+            if (tile.TileType == TileType.Walkable)
+            {
+                return ActionResult.Move;
+            }
+            else if(IsMonsterTile(x, y, out _))
+            {
+                return ActionResult.HitEntity;
+            }
+
+            return ActionResult.HitWall;
         }
 
         public void ToggleMapVisible(bool visible)
@@ -139,9 +155,18 @@ namespace RoguelikeGame
             return x == _player.MapX && y == _player.MapY;
         }
 
-        public bool IsMonsterTile(int x, int y)
+        public bool IsMonsterTile(int x, int y, out Entity m)
         {
-            return x == _monster.MapX && y == _monster.MapY;
+            for(int i=0; i<Monsters.Count; i++)
+            {
+                if (x == Monsters[i].MapX && y == Monsters[i].MapY)
+                {
+                    m = Monsters[i];
+                    return true;
+                }
+            }
+            m = null;
+            return false;
         }
 
         private void DropPlayerInRandomRoom()

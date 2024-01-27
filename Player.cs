@@ -32,7 +32,7 @@ namespace RoguelikeGame
             _fov.UpdateFov(MapX, MapY);
         }
 
-        public bool PerformAction(InputAction action)
+        public ActionResult PerformAction(InputAction action)
         {
             int dx = 0;
             int dy = 0;
@@ -58,15 +58,15 @@ namespace RoguelikeGame
             // System.Console.WriteLine($"{(int)_position.X + Globals.Map.colStartIndex}");
             var newX = MapX + dx;
             var newY = MapY + dy;
-            if (Globals.Map.CanMove(newX, newY))
+            var actionResult = Globals.Map.CanMove(newX, newY);
+            if (actionResult == ActionResult.Move)
             {
                 MapX += dx;
                 MapY += dy;
                 _fov.UpdateFov(MapX, MapY);
                 System.Console.WriteLine($"Map Index: {MapX}, {MapY}");
-                return true;
             }
-            return false;
+            return actionResult;
         }
     }
 }

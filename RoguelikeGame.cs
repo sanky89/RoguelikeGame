@@ -11,6 +11,7 @@ namespace RoguelikeGame
         private SpriteBatch _spriteBatch;
         private Player _player;
         private MapConsole _mapConsole;
+        private ActionLog _actionLog;
         private bool _showMap = false;
         private int _turns = 0;
 
@@ -45,7 +46,7 @@ namespace RoguelikeGame
             Globals.Columns = Globals.GlyphsTexture.Height / Globals.TILE_SIZE;
 
             _player = new Player(new Character(Glyphs.Face1, Color.Yellow), Vector2.Zero);
-
+            _actionLog = new ActionLog();
             Globals.Map = new Map(_player);
             Globals.Map.GenerateMap();
             _mapConsole = new MapConsole( "Map", Globals.MAP_CONSOLE_WIDTH, Globals.MAP_CONSOLE_HEIGHT, ConsoleLocation.TopLeft, BorderStyle.SingleLine, Color.Green);
@@ -110,11 +111,23 @@ namespace RoguelikeGame
 
         private void PerformTurn(InputAction inputAction, Direction scrollDirection)
         {
-            if (_player.PerformAction(inputAction))
-            { 
-                _mapConsole.CheckScrollMap(scrollDirection);
-                _turns++;
+            var actionResult = _player.PerformAction(inputAction);
+
+            switch (actionResult)
+            {
+                case ActionResult.Move:
+                    _mapConsole.CheckScrollMap(scrollDirection);
+                    break;
+                case ActionResult.HitWall:
+                    _actionLog.AddLog("You Hit a Wall");
+                    break;
+                case ActionResult.HitEntity:
+                    _actionLog.AddLog("You hit an enemy");
+                    break;
+                default:
+                    break;
             }
+            _turns++;
         }
 
         protected override void Draw(GameTime gameTime)
@@ -123,6 +136,7 @@ namespace RoguelikeGame
 
             _spriteBatch.Begin();
             _mapConsole.Draw();
+            _spriteBatch.DrawString(Globals.Font, _actionLog.LogString, new Vector2(0, _mapConsole.Height * Globals.TILE_SIZE + 10f), Color.White);
             _spriteBatch.End();
 
             base.Draw(gameTime);
