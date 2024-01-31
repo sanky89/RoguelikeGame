@@ -37,8 +37,7 @@ namespace RoguelikeGame
 
         public Point GetRandomPointInsideRoom()
         {
-            Random random = new Random();
-            return new Point(random.Next(RoomRect.X + 1, RoomRect.Right), random.Next(RoomRect.Y + 1, RoomRect.Bottom));
+            return new Point(Globals.Rng.Next(RoomRect.X + 1, RoomRect.Right), Globals.Rng.Next(RoomRect.Y + 1, RoomRect.Bottom));
         }
     }
 }

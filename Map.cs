@@ -58,8 +58,7 @@ namespace RoguelikeGame
 
         private void DropMonsterInRandomRoom()
         {
-            Random r = new Random();
-            var room = _rooms[r.Next(_rooms.Count - 1)];
+            var room = _rooms[Globals.Rng.Next(_rooms.Count - 1)];
             var point = room.GetRandomPointInsideRoom();
             var monster = new Entity(new Character(Glyphs.ZUpper, Color.Red), Vector2.Zero);
             monster.SetMapPosition(point.X, point.Y);
@@ -171,8 +170,7 @@ namespace RoguelikeGame
 
         private void DropPlayerInRandomRoom()
         {
-            Random r = new Random();
-            _startingRoom = _rooms[r.Next(_rooms.Count - 1)];
+            _startingRoom = _rooms[Globals.Rng.Next(_rooms.Count - 1)];
             if(_startingRoom.RoomRect.Right > Globals.MAP_CONSOLE_WIDTH || 
                _startingRoom.RoomRect.Bottom > Globals.MAP_CONSOLE_HEIGHT)
             {
@@ -194,16 +192,15 @@ namespace RoguelikeGame
                 }
             }
 
-            Random r = new Random();
             int count = 0;
             int failedAttempts = 0;
             int maxFailedAttempts = 500;
             while (count < MAX_ROOMS)
             {
-                int width = r.Next(MIN_ROOM_SIZE, MAX_ROOM_SIZE);
-                int height = r.Next(MIN_ROOM_SIZE, MAX_ROOM_SIZE);
-                int x = r.Next(COLS - width - 1);
-                int y = r.Next(ROWS - height - 1);
+                int width = Globals.Rng.Next(MIN_ROOM_SIZE, MAX_ROOM_SIZE);
+                int height = Globals.Rng.Next(MIN_ROOM_SIZE, MAX_ROOM_SIZE);
+                int x = Globals.Rng.Next(COLS - width - 1);
+                int y = Globals.Rng.Next(ROWS - height - 1);
                 Room room = new Room(x, y, width, height);
                 bool intersects = false;
                 foreach (var room1 in _rooms)

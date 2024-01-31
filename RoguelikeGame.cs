@@ -33,6 +33,9 @@ namespace RoguelikeGame
             Globals.Content = Content;
             Globals.InputManager = new InputManager();
             Globals.InputManager.KeyPressed += HandleAction;
+            int seed = Environment.TickCount;
+            System.Console.WriteLine("Using Seed: " + seed);
+            Globals.Rng = new Random(seed);
             base.Initialize();
         }
 
