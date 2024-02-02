@@ -35,9 +35,9 @@ namespace RoguelikeGame
             return PaddedRoomRect.Intersects(other.PaddedRoomRect);
         }
 
-        public Point GetRandomPointInsideRoom()
+        public Vec2Int GetRandomPointInsideRoom()
         {
-            return new Point(Globals.Rng.Next(RoomRect.X + 1, RoomRect.Right), Globals.Rng.Next(RoomRect.Y + 1, RoomRect.Bottom));
+            return new Vec2Int(Globals.Rng.Next(RoomRect.X + 1, RoomRect.Right), Globals.Rng.Next(RoomRect.Y + 1, RoomRect.Bottom));
         }
     }
 }

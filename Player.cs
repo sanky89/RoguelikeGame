@@ -7,12 +7,10 @@ namespace RoguelikeGame
     public class Player : Entity
     {
         public const int FOV_SIZE = 20;
-        public int X => (int)_position.X;
-        public int Y => (int)_position.Y;
 
         private Fov _fov;
 
-        public Player(Character character, Vector2 position) : base( character, position)
+        public Player(Character character) : base( character)
         {
         }
 
@@ -20,14 +18,6 @@ namespace RoguelikeGame
         {
             base.SetMapPosition(x, y);
             System.Console.WriteLine($"Map Position: {MapX}, {MapY}");
-            _fov = new Fov(Globals.Map);
-            _fov.UpdateFov(MapX, MapY);
-        }
-
-        public void SetInitialMapPosition(Vector2 pos, int x, int y)
-        {
-
-            System.Console.WriteLine($"Position: {pos.X}, {pos.Y} Map Index: {MapX}, {MapY}");
             _fov = new Fov(Globals.Map);
             _fov.UpdateFov(MapX, MapY);
         }

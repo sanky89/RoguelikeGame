@@ -48,7 +48,7 @@ namespace RoguelikeGame
             Globals.Rows = Globals.GlyphsTexture.Width / Globals.TILE_SIZE;
             Globals.Columns = Globals.GlyphsTexture.Height / Globals.TILE_SIZE;
 
-            _player = new Player(new Character(Glyphs.Face1, Color.Yellow), Vector2.Zero);
+            _player = new Player(new Character(Glyphs.Face1, Color.Yellow));
             _actionLog = new ActionLog();
             Globals.Map = new Map(_player);
             Globals.Map.GenerateMap();

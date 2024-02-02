@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 
 namespace RoguelikeGame
 {
@@ -106,18 +105,18 @@ namespace RoguelikeGame
             }
         }
 
-        private Point GetMapPointForLocalFov(int sector, int cx, int cy, int x, int y)
+        private Vec2Int GetMapPointForLocalFov(int sector, int cx, int cy, int x, int y)
         {
             return sector switch
             {
-                1 => new Point(cx + x, cy - y),
-                2 => new Point(cx + y, cy - x),
-                3 => new Point(cx + y, cy + x),
-                4 => new Point(cx + x, cy + y),
-                5 => new Point(cx - x, cy + y),
-                6 => new Point(cx - y, cy + x),
-                7 => new Point(cx - y, cy - x),
-                8 => new Point(cx - x, cy - y),
+                1 => new Vec2Int(cx + x, cy - y),
+                2 => new Vec2Int(cx + y, cy - x),
+                3 => new Vec2Int(cx + y, cy + x),
+                4 => new Vec2Int(cx + x, cy + y),
+                5 => new Vec2Int(cx - x, cy + y),
+                6 => new Vec2Int(cx - y, cy + x),
+                7 => new Vec2Int(cx - y, cy - x),
+                8 => new Vec2Int(cx - x, cy - y),
                 _ => throw new ArgumentOutOfRangeException(nameof(sector))
             };
         }

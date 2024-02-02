@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace RoguelikeGame
 {
@@ -60,7 +59,7 @@ namespace RoguelikeGame
         {
             var room = _rooms[Globals.Rng.Next(_rooms.Count - 1)];
             var point = room.GetRandomPointInsideRoom();
-            var monster = new Entity(new Character(Glyphs.ZUpper, Color.Red), Vector2.Zero);
+            var monster = new Entity(new Character(Glyphs.ZUpper, Color.Red));
             monster.SetMapPosition(point.X, point.Y);
             SetTileType(point.X, point.Y, TileType.Solid);
             Monsters.Add(monster);
@@ -80,7 +79,6 @@ namespace RoguelikeGame
         {
             _player = player;
             DropPlayerInRandomRoom();
-            //_player.SetInitialMapPosition(_position + new Vector2(41, 35), 41, 35);
         }
 
         private void SetTileType(int x, int y, TileType type)
