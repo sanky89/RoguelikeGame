@@ -16,21 +16,33 @@ namespace RoguelikeGame
            
         }
 
-        public void CheckScrollMap(Direction direction)
+        public void CheckScrollMap(InputAction inputAction)
         {
-            if(direction == Direction.RIGHT && Width - Globals.Map.Player.MapX <= 5)
+            if((inputAction == InputAction.MOVE_RIGHT ||
+                inputAction == InputAction.MOVE_NE ||
+                inputAction == InputAction.MOVE_SE) 
+                && Width - Globals.Map.Player.MapX <= 5)
             {
                 ScrollMap(Direction.RIGHT);
             }
-            if (direction == Direction.LEFT && offset.X + Globals.Map.Player.MapX <= 5)
+            if ((inputAction == InputAction.MOVE_LEFT ||
+                inputAction == InputAction.MOVE_NW ||
+                inputAction == InputAction.MOVE_SW) &&
+                offset.X + Globals.Map.Player.MapX <= 5)
             {
                 ScrollMap(Direction.LEFT);
             }
-            if (direction == Direction.UP && offset.Y + Globals.Map.Player.MapY <= 5)
+            if ((inputAction == InputAction.MOVE_UP ||
+                inputAction == InputAction.MOVE_NW ||
+                inputAction == InputAction.MOVE_NE) &&
+                offset.Y + Globals.Map.Player.MapY <= 5)
             {
                 ScrollMap(Direction.DOWN);
             }
-            if (direction == Direction.DOWN && Height - Globals.Map.Player.MapY <= 5)
+            if ((inputAction == InputAction.MOVE_DOWN ||
+                inputAction == InputAction.MOVE_SW ||
+                inputAction == InputAction.MOVE_SE) &&
+                Height - Globals.Map.Player.MapY <= 5)
             {
                 ScrollMap(Direction.UP);
             }

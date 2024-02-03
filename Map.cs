@@ -10,6 +10,10 @@ namespace RoguelikeGame
         RIGHT,
         UP,
         DOWN,
+        NW,
+        NE,
+        SW,
+        SE
     }
 
     public class Map

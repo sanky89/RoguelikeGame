@@ -69,22 +69,7 @@ namespace RoguelikeGame
                 _showMap = !_showMap;
                 Globals.Map.ToggleMapVisible(_showMap);
             }
-            if (Globals.InputManager.IsKeyDown(Keys.LeftShift) && Globals.InputManager.IsKeyPressed(Keys.OemPeriod))
-            {
-                _mapConsole.ScrollMap(Direction.LEFT);
-            }
-            if (Globals.InputManager.IsKeyDown(Keys.LeftShift) && Globals.InputManager.IsKeyPressed(Keys.OemComma))
-            {
-                _mapConsole.ScrollMap(Direction.RIGHT);
-            }
-            if (Globals.InputManager.IsKeyDown(Keys.LeftShift) && Globals.InputManager.IsKeyPressed(Keys.OemSemicolon))
-            {
-                _mapConsole.ScrollMap(Direction.UP);
-            }
-            if (Globals.InputManager.IsKeyDown(Keys.LeftShift) && Globals.InputManager.IsKeyPressed(Keys.OemQuestion))
-            {
-                _mapConsole.ScrollMap(Direction.DOWN);
-            }
+
             base.Update(gameTime);
         }
 
@@ -96,30 +81,28 @@ namespace RoguelikeGame
                     Exit();
                     break;
                 case InputAction.MOVE_LEFT:
-                    PerformTurn(inputAction, Direction.LEFT);
-                    break;
                 case InputAction.MOVE_RIGHT:
-                    PerformTurn(inputAction, Direction.RIGHT);
-                    break;
                 case InputAction.MOVE_UP:
-                    PerformTurn(inputAction, Direction.UP);
-                    break;
                 case InputAction.MOVE_DOWN:
-                    PerformTurn(inputAction, Direction.DOWN);
+                case InputAction.MOVE_NW:
+                case InputAction.MOVE_NE:
+                case InputAction.MOVE_SW:
+                case InputAction.MOVE_SE:
+                    PerformTurn(inputAction);
                     break;
                 default:
                     break;
             }
         }
 
-        private void PerformTurn(InputAction inputAction, Direction scrollDirection)
+        private void PerformTurn(InputAction inputAction)
         {
             var actionResult = _player.PerformAction(inputAction);
 
             switch (actionResult)
             {
                 case ActionResult.Move:
-                    _mapConsole.CheckScrollMap(scrollDirection);
+                    _mapConsole.CheckScrollMap(inputAction);
                     break;
                 case ActionResult.HitWall:
                     _actionLog.AddLog("You Hit a Wall");

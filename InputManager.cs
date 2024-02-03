@@ -15,6 +15,10 @@ namespace RoguelikeGame
         MOVE_RIGHT,
         MOVE_UP,
         MOVE_DOWN,
+        MOVE_NW,
+        MOVE_NE,
+        MOVE_SW,
+        MOVE_SE,
         ESCAPE
     }
     public class InputManager
@@ -36,22 +40,27 @@ namespace RoguelikeGame
 
         public InputManager()
         {
-            if (!ReadInputFile())
+            _actionsMap = new Dictionary<Keys, InputAction>
             {
-                _actionsMap = new Dictionary<Keys, InputAction>
-                {
-                    { Keys.Left, InputAction.MOVE_LEFT},
-                    { Keys.A, InputAction.MOVE_LEFT},
-                    { Keys.Right, InputAction.MOVE_RIGHT},
-                    { Keys.D, InputAction.MOVE_RIGHT},
-                    { Keys.Up, InputAction.MOVE_UP},
-                    { Keys.W, InputAction.MOVE_UP},
-                    { Keys.Down, InputAction.MOVE_DOWN},
-                    { Keys.S, InputAction.MOVE_DOWN},
-                    { Keys.Escape, InputAction.ESCAPE},
-                };
-                WriteInputFile();
-            }
+                 { Keys.Left, InputAction.MOVE_LEFT},
+                 { Keys.A, InputAction.MOVE_LEFT},
+                 { Keys.K, InputAction.MOVE_LEFT},
+                 { Keys.Right, InputAction.MOVE_RIGHT},
+                 { Keys.D, InputAction.MOVE_RIGHT},
+                 { Keys.OemSemicolon, InputAction.MOVE_RIGHT},
+                 { Keys.Up, InputAction.MOVE_UP},
+                 { Keys.W, InputAction.MOVE_UP},
+                 { Keys.O, InputAction.MOVE_UP},
+                 { Keys.Down, InputAction.MOVE_DOWN},
+                 { Keys.S, InputAction.MOVE_DOWN},
+                 { Keys.OemPeriod, InputAction.MOVE_DOWN},
+                 { Keys.I, InputAction.MOVE_NW},
+                 { Keys.P, InputAction.MOVE_NE},
+                 { Keys.OemComma, InputAction.MOVE_SW},
+                 { Keys.OemQuestion, InputAction.MOVE_SE},
+                 { Keys.Escape, InputAction.ESCAPE},
+            };
+            
             _lastKeyboardState = Keyboard.GetState();
             _currentKeyboardState = Keyboard.GetState();
         }
@@ -109,44 +118,6 @@ namespace RoguelikeGame
         {
             _currentActions = _currentActions & ~(1 << (int)inputAction);
             //System.Console.WriteLine(_currentActions);
-        }
-
-        private bool ReadInputFile()
-        {
-            if(!File.Exists(kInputFile))
-            {
-                return false;
-            }
-            string mapString = File.ReadAllText(kInputFile);
-            if(string.IsNullOrEmpty(mapString))
-            {
-                return false;
-            }
-            _actionsMap = new Dictionary<Keys, InputAction>();
-            string[] lines = mapString.Split("\n");
-            for (int i = 0; i < lines.Length-1; i++) //Avoid the final empty line
-            {
-                string[] action = lines[i].Split('|');
-                Enum.TryParse<Keys>(action[0], false, out var key);
-                Enum.TryParse<InputAction>(action[1], false, out var inputAction);
-                _actionsMap[key] = inputAction;
-            }
-            return true;
-        }
-
-        private void WriteInputFile()
-        {
-            
-            string content = "";
-            //using (StreamWriter sw = new StreamWriter(File.Open(path, FileMode.Append)))
-            //{
-                foreach (var kvp in _actionsMap)
-                {
-                   content += kvp.Key + "|" + kvp.Value + "\n";
-                }
-            //}
-            if(!File.Exists(kInputFile))
-                File.WriteAllText(kInputFile, content);
         }
     }
 }

@@ -40,6 +40,22 @@ namespace RoguelikeGame
                     break;
                 case InputAction.MOVE_DOWN:
                     dy = 1;
+                    break;                
+                case InputAction.MOVE_NW:
+                    dx = -1;
+                    dy = -1;
+                    break;
+                case InputAction.MOVE_NE:
+                    dx = 1;
+                    dy = -1;
+                    break;
+                case InputAction.MOVE_SW:
+                    dx = -1;
+                    dy = 1;
+                    break;
+                case InputAction.MOVE_SE:
+                    dx = 1;
+                    dy = 1;
                     break;
                 default:
                     break;
