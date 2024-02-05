@@ -31,7 +31,6 @@ obj/
 [Rr]elease*/
 Ankh.NoLoad
 .vs/
-app.manifest
 
 #MonoDevelop
 *.pidb
