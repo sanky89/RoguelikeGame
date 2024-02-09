@@ -30,14 +30,14 @@ namespace RoguelikeGame
         private Room _startingRoom;
         public Player Player => _player;
 
-        public List<Entity> Monsters;
+        public List<Monster> Monsters;
 
         public Map(Player player)
         {
             _tiles = new Tile[COLS, ROWS];
             _rooms = new List<Room>();
             _player = player;
-            Monsters = new List<Entity>();
+            Monsters = new List<Monster>();
         }
 
         public Tile GetTileAtIndex(int x, int y)
@@ -53,7 +53,7 @@ namespace RoguelikeGame
         {
             GenerateRooms();
             DropPlayerInRandomRoom();
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 40; i++)
             {
                 DropMonsterInRandomRoom();
             }
@@ -63,10 +63,31 @@ namespace RoguelikeGame
         {
             var room = _rooms[Globals.Rng.Next(_rooms.Count - 1)];
             var point = room.GetRandomPointInsideRoom();
-            var monster = new Entity(new Character(Glyphs.ZUpper, Color.Red));
-            monster.SetMapPosition(point.X, point.Y);
-            SetTileType(point.X, point.Y, TileType.Solid);
-            Monsters.Add(monster);
+            var type = (MonsterType)Globals.Rng.Next(0, (int)MonsterType.Count);
+            Monster monster = null;
+            switch (type)
+            {
+                case MonsterType.Skeleton:
+                    monster = new Monster(new Character(Glyphs.SUpper, Color.White), "a Skeleton", MonsterType.Skeleton);
+                    break;
+                case MonsterType.Zombie:
+                    monster = new Monster(new Character(Glyphs.ZUpper, Color.DarkGreen), "a Zombie", MonsterType.Zombie);
+                    break;
+                case MonsterType.Goblin:
+                    monster = new Monster(new Character(Glyphs.GUpper, Color.Green), "a Goblin", MonsterType.Goblin);
+                    break;
+                case MonsterType.Kobold:
+                    monster = new Monster(new Character(Glyphs.KLower, Color.OrangeRed), "a Kobold", MonsterType.Kobold);
+                    break;
+                default:
+                    break;
+            }
+            if(monster != null)
+            {
+                monster.SetMapPosition(point.X, point.Y);
+                SetTileType(point.X, point.Y, TileType.Solid);
+                Monsters.Add(monster);
+            }
         }
 
         public void RegenerateMap()
@@ -94,20 +115,20 @@ namespace RoguelikeGame
         {
             if (x < 0 || y < 0 || x >= COLS || y >= ROWS)
             { 
-                return ActionResult.None; 
+                return new ActionResult(ActionResultType.None, null);
             }
 
             var tile = _tiles[x, y];
             if (tile.TileType == TileType.Walkable)
             {
-                return ActionResult.Move;
+                return new ActionResult(ActionResultType.Move, null);;
             }
-            else if(IsMonsterTile(x, y, out _))
+            else if(IsMonsterTile(x, y, out var monster))
             {
-                return ActionResult.HitEntity;
+                return new ActionResult(ActionResultType.HitEntity, monster);
             }
 
-            return ActionResult.HitWall;
+            return new ActionResult(ActionResultType.HitWall, null);;
         }
 
         public void ToggleMapVisible(bool visible)

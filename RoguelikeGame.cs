@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Microsoft.VisualBasic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -99,16 +100,19 @@ namespace RoguelikeGame
         {
             var actionResult = _player.PerformAction(inputAction);
 
-            switch (actionResult)
+            switch (actionResult.ResultType)
             {
-                case ActionResult.Move:
+                case ActionResultType.Move:
                     _mapConsole.CheckScrollMap(inputAction);
                     break;
-                case ActionResult.HitWall:
+                case ActionResultType.HitWall:
                     _actionLog.AddLog("You Hit a Wall");
                     break;
-                case ActionResult.HitEntity:
-                    _actionLog.AddLog("You hit an enemy");
+                case ActionResultType.HitEntity:
+                    if(actionResult.Entity is Monster m)
+                    {
+                        _actionLog.AddLog($"You hit {m.Name}");
+                    }
                     break;
                 default:
                     break;
