@@ -111,6 +111,18 @@ namespace RoguelikeGame
                             SpriteEffects.None,
                             0);
                     }
+                    else if(Globals.Map.ContainsItem(x,y, out var item) && tile.Visible)
+                    {
+                        Globals.SpriteBatch.Draw(Globals.GlyphsTexture,
+                            (Position + offset + new Vector2(x, y)) * Globals.TILE_SIZE * Globals.SCALE,
+                            item.SourceRect,
+                            item.Color,
+                            0f,
+                            Vector2.Zero,
+                            Globals.SCALE,
+                            SpriteEffects.None,
+                            0);
+                    }
                     else
                     {
                         if (!tile.Visible && !tile.Visited)

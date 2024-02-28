@@ -8,7 +8,7 @@ namespace RoguelikeGame
 {
     public class Monster : Entity
     {
-        public string Name {get; private set;}
+        public readonly string Name;
 
         public MonsterType Type {get; private set;}
         public Monster(Character character, string name, MonsterType monsterType) : base(character)

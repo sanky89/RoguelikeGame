@@ -114,6 +114,13 @@ namespace RoguelikeGame
                         _actionLog.AddLog($"You hit {m.Name}");
                     }
                     break;
+                case ActionResultType.CollectedCoins:
+                    _mapConsole.CheckScrollMap(inputAction);
+                    if(actionResult.Entity is Item item)
+                    {
+                        _actionLog.AddLog($"You collected {item.Amount} {item.Name}");
+                    }
+                    break;
                 default:
                     break;
             }

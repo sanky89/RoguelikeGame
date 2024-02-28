@@ -14,12 +14,14 @@ namespace RoguelikeGame
         Move,
         HitWall,
         HitEntity,
+        CollectedCoins,
+        Count
     }
 
     public class ActionResult
     {
         public readonly ActionResultType ResultType;
-        public readonly Entity? Entity;
+        public readonly Entity? Entity = null;
 
         public ActionResult(ActionResultType resultType, Entity entity)
         {

@@ -66,7 +66,8 @@ namespace RoguelikeGame
             var newX = MapX + dx;
             var newY = MapY + dy;
             var actionResult = Globals.Map.CanMove(newX, newY);
-            if (actionResult.ResultType == ActionResultType.Move)
+            if (actionResult.ResultType == ActionResultType.Move ||
+                actionResult.ResultType == ActionResultType.CollectedCoins)
             {
                 MapX += dx;
                 MapY += dy;
