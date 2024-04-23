@@ -121,7 +121,8 @@ namespace RoguelikeGame
 
         private void DrawTitle(int x)
         {
-            Globals.SpriteBatch.Draw(Globals.GlyphsTexture, new Vector2(x, _y) * Globals.TILE_SIZE, _titleCharacters[x - _titleStartIndex].GetSourceRect(), BorderColor, 0f, Vector2.Zero, Globals.SCALE, SpriteEffects.None, 0);
+            if(!string.IsNullOrEmpty(Title))
+                Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(x, _y) * Globals.TILE_SIZE, _titleCharacters[x - _titleStartIndex].GetSourceRect(), BorderColor, 0f, Vector2.Zero, Globals.SCALE, SpriteEffects.None, 0);
         }
 
         public virtual void Draw()
@@ -139,25 +140,25 @@ namespace RoguelikeGame
             {
                 if (x < _titleStartIndex || x > _titleEndIndex)
                 {
-                    Globals.SpriteBatch.Draw(Globals.GlyphsTexture, new Vector2(x, _y) * Globals.TILE_SIZE, _horizontal.GetSourceRect(), BorderColor, 0f, Vector2.Zero, Globals.SCALE, SpriteEffects.None, 0);
+                    Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(x, _y) * Globals.TILE_SIZE, _horizontal.GetSourceRect(), BorderColor, 0f, Vector2.Zero, Globals.SCALE, SpriteEffects.None, 0);
                 }
                 else
                 {
                     DrawTitle(x);
                 }
-                Globals.SpriteBatch.Draw(Globals.GlyphsTexture, new Vector2(x, _y + Height) * Globals.TILE_SIZE, _horizontal.GetSourceRect(), BorderColor, 0f, Vector2.Zero, Globals.SCALE, SpriteEffects.None, 0);
+                Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(x, _y + Height) * Globals.TILE_SIZE, _horizontal.GetSourceRect(), BorderColor, 0f, Vector2.Zero, Globals.SCALE, SpriteEffects.None, 0);
             }
 
             for (int y = _y+1; y < _y + Height; y++)
             {
-                Globals.SpriteBatch.Draw(Globals.GlyphsTexture, new Vector2(_x, y) * Globals.TILE_SIZE, _vertical.GetSourceRect(), BorderColor, 0f, Vector2.Zero, Globals.SCALE, SpriteEffects.None, 0);
-                Globals.SpriteBatch.Draw(Globals.GlyphsTexture, new Vector2(_x + Width, y) * Globals.TILE_SIZE, _vertical.GetSourceRect(), BorderColor, 0f, Vector2.Zero, Globals.SCALE, SpriteEffects.None, 0);
+                Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(_x, y) * Globals.TILE_SIZE, _vertical.GetSourceRect(), BorderColor, 0f, Vector2.Zero, Globals.SCALE, SpriteEffects.None, 0);
+                Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(_x + Width, y) * Globals.TILE_SIZE, _vertical.GetSourceRect(), BorderColor, 0f, Vector2.Zero, Globals.SCALE, SpriteEffects.None, 0);
             }
 
-            Globals.SpriteBatch.Draw(Globals.GlyphsTexture, new Vector2(_x,_y) * Globals.TILE_SIZE, _upperLeftCorner.GetSourceRect(), BorderColor, 0f, Vector2.Zero, Globals.SCALE, SpriteEffects.None, 0);
-            Globals.SpriteBatch.Draw(Globals.GlyphsTexture, new Vector2(_x+Width, _y) * Globals.TILE_SIZE, _upperRightCorner.GetSourceRect(), BorderColor, 0f, Vector2.Zero, Globals.SCALE, SpriteEffects.None, 0);
-            Globals.SpriteBatch.Draw(Globals.GlyphsTexture, new Vector2(_x, _y+Height) * Globals.TILE_SIZE, _lowerLeftCorner.GetSourceRect(), BorderColor, 0f, Vector2.Zero, Globals.SCALE, SpriteEffects.None, 0);
-            Globals.SpriteBatch.Draw(Globals.GlyphsTexture, new Vector2(_x+Width, _y+Height) * Globals.TILE_SIZE, _lowerRightCorner.GetSourceRect(), BorderColor, 0f, Vector2.Zero, Globals.SCALE, SpriteEffects.None, 0);
+            Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(_x,_y) * Globals.TILE_SIZE, _upperLeftCorner.GetSourceRect(), BorderColor, 0f, Vector2.Zero, Globals.SCALE, SpriteEffects.None, 0);
+            Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(_x+Width, _y) * Globals.TILE_SIZE, _upperRightCorner.GetSourceRect(), BorderColor, 0f, Vector2.Zero, Globals.SCALE, SpriteEffects.None, 0);
+            Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(_x, _y+Height) * Globals.TILE_SIZE, _lowerLeftCorner.GetSourceRect(), BorderColor, 0f, Vector2.Zero, Globals.SCALE, SpriteEffects.None, 0);
+            Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(_x+Width, _y+Height) * Globals.TILE_SIZE, _lowerRightCorner.GetSourceRect(), BorderColor, 0f, Vector2.Zero, Globals.SCALE, SpriteEffects.None, 0);
         }
     }
 }

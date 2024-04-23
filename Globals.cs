@@ -12,17 +12,22 @@ namespace RoguelikeGame
         public const int SCREEN_HEIGHT = 720;
         public const int RENDER_TARGET_WIDTH = 1280;
         public const int RENDER_TARGET_HEIGHT = 720;
-        public const int  MAP_CONSOLE_WIDTH = 90;
-        public const int MAP_CONSOLE_HEIGHT = 50;
-        public const int TILE_SIZE = 12;
-        public const float SCALE = 1f;
+        public const int MAP_CONSOLE_WIDTH = 40;
+        public const int MAP_CONSOLE_HEIGHT = 20;
+        public const int TILE_SIZE = 32;
+        public const float SCALE = 1.0f;
 
         public static GraphicsDevice GraphicsDevice;
         public static ContentManager Content { get; set; }
         public static SpriteBatch SpriteBatch { get; set; }
         public static InputManager InputManager { get; set; }
         public static float ElapsedTime { get; set; }
-        public static Texture2D GlyphsTexture { get; set; }
+        public static bool IsAscii { get; set; }
+        public static Texture2D AsciiTexture { get; set; }
+        public static Texture2D TilesSheet { get; set; }
+        public static Texture2D CharactersSheet { get; set; }
+        public static Texture2D MonstersSheet { get; set; }
+        public static Texture2D ItemsSheet { get; set; }
         public static SpriteFont Font { get; set; }
         public static Map Map {get; set;}
         public static Random Rng { get; set; }

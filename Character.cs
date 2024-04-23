@@ -25,6 +25,15 @@ namespace RoguelikeGame
             SetupChar(glyph, color);
         }
 
+        public Character(Glyphs glyph, Color color, int overrideRow, int overrideCol)
+        {
+            Glyph = glyph;
+            Color = color;
+            ColorDark = Color * 0.2f;
+            _glyphRow = overrideRow;
+            _glyphCol = overrideCol;
+        }
+
         public Rectangle GetSourceRect()
         {
             return new Rectangle(_glyphCol * Globals.TILE_SIZE, _glyphRow * Globals.TILE_SIZE, Globals.TILE_SIZE, Globals.TILE_SIZE);

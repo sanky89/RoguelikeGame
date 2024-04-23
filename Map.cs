@@ -30,14 +30,16 @@ namespace RoguelikeGame
         private Room _startingRoom;
         public Player Player => _player;
 
-        public List<Entity> Monsters;
+        private List<Monster> _monsters;
+        private List<Item> _items;
 
         public Map(Player player)
         {
             _tiles = new Tile[COLS, ROWS];
             _rooms = new List<Room>();
             _player = player;
-            Monsters = new List<Entity>();
+            _monsters = new List<Monster>();
+            _items = new List<Item>();
         }
 
         public Tile GetTileAtIndex(int x, int y)
@@ -53,20 +55,56 @@ namespace RoguelikeGame
         {
             GenerateRooms();
             DropPlayerInRandomRoom();
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 50; i++)
             {
                 DropMonsterInRandomRoom();
+                //DropItem();
             }
         }
 
         private void DropMonsterInRandomRoom()
         {
-            var room = _rooms[Globals.Rng.Next(_rooms.Count - 1)];
+            var room = _rooms[Globals.Rng.Next(_rooms.Count)];
             var point = room.GetRandomPointInsideRoom();
-            var monster = new Entity(new Character(Glyphs.ZUpper, Color.Red));
-            monster.SetMapPosition(point.X, point.Y);
-            SetTileType(point.X, point.Y, TileType.Solid);
-            Monsters.Add(monster);
+            var type = (MonsterType)Globals.Rng.Next(0, (int)MonsterType.Count);
+            Monster monster = null;
+            switch (type)
+            {
+                case MonsterType.Skeleton:
+                    monster = new Monster(new Character(Glyphs.SUpper, Color.White,4,0), "a Skeleton", MonsterType.Skeleton);
+                    break;
+                case MonsterType.Zombie:
+                    monster = new Monster(new Character(Glyphs.ZUpper, Color.DarkGreen, 4,4), "a Zombie", MonsterType.Zombie);
+                    break;
+                case MonsterType.Goblin:
+                    monster = new Monster(new Character(Glyphs.GUpper, Color.Green, 0, 2), "a Goblin", MonsterType.Goblin);
+                    break;
+                case MonsterType.SmallSlime:
+                    monster = new Monster(new Character(Glyphs.SLower, Color.GreenYellow, 2,0), "a small slime", MonsterType.SmallSlime);
+                    break;
+                case MonsterType.Orc:
+                    monster = new Monster(new Character(Glyphs.OUpper, Color.Green, 0, 0), "an Orc", MonsterType.Orc);
+                    break;
+                default:
+                    break;
+            }
+
+            if(monster != null)
+            {
+                monster.SetMapPosition(point.X, point.Y);
+                SetTileType(point.X, point.Y, TileType.Solid);
+                _monsters.Add(monster);
+            }
+        }
+
+        private void DropItem()
+        {
+            var room = _rooms[Globals.Rng.Next(_rooms.Count)];
+            var point = room.GetRandomPointInsideRoom();
+            var item = new Item(new Character(Glyphs.DollarSign, Color.Green), "Coins", new Tuple<int, int>(10, 40));
+            item.SetMapPosition(point.X, point.Y);
+            SetTileType(point.X, point.Y, TileType.Walkable);
+            _items.Add(item);
         }
 
         public void RegenerateMap()
@@ -94,20 +132,25 @@ namespace RoguelikeGame
         {
             if (x < 0 || y < 0 || x >= COLS || y >= ROWS)
             { 
-                return ActionResult.None; 
+                return new ActionResult(ActionResultType.None, null);
             }
 
             var tile = _tiles[x, y];
             if (tile.TileType == TileType.Walkable)
             {
-                return ActionResult.Move;
+                if (ContainsItem(x, y, out var item))
+                {
+                    _items.Remove(item);
+                    return new ActionResult(ActionResultType.CollectedCoins, item);
+                }
+                return new ActionResult(ActionResultType.Move, null);;
             }
-            else if(IsMonsterTile(x, y, out _))
+            else if(IsMonsterTile(x, y, out var monster))
             {
-                return ActionResult.HitEntity;
+                return new ActionResult(ActionResultType.HitEntity, monster);
             }
 
-            return ActionResult.HitWall;
+            return new ActionResult(ActionResultType.HitWall, null);;
         }
 
         public void ToggleMapVisible(bool visible)
@@ -156,17 +199,31 @@ namespace RoguelikeGame
             return x == _player.MapX && y == _player.MapY;
         }
 
-        public bool IsMonsterTile(int x, int y, out Entity m)
+        public bool IsMonsterTile(int x, int y, out Monster m)
         {
-            for(int i=0; i<Monsters.Count; i++)
+            for(int i=0; i<_monsters.Count; i++)
             {
-                if (x == Monsters[i].MapX && y == Monsters[i].MapY)
+                if (x == _monsters[i].MapX && y == _monsters[i].MapY)
                 {
-                    m = Monsters[i];
+                    m = _monsters[i];
                     return true;
                 }
             }
             m = null;
+            return false;
+        }
+
+        public bool ContainsItem(int x, int y, out Item item)
+        {
+            for (int i = 0; i < _items.Count; i++)
+            {
+                if (x == _items[i].MapX && y == _items[i].MapY)
+                {
+                    item = _items[i];
+                    return true;
+                }
+            }
+            item = null;
             return false;
         }
 
@@ -190,7 +247,7 @@ namespace RoguelikeGame
                 for (int x = 0; x < COLS; x++)
                 {
                     
-                    _tiles[x, y] = new Tile(new Character(Glyphs.MediumFill, Color.DarkGray), TileType.Solid);
+                    _tiles[x, y] = new Tile(new Character(Glyphs.MediumFill, Color.White, 1, 0), TileType.Solid);
                 }
             }
 
@@ -232,7 +289,7 @@ namespace RoguelikeGame
                 {
                     for (int x = room.RoomRect.X; x < room.RoomRect.Right; x++)
                     {
-                        _tiles[x, y].UpdateTile(new Character(Glyphs.Period, Color.Green), TileType.Walkable);
+                        _tiles[x, y].UpdateTile(new Character(Glyphs.Period, Color.White, 6, 0), TileType.Walkable);
                     }
                 }
             }
@@ -241,6 +298,66 @@ namespace RoguelikeGame
             System.Console.WriteLine($"Failed Attempts {failedAttempts} Rooms - {_rooms.Count}");
 
             GenerateCorridors();
+
+            for (int y = 1; y < ROWS-1; y++)
+            {
+                for (int x = 1; x < COLS-1; x++)
+                {
+                    if (_tiles[x, y].TileType == TileType.Solid &&
+                        _tiles[x-1, y].TileType == TileType.Solid &&
+                        _tiles[x+1, y].TileType == TileType.Solid &&
+                        !IsUpperCornerTile(x,y))
+                    {
+                        _tiles[x, y].UpdateTile(new Character(Glyphs.MediumFill, Color.White, 1, 1), TileType.Solid);
+                        
+                    }
+                }
+            }
+        }
+
+        private bool IsUpperCornerTile(int x, int y)
+        {
+            return (_tiles[x - 1, y].TileType == TileType.Solid &&
+                _tiles[x, y + 1].TileType == TileType.Solid &&
+                _tiles[x - 1, y + 1].TileType == TileType.Walkable) ||
+                (_tiles[x + 1, y].TileType == TileType.Solid &&
+                _tiles[x, y + 1].TileType == TileType.Solid &&
+                _tiles[x + 1, y + 1].TileType == TileType.Walkable);
+
+        }
+
+        private void GenerateCorridors()
+        {
+            for (int r = 0; r < _rooms.Count - 1; r++)
+            {
+                Room room1 = _rooms[r];
+                Room room2 = _rooms[r + 1];
+                var start = room1.GetRandomPointInsideRoom();
+                var end = room2.GetRandomPointInsideRoom();
+                if (end.X < start.X)
+                {
+                    var temp = start;
+                    start = end;
+                    end = temp;
+                }
+
+                var turningPoint = new Point(end.X, start.Y);
+
+                for (int i = start.X; i <= turningPoint.X; i++)
+                {
+                    _tiles[i, start.Y].UpdateTile(new Character(Glyphs.Period, Color.White, 6, 0), TileType.Walkable);
+                }
+
+                int incr = end.Y < start.Y ? -1 : 1;
+                for (int i = start.Y; ; i += incr)
+                {
+                    if (i == end.Y)
+                    {
+                        break;
+                    }
+                    _tiles[turningPoint.X, i].UpdateTile(new Character(Glyphs.Period, Color.White, 6, 0), TileType.Walkable);
+                }
+            }
         }
 
         private void GenerateTwoRooms()
@@ -268,40 +385,6 @@ namespace RoguelikeGame
                 }
             }
             GenerateCorridors();
-        }
-
-        private void GenerateCorridors()
-        {
-            for (int r = 0; r < _rooms.Count - 1; r++)
-            {
-                Room room1 = _rooms[r];
-                Room room2 = _rooms[r + 1];
-                var start = room1.GetRandomPointInsideRoom();
-                var end = room2.GetRandomPointInsideRoom();
-                if (end.X < start.X)
-                {
-                    var temp = start;
-                    start = end;
-                    end = temp;
-                }
-
-                var turningPoint = new Point(end.X, start.Y);
-
-                for (int i = start.X; i <= turningPoint.X; i++)
-                {
-                    _tiles[i, start.Y].UpdateTile(new Character(Glyphs.Period, Color.Green), TileType.Walkable);
-                }
-
-                int incr = end.Y < start.Y ? -1 : 1;
-                for (int i = start.Y; ; i += incr)
-                {
-                    if (i == end.Y)
-                    {
-                        break;
-                    }
-                    _tiles[turningPoint.X, i].UpdateTile(new Character(Glyphs.Period, Color.Green), TileType.Walkable);
-                }
-            }
         }
 
         private void GenerateTestRoom()

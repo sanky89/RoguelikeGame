@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -65,7 +66,8 @@ namespace RoguelikeGame
             var newX = MapX + dx;
             var newY = MapY + dy;
             var actionResult = Globals.Map.CanMove(newX, newY);
-            if (actionResult == ActionResult.Move)
+            if (actionResult.ResultType == ActionResultType.Move ||
+                actionResult.ResultType == ActionResultType.CollectedCoins)
             {
                 MapX += dx;
                 MapY += dy;
