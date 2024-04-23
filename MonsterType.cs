@@ -6,6 +6,9 @@ namespace RoguelikeGame
         Zombie,
         Goblin,
         Kobold,
+        Snake,
+        Orc,
+        SmallSlime,
         Count
     }
 }

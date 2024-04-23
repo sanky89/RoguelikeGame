@@ -44,16 +44,21 @@ namespace RoguelikeGame
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             Globals.SpriteBatch = _spriteBatch;
-            Globals.GlyphsTexture = Content.Load<Texture2D>("fontsheet");
+            Globals.AsciiTexture = Content.Load<Texture2D>("fontsheet");
+            //Globals.SpritesTexture = Content.Load<Texture2D>("rogues");
+            Globals.TilesSheet = Content.Load<Texture2D>("tiles");
+            Globals.CharactersSheet = Content.Load<Texture2D>("rogues");
+            Globals.MonstersSheet = Content.Load<Texture2D>("monsters");
+            Globals.ItemsSheet = Content.Load<Texture2D>("items");
             Globals.Font = Content.Load<SpriteFont>("rogue_font");
-            Globals.Rows = Globals.GlyphsTexture.Width / Globals.TILE_SIZE;
-            Globals.Columns = Globals.GlyphsTexture.Height / Globals.TILE_SIZE;
-
-            _player = new Player(new Character(Glyphs.Face1, Color.Yellow));
+            Globals.Rows = Globals.ItemsSheet.Width / Globals.TILE_SIZE;
+            Globals.Columns = Globals.ItemsSheet.Height / Globals.TILE_SIZE;
+            Globals.IsAscii = false;
+            _player = new Player(new Character(Glyphs.Face1, Color.Yellow, 0, 3));
             _actionLog = new ActionLog();
             Globals.Map = new Map(_player);
             Globals.Map.GenerateMap();
-            _mapConsole = new MapConsole( "Map", Globals.MAP_CONSOLE_WIDTH, Globals.MAP_CONSOLE_HEIGHT, ConsoleLocation.TopLeft, BorderStyle.SingleLine, Color.Green);
+            _mapConsole = new MapConsole( "", Globals.MAP_CONSOLE_WIDTH, Globals.MAP_CONSOLE_HEIGHT, ConsoleLocation.TopLeft, BorderStyle.None, Color.Green);
         }
 
         protected override void Update(GameTime gameTime)

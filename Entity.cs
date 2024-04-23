@@ -9,7 +9,7 @@ namespace RoguelikeGame
         protected Character _character;
 
         public int Id { get; set; }
-        public Color Color => _character.Color;
+        public Color Color => Globals.IsAscii ? _character.Color : Color.White;
         public Rectangle SourceRect => _character.GetSourceRect();
         public int MapX { get; protected set; }
         public int MapY { get; protected set; }
