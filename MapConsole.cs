@@ -91,7 +91,7 @@ namespace RoguelikeGame
                         continue;
                     }
 
-                    Globals.SpriteBatch.Draw(Globals.TilesSheet,
+                    Globals.SpriteBatch.Draw(Globals.SpriteSheet,
                         (Position + offset + new Vector2(x, y)) * Globals.TILE_SIZE * Globals.SCALE, tile.SourceRect,
                         tile.DisplayColor,
                         0f,
@@ -102,7 +102,7 @@ namespace RoguelikeGame
 
                     if (Globals.Map.IsPlayerTile(x,y))
                     {
-                        Globals.SpriteBatch.Draw(Globals.CharactersSheet, 
+                        Globals.SpriteBatch.Draw(Globals.SpriteSheet, 
                             (Position + offset + new Vector2(x, y)) * Globals.TILE_SIZE * Globals.SCALE,
                             Globals.Map.Player.SourceRect,
                             Globals.Map.Player.Color,
@@ -114,7 +114,7 @@ namespace RoguelikeGame
                     }
                     else if(Globals.Map.IsMonsterTile(x, y, out var m) && tile.Visible)
                     {
-                        Globals.SpriteBatch.Draw(Globals.MonstersSheet,
+                        Globals.SpriteBatch.Draw(Globals.SpriteSheet,
                             (Position + offset + new Vector2(x, y)) * Globals.TILE_SIZE * Globals.SCALE,
                             m.SourceRect,
                             m.Color,
@@ -126,7 +126,7 @@ namespace RoguelikeGame
                     }
                     else if(Globals.Map.ContainsItem(x,y, out var item) && tile.Visible)
                     {
-                        Globals.SpriteBatch.Draw(Globals.ItemsSheet,
+                        Globals.SpriteBatch.Draw(Globals.SpriteSheet,
                             (Position + offset + new Vector2(x, y)) * Globals.TILE_SIZE * Globals.SCALE,
                             item.SourceRect,
                             item.Color,

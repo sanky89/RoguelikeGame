@@ -71,19 +71,19 @@ namespace RoguelikeGame
             switch (type)
             {
                 case MonsterType.Skeleton:
-                    monster = new Monster(new Character(Glyphs.SUpper, Color.White,4,0), "a Skeleton", MonsterType.Skeleton);
+                    monster = new Monster(new Character(Glyphs.SUpper, Color.White,9,0), "a Skeleton", MonsterType.Skeleton);
                     break;
                 case MonsterType.Zombie:
-                    monster = new Monster(new Character(Glyphs.ZUpper, Color.DarkGreen, 4,4), "a Zombie", MonsterType.Zombie);
+                    monster = new Monster(new Character(Glyphs.ZUpper, Color.White, 9,4), "a Zombie", MonsterType.Zombie);
                     break;
                 case MonsterType.Goblin:
-                    monster = new Monster(new Character(Glyphs.GUpper, Color.Green, 0, 2), "a Goblin", MonsterType.Goblin);
+                    monster = new Monster(new Character(Glyphs.GUpper, Color.White, 5, 2), "a Goblin", MonsterType.Goblin);
                     break;
                 case MonsterType.SmallSlime:
-                    monster = new Monster(new Character(Glyphs.SLower, Color.GreenYellow, 2,0), "a small slime", MonsterType.SmallSlime);
+                    monster = new Monster(new Character(Glyphs.SLower, Color.White, 7,0), "a small slime", MonsterType.SmallSlime);
                     break;
                 case MonsterType.Orc:
-                    monster = new Monster(new Character(Glyphs.OUpper, Color.Green, 0, 0), "an Orc", MonsterType.Orc);
+                    monster = new Monster(new Character(Glyphs.OUpper, Color.White, 5, 0), "an Orc", MonsterType.Orc);
                     break;
                 default:
                     break;
@@ -235,7 +235,7 @@ namespace RoguelikeGame
             {
                 DropPlayerInRandomRoom();
                 return;
-            }    
+            }
             var point = _startingRoom.GetRandomPointInsideRoom();
             _player.SetMapPosition(point.X, point.Y);
         }
@@ -247,7 +247,7 @@ namespace RoguelikeGame
                 for (int x = 0; x < COLS; x++)
                 {
                     
-                    _tiles[x, y] = new Tile(new Character(Glyphs.MediumFill, Color.White, 1, 0), TileType.Solid);
+                    _tiles[x, y] = new Tile(new Character(Glyphs.MediumFill, Color.White, 1, 21), TileType.Solid);
                 }
             }
 
@@ -289,7 +289,7 @@ namespace RoguelikeGame
                 {
                     for (int x = room.RoomRect.X; x < room.RoomRect.Right; x++)
                     {
-                        _tiles[x, y].UpdateTile(new Character(Glyphs.Period, Color.White, 6, 0), TileType.Walkable);
+                        _tiles[x, y].UpdateTile(new Character(Glyphs.Period, Color.White, 6, 21), TileType.Walkable);
                     }
                 }
             }
@@ -308,7 +308,7 @@ namespace RoguelikeGame
                         _tiles[x+1, y].TileType == TileType.Solid &&
                         !IsUpperCornerTile(x,y))
                     {
-                        _tiles[x, y].UpdateTile(new Character(Glyphs.MediumFill, Color.White, 1, 1), TileType.Solid);
+                        _tiles[x, y].UpdateTile(new Character(Glyphs.MediumFill, Color.White, 1, 22), TileType.Solid);
                         
                     }
                 }
@@ -345,7 +345,7 @@ namespace RoguelikeGame
 
                 for (int i = start.X; i <= turningPoint.X; i++)
                 {
-                    _tiles[i, start.Y].UpdateTile(new Character(Glyphs.Period, Color.White, 6, 0), TileType.Walkable);
+                    _tiles[i, start.Y].UpdateTile(new Character(Glyphs.Period, Color.White, 6, 21), TileType.Walkable);
                 }
 
                 int incr = end.Y < start.Y ? -1 : 1;
@@ -355,7 +355,7 @@ namespace RoguelikeGame
                     {
                         break;
                     }
-                    _tiles[turningPoint.X, i].UpdateTile(new Character(Glyphs.Period, Color.White, 6, 0), TileType.Walkable);
+                    _tiles[turningPoint.X, i].UpdateTile(new Character(Glyphs.Period, Color.White, 6, 21), TileType.Walkable);
                 }
             }
         }

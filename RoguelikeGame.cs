@@ -45,14 +45,10 @@ namespace RoguelikeGame
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             Globals.SpriteBatch = _spriteBatch;
             Globals.AsciiTexture = Content.Load<Texture2D>("fontsheet");
-            //Globals.SpritesTexture = Content.Load<Texture2D>("rogues");
-            Globals.TilesSheet = Content.Load<Texture2D>("tiles");
-            Globals.CharactersSheet = Content.Load<Texture2D>("rogues");
-            Globals.MonstersSheet = Content.Load<Texture2D>("monsters");
-            Globals.ItemsSheet = Content.Load<Texture2D>("items");
+            Globals.SpriteSheet = Content.Load<Texture2D>("spritesheet");
             Globals.Font = Content.Load<SpriteFont>("rogue_font");
-            Globals.Rows = Globals.ItemsSheet.Width / Globals.TILE_SIZE;
-            Globals.Columns = Globals.ItemsSheet.Height / Globals.TILE_SIZE;
+            Globals.Rows = Globals.SpriteSheet.Width / Globals.TILE_SIZE;
+            Globals.Columns = Globals.SpriteSheet.Height / Globals.TILE_SIZE;
             Globals.IsAscii = false;
             _player = new Player(new Character(Glyphs.Face1, Color.Yellow, 0, 3));
             _actionLog = new ActionLog();
