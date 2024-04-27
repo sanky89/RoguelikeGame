@@ -28,6 +28,7 @@ namespace RoguelikeGame
         public static SpriteFont Font { get; set; }
         public static Map Map {get; set;}
         public static Random Rng { get; set; }
+        public static AssetManager AssetManager { get; set; }
 
         public static int Rows { get; set; }
         public static int Columns { get; set; }

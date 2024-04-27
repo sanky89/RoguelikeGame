@@ -1,0 +1,75 @@
+{
+  "characters": [
+    {
+      "name": "dwarf",
+      "glyph": 1,
+      "row": 0,
+      "col": 0
+    },
+    {
+      "name": "elf",
+      "glyph": 1,
+      "row": 0,
+      "col": 1
+    },
+    {
+      "name": "ranger",
+      "glyph": 1,
+      "row": 0,
+      "col": 2
+    },
+    {
+      "name": "rogue",
+      "glyph": 1,
+      "row": 0,
+      "col": 3
+    }
+  ],
+  "monsters": [
+    {
+      "id": "Skeleton",
+      "name": "a skeleton",
+      "glyph": 1,
+      "row": 9,
+      "col": 0
+    },
+    {
+      "id": "Zombie",
+      "name": "a zombie",
+      "glyph": 1,
+      "row": 9,
+      "col": 4
+    },
+    {
+      "id": "Goblin",
+      "name": "a goblin",
+      "glyph": 1,
+      "row": 5,
+      "col": 2
+    },
+    {
+      "id": "SmallSlime",
+      "name": "a small slime",
+      "glyph": 1,
+      "row": 7,
+      "col": 0
+    },
+    {
+      "id": "Orc",
+      "name": "an orc",
+      "glyph": 1,
+      "row": 5,
+      "col": 0
+    },
+    {
+      "id": "Troll",
+      "name": "a troll",
+      "glyph": 1,
+      "row": 6,
+      "col": 2
+    }
+  ],
+  "items": [
+
+  ]
+}

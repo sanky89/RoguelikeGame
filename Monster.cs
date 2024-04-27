@@ -10,11 +10,9 @@ namespace RoguelikeGame
     {
         public readonly string Name;
 
-        public MonsterType Type {get; private set;}
-        public Monster(Character character, string name, MonsterType monsterType) : base(character)
+        public Monster(Character character, string name) : base(character)
         {
             Name = name;
-            Type = monsterType;
         }
     }
 }

@@ -66,28 +66,7 @@ namespace RoguelikeGame
         {
             var room = _rooms[Globals.Rng.Next(_rooms.Count)];
             var point = room.GetRandomPointInsideRoom();
-            var type = (MonsterType)Globals.Rng.Next(0, (int)MonsterType.Count);
-            Monster monster = null;
-            switch (type)
-            {
-                case MonsterType.Skeleton:
-                    monster = new Monster(new Character(Glyphs.SUpper, Color.White,9,0), "a Skeleton", MonsterType.Skeleton);
-                    break;
-                case MonsterType.Zombie:
-                    monster = new Monster(new Character(Glyphs.ZUpper, Color.White, 9,4), "a Zombie", MonsterType.Zombie);
-                    break;
-                case MonsterType.Goblin:
-                    monster = new Monster(new Character(Glyphs.GUpper, Color.White, 5, 2), "a Goblin", MonsterType.Goblin);
-                    break;
-                case MonsterType.SmallSlime:
-                    monster = new Monster(new Character(Glyphs.SLower, Color.White, 7,0), "a small slime", MonsterType.SmallSlime);
-                    break;
-                case MonsterType.Orc:
-                    monster = new Monster(new Character(Glyphs.OUpper, Color.White, 5, 0), "an Orc", MonsterType.Orc);
-                    break;
-                default:
-                    break;
-            }
+            Monster monster = Globals.AssetManager.CreateRandomMonster();
 
             if(monster != null)
             {

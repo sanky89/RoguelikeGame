@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.IO;
 
 namespace RoguelikeGame
 {
@@ -50,11 +51,15 @@ namespace RoguelikeGame
             Globals.Rows = Globals.SpriteSheet.Width / Globals.TILE_SIZE;
             Globals.Columns = Globals.SpriteSheet.Height / Globals.TILE_SIZE;
             Globals.IsAscii = false;
-            _player = new Player(new Character(Glyphs.Face1, Color.Yellow, 0, 3));
+            Globals.AssetManager = new AssetManager();
+            Globals.AssetManager.ReadJsonFile();
+
+            _player = Globals.AssetManager.CreatePlayer();
             _actionLog = new ActionLog();
             Globals.Map = new Map(_player);
             Globals.Map.GenerateMap();
             _mapConsole = new MapConsole( "", Globals.MAP_CONSOLE_WIDTH, Globals.MAP_CONSOLE_HEIGHT, ConsoleLocation.TopLeft, BorderStyle.None, Color.Green);
+
         }
 
         protected override void Update(GameTime gameTime)
