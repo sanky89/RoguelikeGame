@@ -6,7 +6,8 @@ namespace RoguelikeGame
     {
         Walkable,
         Solid,
-        Transparent
+        Transparent,
+        Entity = Solid | Transparent // Entity should block the movement but not player vision
     }
 
     public class Tile

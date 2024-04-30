@@ -27,7 +27,7 @@ namespace RoguelikeGame
                 System.Console.WriteLine($"Error reading data file {e.Message}");
             }
             _characterModels = new List<CharacterDataModel>(_gameData.characters);
-            _monsterModels = new List<MonsterDataModel>(_gameData.monsters);           
+            _monsterModels = new List<MonsterDataModel>(_gameData.monsters);
         }
 
         public Player CreatePlayer()

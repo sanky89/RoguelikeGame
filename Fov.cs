@@ -71,7 +71,8 @@ namespace RoguelikeGame
                         _map.ToggleTileVisible(mapX, mapY, true);
                         _map.ToggleTileVisited(mapX, mapY, true);
                         //Check if its a wall
-                        if (_map.GetTileType(mapX, mapY) == TileType.Solid)
+                        if (_map.GetTileType(mapX, mapY) == TileType.Solid &&
+                            _map.GetTileType(mapX, mapY) != TileType.Transparent)
                         {
                             if (!prevBlocking)
                             {
