@@ -29,6 +29,7 @@ namespace RoguelikeGame
         private Player _player;
         private Room _startingRoom;
         public Player Player => _player;
+        public Vec2Int PlayerMapPosition { get; private set; }
 
         private List<Monster> _monsters;
         private List<Item> _items;
@@ -209,14 +210,9 @@ namespace RoguelikeGame
         private void DropPlayerInRandomRoom()
         {
             _startingRoom = _rooms[Globals.Rng.Next(_rooms.Count - 1)];
-            if(_startingRoom.RoomRect.Right > Globals.MAP_CONSOLE_WIDTH || 
-               _startingRoom.RoomRect.Bottom > Globals.MAP_CONSOLE_HEIGHT)
-            {
-                DropPlayerInRandomRoom();
-                return;
-            }
             var point = _startingRoom.GetRandomPointInsideRoom();
             _player.SetMapPosition(point.X, point.Y);
+            PlayerMapPosition = new Vec2Int(point.X, point.Y);
         }
 
         private void GenerateRooms()

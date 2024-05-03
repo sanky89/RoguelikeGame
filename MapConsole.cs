@@ -9,40 +9,50 @@ namespace RoguelikeGame
         public Vector2 Position => new Vector2(_x+1, _y+1);
         public Vector2 offset = Vector2.Zero;
 
-
         public MapConsole( string title, int width, int height, ConsoleLocation location, BorderStyle border, Color borderColor) : 
             base(title, width, height, location, border, borderColor)
         {
-           
+            var playerMapPosition = Globals.Map.PlayerMapPosition;
+            var midX = Width/2;
+            var midY = Height/2;
+            if (playerMapPosition.X >= Width)
+            { 
+                offset.X = playerMapPosition.X - midX;
+            }
+            if (playerMapPosition.Y >= Height)
+            {
+                offset.Y = playerMapPosition.Y - midY;
+            }
         }
 
         public void CheckScrollMap(InputAction inputAction)
         {
-            if((inputAction == InputAction.MOVE_RIGHT ||
+
+            if ((inputAction == InputAction.MOVE_RIGHT ||
                 inputAction == InputAction.MOVE_NE ||
                 inputAction == InputAction.MOVE_SE) 
-                && Width - Globals.Map.Player.MapX <= 5)
+                && Width - Globals.Map.Player.MapX + offset.X  <= 5)
             {
                 ScrollMap(Direction.RIGHT);
             }
             if ((inputAction == InputAction.MOVE_LEFT ||
                 inputAction == InputAction.MOVE_NW ||
                 inputAction == InputAction.MOVE_SW) &&
-                offset.X + Globals.Map.Player.MapX <= 5)
+                Globals.Map.Player.MapX - offset.X <= 5)
             {
                 ScrollMap(Direction.LEFT);
             }
             if ((inputAction == InputAction.MOVE_UP ||
                 inputAction == InputAction.MOVE_NW ||
                 inputAction == InputAction.MOVE_NE) &&
-                offset.Y + Globals.Map.Player.MapY <= 5)
+                Globals.Map.Player.MapY - offset.Y <= 5)
             {
                 ScrollMap(Direction.DOWN);
             }
             if ((inputAction == InputAction.MOVE_DOWN ||
                 inputAction == InputAction.MOVE_SW ||
                 inputAction == InputAction.MOVE_SE) &&
-                Height - Globals.Map.Player.MapY <= 5)
+                Height - Globals.Map.Player.MapY + offset.Y <= 5)
             {
                 ScrollMap(Direction.UP);
             }
@@ -53,20 +63,20 @@ namespace RoguelikeGame
             switch (direction)
             {
                 case Direction.LEFT:
-                    offset.X++;
-                    offset.X = Math.Min(0, (int)offset.X);
+                    offset.X--;
+                    offset.X = Math.Max(0, (int)offset.X);
                     break;
                 case Direction.RIGHT:
-                    offset.X--;
-                    offset.X = Math.Max(offset.X, (Width - Map.COLS - 1));
+                    offset.X++;
+                    offset.X = Math.Min(offset.X, Map.COLS);
                     break;
                 case Direction.UP:
-                    offset.Y--;
-                    offset.Y = Math.Max(offset.Y, (Height - Map.ROWS - 1));
+                    offset.Y++;
+                    offset.Y = Math.Min(offset.Y, Map.ROWS);
                     break;
                 case Direction.DOWN:
-                    offset.Y++;
-                    offset.Y = Math.Min(0, (int)offset.Y);
+                    offset.Y--;
+                    offset.Y = Math.Max(0, (int)offset.Y);
                     break;
                 default:
                     break;
@@ -75,12 +85,18 @@ namespace RoguelikeGame
 
         public override void Draw()
         {
-            int maxWidth = Math.Min(Width-1, Map.COLS);
-            int maxHeight = Math.Min(Height-1, Map.ROWS);
-            int startX = (int)-offset.X;
-            int startY = (int)-offset.Y;
-            int endX = Math.Min(maxWidth + startX, Map.COLS);
-            int endY = Math.Min(maxHeight + startY, Map.ROWS);
+            int startX = (int)offset.X;
+            int startY = (int)offset.Y;
+            int endX = startX + Width;
+            if(endX > Map.COLS)
+            {
+                endX = Map.COLS;
+            }
+            int endY = startY + Height;
+            if(endY > Map.ROWS)
+            {
+                endY = Map.ROWS;
+            }
             for (int y = startY; y < endY; y++)
             {
                 for (int x = startX; x < endX; x++)
@@ -92,7 +108,8 @@ namespace RoguelikeGame
                     }
 
                     Globals.SpriteBatch.Draw(Globals.SpriteSheet,
-                        (Position + offset + new Vector2(x, y)) * Globals.TILE_SIZE * Globals.SCALE, tile.SourceRect,
+                        (Position - offset + new Vector2(x, y)) * Globals.TILE_SIZE * Globals.SCALE, 
+                        tile.SourceRect,
                         tile.DisplayColor,
                         0f,
                         Vector2.Zero,
@@ -103,7 +120,7 @@ namespace RoguelikeGame
                     if (Globals.Map.IsPlayerTile(x,y))
                     {
                         Globals.SpriteBatch.Draw(Globals.SpriteSheet, 
-                            (Position + offset + new Vector2(x, y)) * Globals.TILE_SIZE * Globals.SCALE,
+                            (Position - offset + new Vector2(x, y)) * Globals.TILE_SIZE * Globals.SCALE,
                             Globals.Map.Player.SourceRect,
                             Globals.Map.Player.Color,
                             0f,
@@ -115,7 +132,7 @@ namespace RoguelikeGame
                     else if(Globals.Map.IsMonsterTile(x, y, out var m) && tile.Visible)
                     {
                         Globals.SpriteBatch.Draw(Globals.SpriteSheet,
-                            (Position + offset + new Vector2(x, y)) * Globals.TILE_SIZE * Globals.SCALE,
+                            (Position - offset + new Vector2(x, y)) * Globals.TILE_SIZE * Globals.SCALE,
                             m.SourceRect,
                             m.Color,
                             0f,
@@ -127,7 +144,7 @@ namespace RoguelikeGame
                     else if(Globals.Map.ContainsItem(x,y, out var item) && tile.Visible)
                     {
                         Globals.SpriteBatch.Draw(Globals.SpriteSheet,
-                            (Position + offset + new Vector2(x, y)) * Globals.TILE_SIZE * Globals.SCALE,
+                            (Position - offset + new Vector2(x, y)) * Globals.TILE_SIZE * Globals.SCALE,
                             item.SourceRect,
                             item.Color,
                             0f,
