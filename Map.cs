@@ -59,7 +59,7 @@ namespace RoguelikeGame
             for (int i = 0; i < 50; i++)
             {
                 DropMonsterInRandomRoom();
-                //DropItem();
+                DropItem();
             }
         }
 
@@ -81,10 +81,13 @@ namespace RoguelikeGame
         {
             var room = _rooms[Globals.Rng.Next(_rooms.Count)];
             var point = room.GetRandomPointInsideRoom();
-            var item = new Item(new Character(Glyphs.DollarSign, Color.Green), "Coins", new Tuple<int, int>(10, 40));
-            item.SetMapPosition(point.X, point.Y);
-            SetTileType(point.X, point.Y, TileType.Walkable);
-            _items.Add(item);
+            if (!IsMonsterTile(point.X, point.Y, out _))
+            {
+                var item = Globals.AssetManager.CreateRandomItem();
+                item.SetMapPosition(point.X, point.Y);
+                SetTileType(point.X, point.Y, TileType.Walkable);
+                _items.Add(item);
+            }
         }
 
         public void RegenerateMap()

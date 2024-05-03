@@ -70,6 +70,23 @@
     }
   ],
   "items": [
-
+    {
+      "id": "gold",
+      "name": "gold",
+      "glyph": 1,
+      "row": 21,
+      "col": 17,
+      "minAmount": 20,
+      "maxAmount": 50
+    },
+    {
+      "id": "health_potion_1",
+      "name": "health potion",
+      "glyph": 1,
+      "row": 19,
+      "col": 16,
+      "minAmount": 5,
+      "maxAmount": 10
+    }
   ]
 }
