@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualBasic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -139,7 +138,7 @@ namespace RoguelikeGame
 
             _spriteBatch.Begin();
             _mapConsole.Draw();
-            _spriteBatch.DrawString(Globals.Font, _actionLog.LogString, new Vector2(0, _mapConsole.Height * Globals.TILE_SIZE + 10f), Color.White);
+            _spriteBatch.DrawString(Globals.Font, _actionLog.LogString, new Vector2(10f, Globals.RENDER_TARGET_HEIGHT - 100f), Color.White);
             _spriteBatch.End();
 
             base.Draw(gameTime);

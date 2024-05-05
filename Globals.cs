@@ -15,7 +15,6 @@ namespace RoguelikeGame
         public const int MAP_CONSOLE_WIDTH = 32;
         public const int MAP_CONSOLE_HEIGHT = 20;
         public const int TILE_SIZE = 32;
-        public const float SCALE = 1.0f;
 
         public static GraphicsDevice GraphicsDevice;
         public static ContentManager Content { get; set; }

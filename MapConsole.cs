@@ -108,48 +108,48 @@ namespace RoguelikeGame
                     }
 
                     Globals.SpriteBatch.Draw(Globals.SpriteSheet,
-                        (Position - offset + new Vector2(x, y)) * Globals.TILE_SIZE * Globals.SCALE, 
+                        (Position - offset + new Vector2(x, y)) * Globals.TILE_SIZE * Scale, 
                         tile.SourceRect,
                         tile.DisplayColor,
                         0f,
                         Vector2.Zero,
-                        Globals.SCALE,
+                        Scale,
                         SpriteEffects.None,
                         0);
 
                     if (Globals.Map.IsPlayerTile(x,y))
                     {
                         Globals.SpriteBatch.Draw(Globals.SpriteSheet, 
-                            (Position - offset + new Vector2(x, y)) * Globals.TILE_SIZE * Globals.SCALE,
+                            (Position - offset + new Vector2(x, y)) * Globals.TILE_SIZE * Scale,
                             Globals.Map.Player.SourceRect,
                             Globals.Map.Player.Color,
                             0f,
                             Vector2.Zero,
-                            Globals.SCALE,
+                            Scale,
                             SpriteEffects.None,
                             0);
                     }
                     else if(Globals.Map.IsMonsterTile(x, y, out var m) && tile.Visible)
                     {
                         Globals.SpriteBatch.Draw(Globals.SpriteSheet,
-                            (Position - offset + new Vector2(x, y)) * Globals.TILE_SIZE * Globals.SCALE,
+                            (Position - offset + new Vector2(x, y)) * Globals.TILE_SIZE * Scale,
                             m.SourceRect,
                             m.Color,
                             0f,
                             Vector2.Zero,
-                            Globals.SCALE,
+                            Scale,
                             SpriteEffects.None,
                             0);
                     }
                     else if(Globals.Map.ContainsItem(x,y, out var item) && tile.Visible)
                     {
                         Globals.SpriteBatch.Draw(Globals.SpriteSheet,
-                            (Position - offset + new Vector2(x, y)) * Globals.TILE_SIZE * Globals.SCALE,
+                            (Position - offset + new Vector2(x, y)) * Globals.TILE_SIZE * Scale,
                             item.SourceRect,
                             item.Color,
                             0f,
                             Vector2.Zero,
-                            Globals.SCALE,
+                            Scale,
                             SpriteEffects.None,
                             0);
                     }
