@@ -10,11 +10,18 @@
 
 #-------------------------------- References --------------------------------#
 
+/reference:..\..\JsonContentPipelineExtension\bin\Debug\net6.0\JsonContentPipelineExtension.dll
 
 #---------------------------------- Content ---------------------------------#
 
 #begin cp437-thin_8x16.ttf
 /copy:cp437-thin_8x16.ttf
+
+#begin Data/content.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:RuntimeType=RoguelikeGame.GameDataModelReader,RoguelikeGame
+/build:Data/content.json
 
 #begin fontsheet.png
 /importer:TextureImporter
