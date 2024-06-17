@@ -3,33 +3,21 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using Microsoft.Xna.Framework.Content;
 using Color = Microsoft.Xna.Framework.Color;
 
 namespace RoguelikeGame
 {
     public class AssetManager
     {
-        private const string DATA_PATH = "../../../Data/content.json";
-
-        private GameDataModel _gameData;
         private List<CharacterDataModel> _characterModels;
         private List<MonsterDataModel> _monsterModels;
         private List<ItemDataModel> _itemModels;
-
-        public void ReadJsonFile()
+        public  AssetManager(GameDataModel gameData)
         {
-            try
-            {
-                string text = File.ReadAllText(DATA_PATH);
-                _gameData = JsonSerializer.Deserialize<GameDataModel>(text);
-            }
-            catch (Exception e)
-            {
-                System.Console.WriteLine($"Error reading data file {e.Message}");
-            }
-            _characterModels = new List<CharacterDataModel>(_gameData.characters);
-            _monsterModels = new List<MonsterDataModel>(_gameData.monsters);
-            _itemModels = new List<ItemDataModel>(_gameData.items);
+            _characterModels = new List<CharacterDataModel>(gameData.characters);
+            _monsterModels = new List<MonsterDataModel>(gameData.monsters);
+            _itemModels = new List<ItemDataModel>(gameData.items);
         }
 
         public Player CreatePlayer()
