@@ -140,6 +140,7 @@ namespace RoguelikeGame
             _spriteBatch.Begin();
             _mapConsole.Draw();
             _spriteBatch.DrawString(Globals.Font, _actionLog.LogString, new Vector2(10f, Globals.RENDER_TARGET_HEIGHT - 100f), Color.White);
+            _spriteBatch.DrawString(Globals.Font, _player.PlayerStats.StatsLog, new Vector2(Globals.RENDER_TARGET_WIDTH - 240f, 10f), Color.White);
             _spriteBatch.End();
 
             base.Draw(gameTime);

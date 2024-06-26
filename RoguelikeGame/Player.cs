@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -10,9 +11,10 @@ namespace RoguelikeGame
         public const int FOV_SIZE = 20;
 
         private Fov _fov;
-
+        public readonly PlayerStats PlayerStats;
         public Player(Character character) : base( character)
         {
+            PlayerStats = new ();
         }
 
         public override void SetMapPosition(int x, int y)
