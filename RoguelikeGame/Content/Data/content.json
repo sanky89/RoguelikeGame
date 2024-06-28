@@ -4,25 +4,105 @@
       "name": "dwarf",
       "glyph": 1,
       "row": 0,
-      "col": 0
+      "col": 0,
+      "stats": [
+        {
+          "name": "health",
+          "minValue": 0,
+          "maxValue": 100,
+          "defaultValue": 100
+        },
+        {
+          "name": "attack",
+          "minValue": 10,
+          "maxValue": 50,
+          "defaultValue": 20
+        },
+        {
+          "name": "defense",
+          "minValue": 10,
+          "maxValue": 50,
+          "defaultValue": 20
+        }
+      ]
     },
     {
       "name": "elf",
       "glyph": 1,
       "row": 0,
-      "col": 1
+      "col": 1,
+      "stats": [
+        {
+          "name": "health",
+          "minValue": 0,
+          "maxValue": 100,
+          "defaultValue": 100
+        },
+        {
+          "name": "attack",
+          "minValue": 10,
+          "maxValue": 50,
+          "defaultValue": 20
+        },
+        {
+          "name": "defense",
+          "minValue": 10,
+          "maxValue": 50,
+          "defaultValue": 20
+        }
+      ]
     },
     {
       "name": "ranger",
       "glyph": 1,
       "row": 0,
-      "col": 2
+      "col": 2,
+      "stats": [
+        {
+          "name": "health",
+          "minValue": 0,
+          "maxValue": 100,
+          "defaultValue": 100
+        },
+        {
+          "name": "attack",
+          "minValue": 10,
+          "maxValue": 50,
+          "defaultValue": 20
+        },
+        {
+          "name": "defense",
+          "minValue": 10,
+          "maxValue": 50,
+          "defaultValue": 20
+        }
+      ]
     },
     {
       "name": "rogue",
       "glyph": 1,
       "row": 0,
-      "col": 3
+      "col": 3,
+      "stats": [
+        {
+          "name": "health",
+          "minValue": 0,
+          "maxValue": 100,
+          "defaultValue": 100
+        },
+        {
+          "name": "attack",
+          "minValue": 10,
+          "maxValue": 50,
+          "defaultValue": 20
+        },
+        {
+          "name": "defense",
+          "minValue": 10,
+          "maxValue": 50,
+          "defaultValue": 20
+        }
+      ]
     }
   ],
   "monsters": [
@@ -31,42 +111,162 @@
       "name": "a skeleton",
       "glyph": 1,
       "row": 9,
-      "col": 0
+      "col": 0,
+      "stats": [
+        {
+          "name": "health",
+          "minValue": 0,
+          "maxValue": 100,
+          "defaultValue": 100
+        },
+        {
+          "name": "attack",
+          "minValue": 10,
+          "maxValue": 50,
+          "defaultValue": 20
+        },
+        {
+          "name": "defense",
+          "minValue": 10,
+          "maxValue": 50,
+          "defaultValue": 20
+        }
+      ]
     },
     {
       "id": "Zombie",
       "name": "a zombie",
       "glyph": 1,
       "row": 9,
-      "col": 4
+      "col": 4,
+      "stats": [
+        {
+          "name": "health",
+          "minValue": 0,
+          "maxValue": 100,
+          "defaultValue": 100
+        },
+        {
+          "name": "attack",
+          "minValue": 10,
+          "maxValue": 50,
+          "defaultValue": 20
+        },
+        {
+          "name": "defense",
+          "minValue": 10,
+          "maxValue": 50,
+          "defaultValue": 20
+        }
+      ]
     },
     {
       "id": "Goblin",
       "name": "a goblin",
       "glyph": 1,
       "row": 5,
-      "col": 2
+      "col": 2,
+      "stats": [
+        {
+          "name": "health",
+          "minValue": 0,
+          "maxValue": 100,
+          "defaultValue": 100
+        },
+        {
+          "name": "attack",
+          "minValue": 10,
+          "maxValue": 50,
+          "defaultValue": 20
+        },
+        {
+          "name": "defense",
+          "minValue": 10,
+          "maxValue": 50,
+          "defaultValue": 20
+        }
+      ]
     },
     {
       "id": "SmallSlime",
       "name": "a small slime",
       "glyph": 1,
       "row": 7,
-      "col": 0
+      "col": 0,
+      "stats": [
+        {
+          "name": "health",
+          "minValue": 0,
+          "maxValue": 100,
+          "defaultValue": 100
+        },
+        {
+          "name": "attack",
+          "minValue": 10,
+          "maxValue": 50,
+          "defaultValue": 20
+        },
+        {
+          "name": "defense",
+          "minValue": 10,
+          "maxValue": 50,
+          "defaultValue": 20
+        }
+      ]
     },
     {
       "id": "Orc",
       "name": "an orc",
       "glyph": 1,
       "row": 5,
-      "col": 0
+      "col": 0,
+      "stats": [
+        {
+          "name": "health",
+          "minValue": 0,
+          "maxValue": 100,
+          "defaultValue": 100
+        },
+        {
+          "name": "attack",
+          "minValue": 10,
+          "maxValue": 50,
+          "defaultValue": 20
+        },
+        {
+          "name": "defense",
+          "minValue": 10,
+          "maxValue": 50,
+          "defaultValue": 20
+        }
+      ]
     },
     {
       "id": "Troll",
       "name": "a troll",
       "glyph": 1,
       "row": 6,
-      "col": 2
+      "col": 2,
+      "stats": [
+        {
+          "name": "health",
+          "minValue": 0,
+          "maxValue": 100,
+          "defaultValue": 100
+        },
+        {
+          "name": "attack",
+          "minValue": 10,
+          "maxValue": 50,
+          "defaultValue": 20
+        },
+        {
+          "name": "defense",
+          "minValue": 10,
+          "maxValue": 50,
+          "defaultValue": 20
+        }
+      ]
     }
   ],
   "items": [

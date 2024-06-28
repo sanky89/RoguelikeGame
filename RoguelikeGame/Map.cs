@@ -30,6 +30,7 @@ namespace RoguelikeGame
         private Room _startingRoom;
         public Player Player => _player;
         public Vec2Int PlayerMapPosition { get; private set; }
+        public List<Monster> VisibleMonsters { get; private set; }
 
         private List<Monster> _monsters;
         private List<Item> _items;
@@ -40,6 +41,7 @@ namespace RoguelikeGame
             _rooms = new List<Room>();
             _player = player;
             _monsters = new List<Monster>();
+            VisibleMonsters = new List<Monster>();
             _items = new List<Item>();
         }
 
@@ -58,16 +60,16 @@ namespace RoguelikeGame
             DropPlayerInRandomRoom();
             for (int i = 0; i < 50; i++)
             {
-                DropMonsterInRandomRoom();
+                DropMonsterInRandomRoom(i);
                 DropItem();
             }
         }
 
-        private void DropMonsterInRandomRoom()
+        private void DropMonsterInRandomRoom(int index)
         {
             var room = _rooms[Globals.Rng.Next(_rooms.Count)];
             var point = room.GetRandomPointInsideRoom();
-            Monster monster = Globals.AssetManager.CreateRandomMonster();
+            Monster monster = Globals.AssetManager.CreateRandomMonster(index);
 
             if(monster != null)
             {
@@ -130,7 +132,8 @@ namespace RoguelikeGame
             }
             else if(IsMonsterTile(x, y, out var monster))
             {
-                _player.PlayerStats.UpdateStat("Health", -10);
+                _player.PlayerStats.UpdateStat("health", -monster.MonsterStats.Stats["attack"].CurrentValue);
+                monster.MonsterStats.UpdateStat("health", -_player.PlayerStats.Stats["attack"].CurrentValue);
                 return new ActionResult(ActionResultType.HitEntity, monster);
             }
 
@@ -143,11 +146,19 @@ namespace RoguelikeGame
             {
                 tile.Visible = visible;
             }
+            VisibleMonsters.Clear();
         }
 
         public void ToggleTileVisible(int x, int y, bool visible)
         {
             _tiles[x, y].Visible = visible;
+            if (IsMonsterTile(x, y, out var m))
+            {
+                if(visible && !VisibleMonsters.Contains(m))
+                {
+                    VisibleMonsters.Add(m);
+                }
+            }
         }
 
         public void ToggleMapVisited(bool visited)
@@ -174,8 +185,7 @@ namespace RoguelikeGame
 
         public bool IsWithinMapRange(int x, int y)
         {
-            return x >= 0 && x < COLS &&
-                        y >= 0 && y < ROWS;
+            return x >= 0 && x < COLS && y >= 0 && y < ROWS;
         }
 
         public bool IsPlayerTile(int x, int y)

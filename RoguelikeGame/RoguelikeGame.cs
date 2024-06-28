@@ -141,6 +141,11 @@ namespace RoguelikeGame
             _mapConsole.Draw();
             _spriteBatch.DrawString(Globals.Font, _actionLog.LogString, new Vector2(10f, Globals.RENDER_TARGET_HEIGHT - 100f), Color.White);
             _spriteBatch.DrawString(Globals.Font, _player.PlayerStats.StatsLog, new Vector2(Globals.RENDER_TARGET_WIDTH - 240f, 10f), Color.White);
+            for (int i = 0; i < Globals.Map.VisibleMonsters.Count; i++)
+            {
+                Monster m = Globals.Map.VisibleMonsters[i];
+                _spriteBatch.DrawString(Globals.Font, m.MonsterStats.StatsLog, new Vector2(Globals.RENDER_TARGET_WIDTH - 240f, 80f + (60f*i)), Color.Red);
+            }
             _spriteBatch.End();
 
             base.Draw(gameTime);

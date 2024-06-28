@@ -22,15 +22,16 @@ namespace RoguelikeGame
 
         public Player CreatePlayer()
         {
-            var playerModel = _characterModels[3];
-            var player = new Player(new Character((Glyphs)playerModel.glyph, Color.Yellow, playerModel.row, playerModel.col));
+            var playerData = _characterModels[3];
+            var player = new Player(new Character((Glyphs)playerData.glyph, Color.Yellow, playerData.row, playerData.col), playerData.stats);
             return player;
         }
 
-        public Monster CreateRandomMonster()
+        public Monster CreateRandomMonster(int id)
         {
             var monsterData = _monsterModels[Globals.Rng.Next(0, _monsterModels.Count)];
-            return new Monster(new Character((Glyphs)monsterData.glyph, Color.White, monsterData.row, monsterData.col), monsterData.name);
+            var character = new Character((Glyphs)monsterData.glyph, Color.White, monsterData.row, monsterData.col);
+            return new Monster(character, monsterData.name, id, monsterData.stats);
         }
 
         public Monster CreateMonster(string id)
@@ -40,7 +41,7 @@ namespace RoguelikeGame
             {
                 return null;
             }
-            return new Monster(new Character((Glyphs)monsterData.glyph, Color.White, monsterData.row, monsterData.col), monsterData.name);
+            return new Monster(new Character((Glyphs)monsterData.glyph, Color.White, monsterData.row, monsterData.col), monsterData.name, 0, monsterData.stats);
         }
 
         public Item CreateRandomItem()
@@ -80,6 +81,7 @@ namespace RoguelikeGame
     public class CharacterDataModel : EntityDataModel
     {
         public int health { get; set; }
+        public List<StatDataModel> stats { get; set; }
     }
 
     public class MonsterDataModel : CharacterDataModel
@@ -90,5 +92,14 @@ namespace RoguelikeGame
     {
         public int minAmount { get; set; }
         public int maxAmount { get; set; }
+    }
+
+    public class StatDataModel
+    {
+        public string name { get; set; }
+        public int minValue { get; set; }
+        public int maxValue { get; set; }
+        public int defaultValue { get; set; }
+        
     }
 }

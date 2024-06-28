@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -11,10 +12,10 @@ namespace RoguelikeGame
         public const int FOV_SIZE = 20;
 
         private Fov _fov;
-        public readonly PlayerStats PlayerStats;
-        public Player(Character character) : base( character)
+        public readonly EntityStats PlayerStats;
+        public Player(Character character, List<StatDataModel> stats) : base( character)
         {
-            PlayerStats = new ();
+            PlayerStats = new EntityStats(stats);
         }
 
         public override void SetMapPosition(int x, int y)
