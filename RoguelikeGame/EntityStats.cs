@@ -19,10 +19,14 @@ namespace RoguelikeGame
                     Name = s.name,
                     MinValue = s.minValue,
                     MaxValue = s.maxValue,
-                    CurrentValue = s.defaultValue
+                    CurrentValue = s.defaultValue,
+                    Display = s.display,
                 };
                 Stats.Add(s.name, stat);
-                StatsLog += $"{stat.Name}: {stat.CurrentValue}/{stat.MaxValue}\n";
+                if(stat.Display)
+                {
+                    StatsLog += $"{stat.Name}: {stat.CurrentValue}/{stat.MaxValue}\n";
+                }
             }
         }
 
@@ -33,7 +37,10 @@ namespace RoguelikeGame
             foreach(var kvp in Stats)
             {
                 var stat = kvp.Value;
-                StatsLog += $"{stat.Name}: {stat.CurrentValue}/{stat.MaxValue}\n";
+                if (stat.Display)
+                {
+                    StatsLog += $"{stat.Name}: {stat.CurrentValue}/{stat.MaxValue}\n";
+                }
             }
         }
 

@@ -100,6 +100,7 @@ namespace RoguelikeGame
         public int minValue { get; set; }
         public int maxValue { get; set; }
         public int defaultValue { get; set; }
+        public bool display { get; set; }
         
     }
 }

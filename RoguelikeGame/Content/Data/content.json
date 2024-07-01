@@ -10,19 +10,22 @@
           "name": "health",
           "minValue": 0,
           "maxValue": 100,
-          "defaultValue": 100
+          "defaultValue": 100,
+          "display": true
         },
         {
           "name": "attack",
           "minValue": 10,
           "maxValue": 50,
-          "defaultValue": 20
+          "defaultValue": 20,
+          "display": true
         },
         {
           "name": "defense",
           "minValue": 10,
           "maxValue": 50,
-          "defaultValue": 20
+          "defaultValue": 20,
+          "display": true
         }
       ]
     },
@@ -36,19 +39,22 @@
           "name": "health",
           "minValue": 0,
           "maxValue": 100,
-          "defaultValue": 100
+          "defaultValue": 100,
+          "display": true
         },
         {
           "name": "attack",
           "minValue": 10,
           "maxValue": 50,
-          "defaultValue": 20
+          "defaultValue": 20,
+          "display": true
         },
         {
           "name": "defense",
           "minValue": 10,
           "maxValue": 50,
-          "defaultValue": 20
+          "defaultValue": 20,
+          "display": true
         }
       ]
     },
@@ -62,19 +68,22 @@
           "name": "health",
           "minValue": 0,
           "maxValue": 100,
-          "defaultValue": 100
+          "defaultValue": 100,
+          "display": true
         },
         {
           "name": "attack",
           "minValue": 10,
           "maxValue": 50,
-          "defaultValue": 20
+          "defaultValue": 20,
+          "display": true
         },
         {
           "name": "defense",
           "minValue": 10,
           "maxValue": 50,
-          "defaultValue": 20
+          "defaultValue": 20,
+          "display": true
         }
       ]
     },
@@ -88,19 +97,22 @@
           "name": "health",
           "minValue": 0,
           "maxValue": 100,
-          "defaultValue": 100
+          "defaultValue": 100,
+          "display":  true
         },
         {
           "name": "attack",
           "minValue": 10,
           "maxValue": 50,
-          "defaultValue": 20
+          "defaultValue": 20,
+          "display": true
         },
         {
           "name": "defense",
           "minValue": 10,
           "maxValue": 50,
-          "defaultValue": 20
+          "defaultValue": 20,
+          "display": true
         }
       ]
     }
@@ -117,19 +129,22 @@
           "name": "health",
           "minValue": 0,
           "maxValue": 100,
-          "defaultValue": 100
+          "defaultValue": 100,
+          "display":  true
         },
         {
           "name": "attack",
           "minValue": 10,
           "maxValue": 50,
-          "defaultValue": 20
+          "defaultValue": 20,
+          "display": false
         },
         {
           "name": "defense",
           "minValue": 10,
           "maxValue": 50,
-          "defaultValue": 20
+          "defaultValue": 20,
+          "display": false
         }
       ]
     },
@@ -144,19 +159,22 @@
           "name": "health",
           "minValue": 0,
           "maxValue": 100,
-          "defaultValue": 100
+          "defaultValue": 100,
+          "display": true
         },
         {
           "name": "attack",
           "minValue": 10,
           "maxValue": 50,
-          "defaultValue": 20
+          "defaultValue": 20,
+          "display": false
         },
         {
           "name": "defense",
           "minValue": 10,
           "maxValue": 50,
-          "defaultValue": 20
+          "defaultValue": 20,
+          "display": false
         }
       ]
     },
@@ -171,19 +189,22 @@
           "name": "health",
           "minValue": 0,
           "maxValue": 100,
-          "defaultValue": 100
+          "defaultValue": 100,
+          "display": true
         },
         {
           "name": "attack",
           "minValue": 10,
           "maxValue": 50,
-          "defaultValue": 20
+          "defaultValue": 20,
+          "display": false
         },
         {
           "name": "defense",
           "minValue": 10,
           "maxValue": 50,
-          "defaultValue": 20
+          "defaultValue": 20,
+          "display": false
         }
       ]
     },
@@ -198,19 +219,22 @@
           "name": "health",
           "minValue": 0,
           "maxValue": 100,
-          "defaultValue": 100
+          "defaultValue": 100,
+          "display": true
         },
         {
           "name": "attack",
           "minValue": 10,
           "maxValue": 50,
-          "defaultValue": 20
+          "defaultValue": 20,
+          "display": false
         },
         {
           "name": "defense",
           "minValue": 10,
           "maxValue": 50,
-          "defaultValue": 20
+          "defaultValue": 20,
+          "display": false
         }
       ]
     },
@@ -225,19 +249,22 @@
           "name": "health",
           "minValue": 0,
           "maxValue": 100,
-          "defaultValue": 100
+          "defaultValue": 100,
+          "display": true
         },
         {
           "name": "attack",
           "minValue": 10,
           "maxValue": 50,
-          "defaultValue": 20
+          "defaultValue": 20,
+          "display": false
         },
         {
           "name": "defense",
           "minValue": 10,
           "maxValue": 50,
-          "defaultValue": 20
+          "defaultValue": 20,
+          "display": false
         }
       ]
     },
@@ -252,19 +279,22 @@
           "name": "health",
           "minValue": 0,
           "maxValue": 100,
-          "defaultValue": 100
+          "defaultValue": 100,
+          "display": true
         },
         {
           "name": "attack",
           "minValue": 10,
           "maxValue": 50,
-          "defaultValue": 20
+          "defaultValue": 20,
+          "display": false
         },
         {
           "name": "defense",
           "minValue": 10,
           "maxValue": 50,
-          "defaultValue": 20
+          "defaultValue": 20,
+          "display": false
         }
       ]
     }

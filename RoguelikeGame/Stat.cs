@@ -9,5 +9,6 @@ namespace RoguelikeGame
         public int MaxValue { get; set; }
         public int DefaultValue { get; set; }
         public int CurrentValue { get; set; }
+        public bool Display { get; set; }
     }
 }
