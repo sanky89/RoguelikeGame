@@ -51,8 +51,10 @@ namespace RoguelikeGame
             Globals.Columns = Globals.SpriteSheet.Height / Globals.TILE_SIZE;
             Globals.IsAscii = false;
         
-            var gameData = Content.Load<GameDataModel>("Data/content");
-            Globals.AssetManager = new AssetManager(gameData);
+            var charactersData = Content.Load<CharactersDataModel>("Data/characters");
+            var monstersData = Content.Load<MonstersDataModel>("Data/monsters");
+            var itemsData = Content.Load<ItemsDataModel>("Data/items");
+            Globals.AssetManager = new AssetManager(charactersData, monstersData, itemsData);
 
             _player = Globals.AssetManager.CreatePlayer();
             _actionLog = new ActionLog();

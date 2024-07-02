@@ -1,122 +1,4 @@
 {
-  "characters": [
-    {
-      "name": "dwarf",
-      "glyph": 1,
-      "row": 0,
-      "col": 0,
-      "stats": [
-        {
-          "name": "health",
-          "minValue": 0,
-          "maxValue": 100,
-          "defaultValue": 100,
-          "display": true
-        },
-        {
-          "name": "attack",
-          "minValue": 10,
-          "maxValue": 50,
-          "defaultValue": 20,
-          "display": true
-        },
-        {
-          "name": "defense",
-          "minValue": 10,
-          "maxValue": 50,
-          "defaultValue": 20,
-          "display": true
-        }
-      ]
-    },
-    {
-      "name": "elf",
-      "glyph": 1,
-      "row": 0,
-      "col": 1,
-      "stats": [
-        {
-          "name": "health",
-          "minValue": 0,
-          "maxValue": 100,
-          "defaultValue": 100,
-          "display": true
-        },
-        {
-          "name": "attack",
-          "minValue": 10,
-          "maxValue": 50,
-          "defaultValue": 20,
-          "display": true
-        },
-        {
-          "name": "defense",
-          "minValue": 10,
-          "maxValue": 50,
-          "defaultValue": 20,
-          "display": true
-        }
-      ]
-    },
-    {
-      "name": "ranger",
-      "glyph": 1,
-      "row": 0,
-      "col": 2,
-      "stats": [
-        {
-          "name": "health",
-          "minValue": 0,
-          "maxValue": 100,
-          "defaultValue": 100,
-          "display": true
-        },
-        {
-          "name": "attack",
-          "minValue": 10,
-          "maxValue": 50,
-          "defaultValue": 20,
-          "display": true
-        },
-        {
-          "name": "defense",
-          "minValue": 10,
-          "maxValue": 50,
-          "defaultValue": 20,
-          "display": true
-        }
-      ]
-    },
-    {
-      "name": "rogue",
-      "glyph": 1,
-      "row": 0,
-      "col": 3,
-      "stats": [
-        {
-          "name": "health",
-          "minValue": 0,
-          "maxValue": 100,
-          "defaultValue": 100,
-          "display":  true
-        },
-        {
-          "name": "attack",
-          "minValue": 10,
-          "maxValue": 50,
-          "defaultValue": 20,
-          "display": true
-        },
-        {
-          "name": "defense",
-          "minValue": 10,
-          "maxValue": 50,
-          "defaultValue": 20,
-          "display": true
-        }
-      ]
-    }
-  ],
   "monsters": [
     {
       "id": "Skeleton",
@@ -130,7 +12,7 @@
           "minValue": 0,
           "maxValue": 100,
           "defaultValue": 100,
-          "display":  true
+          "display": true
         },
         {
           "name": "attack",
@@ -297,26 +179,6 @@
           "display": false
         }
       ]
-    }
-  ],
-  "items": [
-    {
-      "id": "gold",
-      "name": "gold",
-      "glyph": 1,
-      "row": 21,
-      "col": 17,
-      "minAmount": 20,
-      "maxAmount": 50
-    },
-    {
-      "id": "health_potion_1",
-      "name": "health potion",
-      "glyph": 1,
-      "row": 19,
-      "col": 16,
-      "minAmount": 5,
-      "maxAmount": 10
     }
   ]
 }

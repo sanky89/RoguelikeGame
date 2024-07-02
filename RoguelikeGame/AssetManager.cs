@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text.Json;
-using Microsoft.Xna.Framework.Content;
 using Color = Microsoft.Xna.Framework.Color;
 
 namespace RoguelikeGame
@@ -13,11 +10,11 @@ namespace RoguelikeGame
         private List<CharacterDataModel> _characterModels;
         private List<MonsterDataModel> _monsterModels;
         private List<ItemDataModel> _itemModels;
-        public  AssetManager(GameDataModel gameData)
+        public  AssetManager(CharactersDataModel charactersData, MonstersDataModel monstersData, ItemsDataModel itemsData)
         {
-            _characterModels = new List<CharacterDataModel>(gameData.characters);
-            _monsterModels = new List<MonsterDataModel>(gameData.monsters);
-            _itemModels = new List<ItemDataModel>(gameData.items);
+            _characterModels = new List<CharacterDataModel>(charactersData.characters);
+            _monsterModels = new List<MonsterDataModel>(monstersData.monsters);
+            _itemModels = new List<ItemDataModel>(itemsData.items);
         }
 
         public Player CreatePlayer()
@@ -62,10 +59,18 @@ namespace RoguelikeGame
         }
     }
 
-    public class GameDataModel
+    public class CharactersDataModel
     {
         public List<CharacterDataModel> characters { get; set; }
+    }
+
+    public class MonstersDataModel
+    {
         public List<MonsterDataModel> monsters { get; set; }
+    }
+
+    public class ItemsDataModel
+    {
         public List<ItemDataModel> items { get; set; }
     }
 

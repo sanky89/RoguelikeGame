@@ -17,11 +17,23 @@
 #begin cp437-thin_8x16.ttf
 /copy:cp437-thin_8x16.ttf
 
-#begin Data/content.json
+#begin Data/characters.json
 /importer:JsonContentImporter
 /processor:JsonContentProcessor
-/processorParam:RuntimeType=RoguelikeGame.GameDataModelReader,RoguelikeGame
-/build:Data/content.json
+/processorParam:RuntimeType=RoguelikeGame.CharactersDataModelReader,RoguelikeGame
+/build:Data/characters.json
+
+#begin Data/items.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:RuntimeType=RoguelikeGame.ItemsDataModelReader,RoguelikeGame
+/build:Data/items.json
+
+#begin Data/monsters.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:RuntimeType=RoguelikeGame.MonstersDataModelReader,RoguelikeGame
+/build:Data/monsters.json
 
 #begin fontsheet.png
 /importer:TextureImporter

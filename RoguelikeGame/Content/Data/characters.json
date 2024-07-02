@@ -1,0 +1,120 @@
+{
+  "characters": [
+    {
+      "name": "dwarf",
+      "glyph": 1,
+      "row": 0,
+      "col": 0,
+      "stats": [
+        {
+          "name": "health",
+          "minValue": 0,
+          "maxValue": 100,
+          "defaultValue": 100,
+          "display": true
+        },
+        {
+          "name": "attack",
+          "minValue": 10,
+          "maxValue": 50,
+          "defaultValue": 20,
+          "display": true
+        },
+        {
+          "name": "defense",
+          "minValue": 10,
+          "maxValue": 50,
+          "defaultValue": 20,
+          "display": true
+        }
+      ]
+    },
+    {
+      "name": "elf",
+      "glyph": 1,
+      "row": 0,
+      "col": 1,
+      "stats": [
+        {
+          "name": "health",
+          "minValue": 0,
+          "maxValue": 100,
+          "defaultValue": 100,
+          "display": true
+        },
+        {
+          "name": "attack",
+          "minValue": 10,
+          "maxValue": 50,
+          "defaultValue": 20,
+          "display": true
+        },
+        {
+          "name": "defense",
+          "minValue": 10,
+          "maxValue": 50,
+          "defaultValue": 20,
+          "display": true
+        }
+      ]
+    },
+    {
+      "name": "ranger",
+      "glyph": 1,
+      "row": 0,
+      "col": 2,
+      "stats": [
+        {
+          "name": "health",
+          "minValue": 0,
+          "maxValue": 100,
+          "defaultValue": 100,
+          "display": true
+        },
+        {
+          "name": "attack",
+          "minValue": 10,
+          "maxValue": 50,
+          "defaultValue": 20,
+          "display": true
+        },
+        {
+          "name": "defense",
+          "minValue": 10,
+          "maxValue": 50,
+          "defaultValue": 20,
+          "display": true
+        }
+      ]
+    },
+    {
+      "name": "rogue",
+      "glyph": 1,
+      "row": 0,
+      "col": 3,
+      "stats": [
+        {
+          "name": "health",
+          "minValue": 0,
+          "maxValue": 100,
+          "defaultValue": 100,
+          "display": true
+        },
+        {
+          "name": "attack",
+          "minValue": 10,
+          "maxValue": 50,
+          "defaultValue": 20,
+          "display": true
+        },
+        {
+          "name": "defense",
+          "minValue": 10,
+          "maxValue": 50,
+          "defaultValue": 20,
+          "display": true
+        }
+      ]
+    }
+  ]
+}
