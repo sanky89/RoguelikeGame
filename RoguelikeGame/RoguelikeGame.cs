@@ -55,7 +55,7 @@ namespace RoguelikeGame
             var monstersData = Content.Load<MonstersDataModel>("Data/monsters");
             var itemsData = Content.Load<ItemsDataModel>("Data/items");
             Globals.AssetManager = new AssetManager(charactersData, monstersData, itemsData);
-
+            Globals.CombatManager = new CombatManager();
             _player = Globals.AssetManager.CreatePlayer();
             _actionLog = new ActionLog();
             Globals.Map = new Map(_player);
@@ -107,7 +107,7 @@ namespace RoguelikeGame
         private void PerformTurn(InputAction inputAction)
         {
             var actionResult = _player.PerformAction(inputAction);
-
+            _turns++;
             switch (actionResult.ResultType)
             {
                 case ActionResultType.Move:
@@ -119,7 +119,8 @@ namespace RoguelikeGame
                 case ActionResultType.HitEntity:
                     if(actionResult.Entity is Monster m)
                     {
-                        _actionLog.AddLog($"You hit {m.Name}");
+                        Globals.CombatManager.ResolveCombat(_player, m, out var log);
+                        _actionLog.AddLog(log);
                     }
                     break;
                 case ActionResultType.CollectedCoins:

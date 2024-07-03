@@ -28,6 +28,7 @@ namespace RoguelikeGame
         public static Map Map {get; set;}
         public static Random Rng { get; set; }
         public static AssetManager AssetManager { get; set; }
+        public static CombatManager CombatManager { get; set; }
 
         public static int Rows { get; set; }
         public static int Columns { get; set; }

@@ -15,16 +15,23 @@
         },
         {
           "name": "attack",
-          "minValue": 10,
+          "minValue": 1,
           "maxValue": 50,
+          "defaultValue": 10,
+          "display": true
+        },
+        {
+          "name": "attackChance",
+          "minValue": 10,
+          "maxValue": 100,
           "defaultValue": 20,
           "display": true
         },
         {
           "name": "defense",
-          "minValue": 10,
+          "minValue": 1,
           "maxValue": 50,
-          "defaultValue": 20,
+          "defaultValue": 10,
           "display": true
         }
       ]
@@ -44,16 +51,23 @@
         },
         {
           "name": "attack",
-          "minValue": 10,
+          "minValue": 1,
           "maxValue": 50,
+          "defaultValue": 10,
+          "display": true
+        },
+        {
+          "name": "attackChance",
+          "minValue": 10,
+          "maxValue": 100,
           "defaultValue": 20,
           "display": true
         },
         {
           "name": "defense",
-          "minValue": 10,
+          "minValue": 1,
           "maxValue": 50,
-          "defaultValue": 20,
+          "defaultValue": 10,
           "display": true
         }
       ]
@@ -75,6 +89,13 @@
           "name": "attack",
           "minValue": 10,
           "maxValue": 50,
+          "defaultValue": 20,
+          "display": true
+        },
+        {
+          "name": "attackChance",
+          "minValue": 10,
+          "maxValue": 100,
           "defaultValue": 20,
           "display": true
         },
@@ -102,16 +123,23 @@
         },
         {
           "name": "attack",
-          "minValue": 10,
+          "minValue": 1,
           "maxValue": 50,
-          "defaultValue": 20,
+          "defaultValue": 10,
+          "display": true
+        },
+        {
+          "name": "attackChance",
+          "minValue": 10,
+          "maxValue": 100,
+          "defaultValue": 80,
           "display": true
         },
         {
           "name": "defense",
-          "minValue": 10,
+          "minValue": 1,
           "maxValue": 50,
-          "defaultValue": 20,
+          "defaultValue": 10,
           "display": true
         }
       ]

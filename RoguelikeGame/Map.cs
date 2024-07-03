@@ -132,8 +132,6 @@ namespace RoguelikeGame
             }
             else if(IsMonsterTile(x, y, out var monster))
             {
-                _player.PlayerStats.UpdateStat("health", -monster.MonsterStats.Stats["attack"].CurrentValue);
-                monster.MonsterStats.UpdateStat("health", -_player.PlayerStats.Stats["attack"].CurrentValue);
                 return new ActionResult(ActionResultType.HitEntity, monster);
             }
 
