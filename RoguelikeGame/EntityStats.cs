@@ -23,7 +23,7 @@ namespace RoguelikeGame
                     Display = s.display,
                 };
                 Stats.Add(s.name, stat);
-                if(stat.Display)
+                if(stat.ShouldDisplayStat())
                 {
                     StatsLog += $"{stat.Name}: {stat.CurrentValue}/{stat.MaxValue}\n";
                 }
@@ -37,7 +37,7 @@ namespace RoguelikeGame
             foreach(var kvp in Stats)
             {
                 var stat = kvp.Value;
-                if (stat.Display)
+                if (stat.ShouldDisplayStat())
                 {
                     StatsLog += $"{stat.Name}: {stat.CurrentValue}/{stat.MaxValue}\n";
                 }

@@ -25,7 +25,7 @@
           "minValue": 10,
           "maxValue": 100,
           "defaultValue": 20,
-          "display": true
+          "display": false
         },
         {
           "name": "defense",
@@ -61,7 +61,7 @@
           "minValue": 10,
           "maxValue": 100,
           "defaultValue": 20,
-          "display": true
+          "display": false
         },
         {
           "name": "defense",
@@ -97,7 +97,7 @@
           "minValue": 10,
           "maxValue": 100,
           "defaultValue": 20,
-          "display": true
+          "display": false
         },
         {
           "name": "defense",
@@ -133,7 +133,7 @@
           "minValue": 10,
           "maxValue": 100,
           "defaultValue": 80,
-          "display": true
+          "display": false
         },
         {
           "name": "defense",

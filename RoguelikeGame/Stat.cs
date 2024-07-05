@@ -10,5 +10,10 @@ namespace RoguelikeGame
         public int DefaultValue { get; set; }
         public int CurrentValue { get; set; }
         public bool Display { get; set; }
+
+        public bool ShouldDisplayStat()
+        {
+            return Display && CurrentValue > 0;
+        }
     }
 }

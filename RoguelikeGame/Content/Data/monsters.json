@@ -25,7 +25,14 @@
           "name": "defense",
           "minValue": 10,
           "maxValue": 50,
-          "defaultValue": 20,
+          "defaultValue": 10,
+          "display": false
+        },
+        {
+          "name": "defenseChance",
+          "minValue": 2,
+          "maxValue": 50,
+          "defaultValue": 50,
           "display": false
         }
       ]
@@ -55,7 +62,14 @@
           "name": "defense",
           "minValue": 10,
           "maxValue": 50,
-          "defaultValue": 20,
+          "defaultValue": 15,
+          "display": false
+        },
+        {
+          "name": "defenseChance",
+          "minValue": 2,
+          "maxValue": 50,
+          "defaultValue": 50,
           "display": false
         }
       ]
@@ -85,7 +99,14 @@
           "name": "defense",
           "minValue": 10,
           "maxValue": 50,
-          "defaultValue": 20,
+          "defaultValue": 8,
+          "display": false
+        },
+        {
+          "name": "defenseChance",
+          "minValue": 2,
+          "maxValue": 50,
+          "defaultValue": 50,
           "display": false
         }
       ]
@@ -115,7 +136,14 @@
           "name": "defense",
           "minValue": 10,
           "maxValue": 50,
-          "defaultValue": 20,
+          "defaultValue": 5,
+          "display": false
+        },
+        {
+          "name": "defenseChance",
+          "minValue": 2,
+          "maxValue": 50,
+          "defaultValue": 50,
           "display": false
         }
       ]
@@ -147,6 +175,13 @@
           "maxValue": 50,
           "defaultValue": 20,
           "display": false
+        },
+        {
+          "name": "defenseChance",
+          "minValue": 2,
+          "maxValue": 50,
+          "defaultValue": 50,
+          "display": false
         }
       ]
     },
@@ -176,6 +211,13 @@
           "minValue": 10,
           "maxValue": 50,
           "defaultValue": 20,
+          "display": false
+        },
+        {
+          "name": "defenseChance",
+          "minValue": 2,
+          "maxValue": 50,
+          "defaultValue": 50,
           "display": false
         }
       ]

@@ -79,6 +79,12 @@ namespace RoguelikeGame
             }
         }
 
+        public void RemoveMonster(Monster m)
+        {
+            SetTileType(m.MapX, m.MapY, TileType.Walkable);
+            _monsters.Remove(m);
+        }
+
         private void DropItem()
         {
             var room = _rooms[Globals.Rng.Next(_rooms.Count)];
