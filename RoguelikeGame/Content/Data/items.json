@@ -7,7 +7,8 @@
       "row": 21,
       "col": 17,
       "minAmount": 20,
-      "maxAmount": 50
+      "maxAmount": 50,
+      "affectedStat": ""
     },
     {
       "id": "health_potion_1",
@@ -16,7 +17,8 @@
       "row": 19,
       "col": 16,
       "minAmount": 5,
-      "maxAmount": 10
+      "maxAmount": 10,
+      "affectedStat": "health"
     }
   ]
 }

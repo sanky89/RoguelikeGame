@@ -70,7 +70,7 @@ namespace RoguelikeGame
             var newY = MapY + dy;
             var actionResult = Globals.Map.CanMove(newX, newY);
             if (actionResult.ResultType == ActionResultType.Move ||
-                actionResult.ResultType == ActionResultType.CollectedCoins)
+                actionResult.ResultType == ActionResultType.CollectItem)
             {
                 MapX += dx;
                 MapY += dy;

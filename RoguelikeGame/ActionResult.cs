@@ -14,7 +14,7 @@ namespace RoguelikeGame
         Move,
         HitWall,
         HitEntity,
-        CollectedCoins,
+        CollectItem,
         Count
     }
 

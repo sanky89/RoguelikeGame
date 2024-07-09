@@ -132,7 +132,7 @@ namespace RoguelikeGame
                 if (ContainsItem(x, y, out var item))
                 {
                     _items.Remove(item);
-                    return new ActionResult(ActionResultType.CollectedCoins, item);
+                    return new ActionResult(ActionResultType.CollectItem, item);
                 }
                 return new ActionResult(ActionResultType.Move, null);;
             }

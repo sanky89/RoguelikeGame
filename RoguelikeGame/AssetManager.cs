@@ -44,7 +44,8 @@ namespace RoguelikeGame
         public Item CreateRandomItem()
         {
             var itemData = _itemModels[Globals.Rng.Next(0, _itemModels.Count)];
-            return new Item(new Character((Glyphs)itemData.glyph, Color.Green, itemData.row, itemData.col), itemData.name, new Tuple<int, int>(itemData.minAmount, itemData.maxAmount));
+            var character = new Character((Glyphs)itemData.glyph, Color.Green, itemData.row, itemData.col);
+            return new Item(character, itemData.name, new Tuple<int, int>(itemData.minAmount, itemData.maxAmount), itemData.affectedStat);
         }
 
         public Item CreateItem(string id)
@@ -54,8 +55,8 @@ namespace RoguelikeGame
             {
                 return null;
             }
-
-            return new Item(new Character((Glyphs)itemData.glyph, Color.Green, itemData.row, itemData.col), itemData.name, new Tuple<int, int>(itemData.minAmount, itemData.maxAmount));
+            var character = new Character((Glyphs)itemData.glyph, Color.Green, itemData.row, itemData.col);
+            return new Item(character, itemData.name, new Tuple<int, int>(itemData.minAmount, itemData.maxAmount), itemData.affectedStat);
         }
     }
 
@@ -97,6 +98,7 @@ namespace RoguelikeGame
     {
         public int minAmount { get; set; }
         public int maxAmount { get; set; }
+        public string affectedStat { get; set; }
     }
 
     public class StatDataModel

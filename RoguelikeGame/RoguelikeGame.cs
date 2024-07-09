@@ -123,11 +123,12 @@ namespace RoguelikeGame
                         _actionLog.AddLog(log);
                     }
                     break;
-                case ActionResultType.CollectedCoins:
+                case ActionResultType.CollectItem:
                     _mapConsole.CheckScrollMap(inputAction);
                     if(actionResult.Entity is Item item)
                     {
                         _actionLog.AddLog($"You collected {item.Amount} {item.Name}");
+                        item.OnPickup();
                     }
                     break;
                 default:
