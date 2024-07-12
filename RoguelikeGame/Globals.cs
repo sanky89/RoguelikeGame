@@ -15,6 +15,7 @@ namespace RoguelikeGame
         public const int MAP_CONSOLE_WIDTH = 32;
         public const int MAP_CONSOLE_HEIGHT = 20;
         public const int TILE_SIZE = 32;
+        public const int ASCII_SIZE = 12;
 
         public static GraphicsDevice GraphicsDevice;
         public static ContentManager Content { get; set; }
@@ -32,6 +33,8 @@ namespace RoguelikeGame
 
         public static int Rows { get; set; }
         public static int Columns { get; set; }
+        public static int AsciiRows { get; set; }
+        public static int AsciiColumns { get; set; }
 
         public static void Update(GameTime gameTime)
         {

@@ -47,6 +47,9 @@
 /processorParam:TextureFormat=Color
 /build:fontsheet.png
 
+#begin PerfectDOSVGA437.ttf
+/copy:PerfectDOSVGA437.ttf
+
 #begin rogue_font.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor

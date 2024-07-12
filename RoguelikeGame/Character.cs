@@ -34,6 +34,11 @@ namespace RoguelikeGame
             _glyphCol = overrideCol;
         }
 
+        public Rectangle GetAsciiSourceRect()
+        {
+            return new Rectangle(_glyphCol * Globals.ASCII_SIZE, _glyphRow * Globals.ASCII_SIZE, Globals.ASCII_SIZE, Globals.ASCII_SIZE);
+        }
+
         public Rectangle GetSourceRect()
         {
             return new Rectangle(_glyphCol * Globals.TILE_SIZE, _glyphRow * Globals.TILE_SIZE, Globals.TILE_SIZE, Globals.TILE_SIZE);
@@ -45,8 +50,8 @@ namespace RoguelikeGame
             Color = color;
             ColorDark = Color * 0.2f;
             _glyphInt = (int)glyph;
-            _glyphRow = _glyphInt / Globals.Columns;
-            _glyphCol = _glyphInt % Globals.Columns;
+            _glyphRow = _glyphInt / Globals.AsciiColumns;
+            _glyphCol = _glyphInt % Globals.AsciiRows;
         }
     }
 }

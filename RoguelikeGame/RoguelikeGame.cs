@@ -50,6 +50,8 @@ namespace RoguelikeGame
             Globals.Font = Content.Load<SpriteFont>("rogue_font");
             Globals.Rows = Globals.SpriteSheet.Width / Globals.TILE_SIZE;
             Globals.Columns = Globals.SpriteSheet.Height / Globals.TILE_SIZE;
+            Globals.AsciiRows = Globals.AsciiTexture.Width / Globals.ASCII_SIZE;
+            Globals.AsciiColumns = Globals.AsciiTexture.Height / Globals.ASCII_SIZE;
             Globals.IsAscii = false;
         
             var charactersData = Content.Load<CharactersDataModel>("Data/characters");
@@ -62,7 +64,7 @@ namespace RoguelikeGame
             Globals.Map = new Map(_player);
             Globals.Map.GenerateMap();
             _mapConsole = new MapConsole( "", Globals.MAP_CONSOLE_WIDTH, Globals.MAP_CONSOLE_HEIGHT, ConsoleLocation.TopLeft, BorderStyle.None, Color.Green);
-            _statsConsole = new StatsConsole( "", 8, Globals.MAP_CONSOLE_HEIGHT, ConsoleLocation.TopRight, BorderStyle.None, Color.Green);
+            _statsConsole = new StatsConsole( " Stats", 20, Globals.SCREEN_HEIGHT/Globals.ASCII_SIZE/2, ConsoleLocation.TopRight, BorderStyle.DoubleLine, Color.Yellow);
 
         }
 

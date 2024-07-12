@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace RoguelikeGame
 {
@@ -16,6 +17,7 @@ namespace RoguelikeGame
 
         public override void Draw()
         {
+            base.Draw();
             DrawStats(_playerStats, Color.White);
 
             _lineNumber += 2;
@@ -25,7 +27,6 @@ namespace RoguelikeGame
                 DrawStats(m.Stats, Color.Red, m.Name);
             }
             _lineNumber = 0;
-            base.Draw();
         }
 
         private void DrawStats(Stats stats, Color color, string overrideDisplayId = null)
@@ -38,7 +39,10 @@ namespace RoguelikeGame
                     continue;
                 }
                 var text = $"{overrideDisplayId ?? stat.Name}: {stat.CurrentValue}/{stat.MaxValue}";
-                Globals.SpriteBatch.DrawString(Globals.Font, text, new Vector2(_x * Globals.TILE_SIZE, _y * Globals.TILE_SIZE + _lineNumber++ * SPACING), color);
+                Globals.SpriteBatch.DrawString(Globals.Font,
+                    text,
+                    new Vector2((_x+2) * Globals.ASCII_SIZE, (_y+2) * Globals.ASCII_SIZE + _lineNumber++ * SPACING),
+                    color);
             }
         }
     }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+
 namespace RoguelikeGame
 {
     public enum ConsoleLocation
@@ -104,16 +105,16 @@ namespace RoguelikeGame
                     _y = 0;
                     break;
                 case ConsoleLocation.TopRight:
-                    _x = Globals.SCREEN_WIDTH/Globals.TILE_SIZE - Width;
+                    _x = Globals.SCREEN_WIDTH/Globals.ASCII_SIZE - Width;
                     _y = 0;
                     break;
                 case ConsoleLocation.BottomLeft:
                     _x = 0;
-                    _y = Globals.SCREEN_HEIGHT / Globals.TILE_SIZE - Height-1;
+                    _y = Globals.SCREEN_HEIGHT / Globals.ASCII_SIZE - Height-1;
                     break;
                 case ConsoleLocation.BottomRight:
-                    _x = Globals.SCREEN_WIDTH / Globals.TILE_SIZE - Width;
-                    _y = Globals.SCREEN_HEIGHT / Globals.TILE_SIZE - Height-1;
+                    _x = Globals.SCREEN_WIDTH / Globals.ASCII_SIZE - Width;
+                    _y = Globals.SCREEN_HEIGHT / Globals.ASCII_SIZE - Height-1;
                     break;
                 default:
                     return;
@@ -123,43 +124,41 @@ namespace RoguelikeGame
         private void DrawTitle(int x)
         {
             if(!string.IsNullOrEmpty(Title))
-                Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(x, _y) * Globals.TILE_SIZE, _titleCharacters[x - _titleStartIndex].GetSourceRect(), BorderColor, 0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0);
+                Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(x, _y) * Globals.ASCII_SIZE, _titleCharacters[x - _titleStartIndex].GetAsciiSourceRect(), BorderColor, 0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0);
+        }
+
+        private void DrawTitleString(int x)
+        {
+            Globals.SpriteBatch.DrawString(Globals.Font, Title, new Vector2(x, _y) * Globals.ASCII_SIZE, BorderColor);
         }
 
         public virtual void Draw()
         {
             if(Border == BorderStyle.None)
             {
-                for (int x = _titleStartIndex; x <= _titleEndIndex; x++)
-                {
-                    DrawTitle(x);
-                }
                 return;
             }
+            DrawTitleString(_titleStartIndex);
 
             for (int x = _x+1; x < _x + Width; x++)
             {
                 if (x < _titleStartIndex || x > _titleEndIndex)
                 {
-                    Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(x, _y) * Globals.TILE_SIZE, _horizontal.GetSourceRect(), BorderColor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
+                    Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(x, _y) * Globals.ASCII_SIZE, _horizontal.GetAsciiSourceRect(), BorderColor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
                 }
-                else
-                {
-                    DrawTitle(x);
-                }
-                Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(x, _y + Height) * Globals.TILE_SIZE, _horizontal.GetSourceRect(), BorderColor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
+                Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(x, _y + Height) * Globals.ASCII_SIZE, _horizontal.GetAsciiSourceRect(), BorderColor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
             }
 
             for (int y = _y+1; y < _y + Height; y++)
             {
-                Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(_x, y) * Globals.TILE_SIZE, _vertical.GetSourceRect(), BorderColor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
-                Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(_x + Width, y) * Globals.TILE_SIZE, _vertical.GetSourceRect(), BorderColor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
+                Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(_x, y) * Globals.ASCII_SIZE, _vertical.GetAsciiSourceRect(), BorderColor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
+                Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(_x + Width, y) * Globals.ASCII_SIZE, _vertical.GetAsciiSourceRect(), BorderColor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
             }
 
-            Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(_x,_y) * Globals.TILE_SIZE, _upperLeftCorner.GetSourceRect(), BorderColor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
-            Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(_x+Width, _y) * Globals.TILE_SIZE, _upperRightCorner.GetSourceRect(), BorderColor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
-            Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(_x, _y+Height) * Globals.TILE_SIZE, _lowerLeftCorner.GetSourceRect(), BorderColor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
-            Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(_x+Width, _y+Height) * Globals.TILE_SIZE, _lowerRightCorner.GetSourceRect(), BorderColor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
+            Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(_x,_y) * Globals.ASCII_SIZE, _upperLeftCorner.GetAsciiSourceRect(), BorderColor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
+            Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(_x+Width, _y) * Globals.ASCII_SIZE, _upperRightCorner.GetAsciiSourceRect(), BorderColor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
+            Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(_x, _y+Height) * Globals.ASCII_SIZE, _lowerLeftCorner.GetAsciiSourceRect(), BorderColor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
+            Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(_x+Width, _y+Height) * Globals.ASCII_SIZE, _lowerRightCorner.GetAsciiSourceRect(), BorderColor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
         }
     }
 }
