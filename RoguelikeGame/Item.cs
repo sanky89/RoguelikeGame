@@ -27,7 +27,7 @@ namespace RoguelikeGame
                 return;
             }
 
-            Globals.Map.Player.PlayerStats.UpdateStat(AffectedStat, Amount);
+            Globals.Map.Player.Stats[AffectedStat].CurrentValue += Amount;
         }
     }
 }

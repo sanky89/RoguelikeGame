@@ -9,13 +9,13 @@ namespace RoguelikeGame
     public class Monster : Entity
     {
         public readonly string Name;
-        public readonly EntityStats MonsterStats;
+        public readonly Stats Stats;
 
-        public Monster(Character character, string name, int id, List<StatDataModel> stats) : base(character)
+        public Monster(Character character, string name, int id, Stats stats) : base(character)
         {
             Id = id;
             Name = name;
-            MonsterStats = new EntityStats(stats);
+            Stats = stats;
         }
     }
 }

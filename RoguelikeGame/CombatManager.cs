@@ -16,8 +16,8 @@ namespace RoguelikeGame
             System.Console.WriteLine($"attackChance={attackChance} defenseChance={defenseChance}");
             int hitAmount = 0;
             log = "";
-            var playerStats = player.PlayerStats.Stats;
-            var monsterStats = monster.MonsterStats.Stats;
+            var playerStats = player.Stats;
+            var monsterStats = monster.Stats;
             if (attackChance <= playerStats["attackChance"].CurrentValue)
             {
 
@@ -36,12 +36,12 @@ namespace RoguelikeGame
                 else if(hitAmount < 0)
                 {
                     log += $"{monster.Name} attacked you for {-hitAmount} damage";
-                    player.PlayerStats.UpdateStat("health", hitAmount);
+                    player.Stats["health"].CurrentValue += hitAmount;
                 }
                 else
                 {
                     log = $"You hit {monster.Name} for {hitAmount} damage";
-                    monster.MonsterStats.UpdateStat("health", -hitAmount);
+                    monster.Stats["health"].CurrentValue += -hitAmount;
                 }
             }
             else
@@ -53,7 +53,7 @@ namespace RoguelikeGame
 
         private void ResolveDeath(Monster m)
         {
-            if(m.MonsterStats.Stats["health"].CurrentValue <= 0)
+            if(m.Stats["health"].CurrentValue <= 0)
             {
                 Globals.Map.RemoveMonster(m);
             }

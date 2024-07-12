@@ -12,6 +12,7 @@ namespace RoguelikeGame
         private SpriteBatch _spriteBatch;
         private Player _player;
         private MapConsole _mapConsole;
+        private StatsConsole _statsConsole;
         private ActionLog _actionLog;
         private bool _showMap = false;
         private int _turns = 0;
@@ -61,6 +62,7 @@ namespace RoguelikeGame
             Globals.Map = new Map(_player);
             Globals.Map.GenerateMap();
             _mapConsole = new MapConsole( "", Globals.MAP_CONSOLE_WIDTH, Globals.MAP_CONSOLE_HEIGHT, ConsoleLocation.TopLeft, BorderStyle.None, Color.Green);
+            _statsConsole = new StatsConsole( "", 8, Globals.MAP_CONSOLE_HEIGHT, ConsoleLocation.TopRight, BorderStyle.None, Color.Green);
 
         }
 
@@ -143,13 +145,8 @@ namespace RoguelikeGame
 
             _spriteBatch.Begin();
             _mapConsole.Draw();
+            _statsConsole.Draw();
             _spriteBatch.DrawString(Globals.Font, _actionLog.LogString, new Vector2(10f, Globals.RENDER_TARGET_HEIGHT - 100f), Color.White);
-            _spriteBatch.DrawString(Globals.Font, _player.PlayerStats.StatsLog, new Vector2(Globals.RENDER_TARGET_WIDTH - 240f, 10f), Color.White);
-            for (int i = 0; i < Globals.Map.VisibleMonsters.Count; i++)
-            {
-                Monster m = Globals.Map.VisibleMonsters[i];
-                _spriteBatch.DrawString(Globals.Font, m.MonsterStats.StatsLog, new Vector2(Globals.RENDER_TARGET_WIDTH - 240f, 80f + (20f*i)), Color.Red);
-            }
             _spriteBatch.End();
 
             base.Draw(gameTime);

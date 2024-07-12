@@ -20,15 +20,17 @@ namespace RoguelikeGame
         public Player CreatePlayer()
         {
             var playerData = _characterModels[3];
-            var player = new Player(new Character((Glyphs)playerData.glyph, Color.Yellow, playerData.row, playerData.col), playerData.stats);
+            Stats statsDict = CreateStatsDict(playerData.stats);
+            var player = new Player(new Character((Glyphs)playerData.glyph, Color.Yellow, playerData.row, playerData.col), statsDict);
             return player;
         }
 
         public Monster CreateRandomMonster(int id)
         {
             var monsterData = _monsterModels[Globals.Rng.Next(0, _monsterModels.Count)];
+            Stats statsDict = CreateStatsDict(monsterData.stats);
             var character = new Character((Glyphs)monsterData.glyph, Color.White, monsterData.row, monsterData.col);
-            return new Monster(character, monsterData.name, id, monsterData.stats);
+            return new Monster(character, monsterData.name, id, statsDict);
         }
 
         public Monster CreateMonster(string id)
@@ -38,7 +40,25 @@ namespace RoguelikeGame
             {
                 return null;
             }
-            return new Monster(new Character((Glyphs)monsterData.glyph, Color.White, monsterData.row, monsterData.col), monsterData.name, 0, monsterData.stats);
+            Stats statsDict = CreateStatsDict(monsterData.stats);
+            return new Monster(new Character((Glyphs)monsterData.glyph, Color.White, monsterData.row, monsterData.col), monsterData.name, 0, statsDict);
+        }
+
+        private Stats CreateStatsDict(List<StatDataModel> statsData)
+        {
+            Stats result = new Stats();
+            foreach (var s in statsData)
+            {
+                result.Add(s.name, new Stat
+                {
+                    Name = s.name,
+                    MinValue = s.minValue,
+                    MaxValue = s.maxValue,
+                    CurrentValue = s.defaultValue,
+                    Display = s.display,
+                });
+            }
+            return result;
         }
 
         public Item CreateRandomItem()

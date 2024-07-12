@@ -12,10 +12,10 @@ namespace RoguelikeGame
         public const int FOV_SIZE = 20;
 
         private Fov _fov;
-        public readonly EntityStats PlayerStats;
-        public Player(Character character, List<StatDataModel> stats) : base( character)
+        public readonly Stats Stats;
+        public Player(Character character, Stats stats) : base( character)
         {
-            PlayerStats = new EntityStats(stats);
+            Stats = stats;
         }
 
         public override void SetMapPosition(int x, int y)
