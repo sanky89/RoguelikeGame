@@ -68,11 +68,11 @@ namespace RoguelikeGame
                     break;
                 case Direction.RIGHT:
                     offset.X++;
-                    offset.X = Math.Min(offset.X, Map.COLS);
+                    offset.X = Math.Min(offset.X, Globals.Map.Cols);
                     break;
                 case Direction.UP:
                     offset.Y++;
-                    offset.Y = Math.Min(offset.Y, Map.ROWS);
+                    offset.Y = Math.Min(offset.Y, Globals.Map.Rows);
                     break;
                 case Direction.DOWN:
                     offset.Y--;
@@ -88,14 +88,14 @@ namespace RoguelikeGame
             int startX = (int)offset.X;
             int startY = (int)offset.Y;
             int endX = startX + Width;
-            if(endX > Map.COLS)
+            if(endX > Globals.Map.Cols)
             {
-                endX = Map.COLS;
+                endX = Globals.Map.Cols;
             }
             int endY = startY + Height;
-            if(endY > Map.ROWS)
+            if(endY > Globals.Map.Rows)
             {
-                endY = Map.ROWS;
+                endY = Globals.Map.Rows;
             }
             for (int y = startY; y < endY; y++)
             {
