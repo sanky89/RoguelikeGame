@@ -20,31 +20,24 @@ namespace RoguelikeGame
     {
         public int Rows { get; private set; }
         public int Cols { get; private set; }
-        private List<Room> _rooms;
         public Tile[,] Tiles { get; private set; }
         private Player _player;
         public Player Player => _player;
         public Vec2Int PlayerMapPosition { get; set; }
         public List<Monster> VisibleMonsters { get; set; }
         public List<Room> Rooms { get; set; }
-        public List<Monster> Monsters;
+        public List<Monster> Monsters { get; set; }
+        public List<Item> Items { get; set; }
 
-        private List<Item> _items;
-
-        public Map(int rows, int cols)
+        public Map(int rows, int cols, Player player)
         {
             Rows = rows;
             Cols = cols;
-        }
-
-        public Map(Player player)
-        {
-            Tiles = new Tile[Cols, Rows];
-            _rooms = new List<Room>();
+            Tiles = new Tile[cols, rows];
             _player = player;
             Monsters = new List<Monster>();
             VisibleMonsters = new List<Monster>();
-            _items = new List<Item>();
+            Items = new List<Item>();
         }
 
         public Tile GetTileAtIndex(int x, int y)
@@ -60,19 +53,6 @@ namespace RoguelikeGame
         {
             SetTileType(m.MapX, m.MapY, TileType.Walkable);
             Monsters.Remove(m);
-        }
-
-        private void DropItem()
-        {
-            var room = _rooms[Globals.Rng.Next(_rooms.Count)];
-            var point = room.GetRandomPointInsideRoom();
-            if (!IsMonsterTile(point.X, point.Y, out _))
-            {
-                var item = Globals.AssetManager.CreateRandomItem();
-                item.SetMapPosition(point.X, point.Y);
-                SetTileType(point.X, point.Y, TileType.Walkable);
-                _items.Add(item);
-            }
         }
 
         public void SetPlayer(Player player)
@@ -97,7 +77,7 @@ namespace RoguelikeGame
             {
                 if (ContainsItem(x, y, out var item))
                 {
-                    _items.Remove(item);
+                    Items.Remove(item);
                     return new ActionResult(ActionResultType.CollectItem, item);
                 }
                 return new ActionResult(ActionResultType.Move, null);;
@@ -179,11 +159,11 @@ namespace RoguelikeGame
 
         public bool ContainsItem(int x, int y, out Item item)
         {
-            for (int i = 0; i < _items.Count; i++)
+            for (int i = 0; i < Items.Count; i++)
             {
-                if (x == _items[i].MapX && y == _items[i].MapY)
+                if (x == Items[i].MapX && y == Items[i].MapY)
                 {
-                    item = _items[i];
+                    item = Items[i];
                     return true;
                 }
             }

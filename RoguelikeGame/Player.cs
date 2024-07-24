@@ -18,11 +18,11 @@ namespace RoguelikeGame
             Stats = stats;
         }
 
-        public override void SetMapPosition(int x, int y)
+        public override void SetMapPosition(Map map, int x, int y)
         {
-            base.SetMapPosition(x, y);
+            base.SetMapPosition(map, x, y);
             System.Console.WriteLine($"Map Position: {MapX}, {MapY}");
-            _fov = new Fov(Globals.Map);
+            _fov = new Fov(map);
             _fov.UpdateFov(MapX, MapY);
         }
 

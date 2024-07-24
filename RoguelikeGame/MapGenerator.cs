@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Data;
 
 namespace RoguelikeGame
 {
@@ -16,14 +13,14 @@ namespace RoguelikeGame
         private const int MAX_ROOM_SIZE = 20;
         private const int MAX_MONSTERS = 50;
         private const int MAX_ITEMS = 50;
-        private Tile[,] _tiles;
 
-        public Map GenerateMap()
+        public Map GenerateMap(Player player)
         {
-            Map map = new Map(ROWS, COLS);
+            Map map = new Map(ROWS, COLS, player);
             GenerateRooms(map);
             DropPlayerInRandomRoom(map);
-
+            GenerateMonsters(map);
+            GenerateItems(map);
             return map;
         }
 
@@ -77,7 +74,7 @@ namespace RoguelikeGame
                 {
                     for (int x = room.RoomRect.X; x < room.RoomRect.Right; x++)
                     {
-                        _tiles[x, y].UpdateTile(new Character(Glyphs.Period, Color.White, 6, 21), TileType.Walkable);
+                        map.Tiles[x, y].UpdateTile(new Character(Glyphs.Period, Color.White, 6, 21), TileType.Walkable);
                     }
                 }
             }
@@ -85,25 +82,25 @@ namespace RoguelikeGame
             map.Rooms.Sort((a, b) => a.RoomRect.Right.CompareTo(b.RoomRect.Right));
             System.Console.WriteLine($"Failed Attempts {failedAttempts} Rooms - {map.Rooms.Count}");
 
-            GenerateCorridors(map.Rooms);
+            GenerateCorridors(map, map.Rooms);
 
             for (int y = 1; y < ROWS - 1; y++)
             {
                 for (int x = 1; x < COLS - 1; x++)
                 {
-                    if (_tiles[x, y].TileType == TileType.Solid &&
-                        _tiles[x - 1, y].TileType == TileType.Solid &&
-                        _tiles[x + 1, y].TileType == TileType.Solid &&
-                        !IsUpperCornerTile(x, y))
+                    if (map.Tiles[x, y].TileType == TileType.Solid &&
+                        map.Tiles[x - 1, y].TileType == TileType.Solid &&
+                        map.Tiles[x + 1, y].TileType == TileType.Solid &&
+                        !IsUpperCornerTile(map, x, y))
                     {
-                        _tiles[x, y].UpdateTile(new Character(Glyphs.MediumFill, Color.White, 1, 22), TileType.Solid);
+                        map.Tiles[x, y].UpdateTile(new Character(Glyphs.MediumFill, Color.White, 1, 22), TileType.Solid);
 
                     }
                 }
             }
         }
 
-        private void GenerateCorridors(List<Room> rooms)
+        private void GenerateCorridors(Map map, List<Room> rooms)
         {
             for (int r = 0; r < rooms.Count - 1; r++)
             {
@@ -122,7 +119,7 @@ namespace RoguelikeGame
 
                 for (int i = start.X; i <= turningPoint.X; i++)
                 {
-                    _tiles[i, start.Y].UpdateTile(new Character(Glyphs.Period, Color.White, 6, 21), TileType.Walkable);
+                    map.Tiles[i, start.Y].UpdateTile(new Character(Glyphs.Period, Color.White, 6, 21), TileType.Walkable);
                 }
 
                 int incr = end.Y < start.Y ? -1 : 1;
@@ -132,7 +129,7 @@ namespace RoguelikeGame
                     {
                         break;
                     }
-                    _tiles[turningPoint.X, i].UpdateTile(new Character(Glyphs.Period, Color.White, 6, 21), TileType.Walkable);
+                    map.Tiles[turningPoint.X, i].UpdateTile(new Character(Glyphs.Period, Color.White, 6, 21), TileType.Walkable);
                 }
             }
         }
@@ -147,9 +144,25 @@ namespace RoguelikeGame
 
                 if (monster != null)
                 {
-                    monster.SetMapPosition(point.X, point.Y);
+                    monster.SetMapPosition(map, point.X, point.Y);
                     map.SetTileType(point.X, point.Y, TileType.Entity);
                     map.Monsters.Add(monster);
+                }
+            }
+        }
+
+        private void GenerateItems(Map map)
+        {
+            for (int i = 0; i < MAX_ITEMS; i++)
+            {
+                var room = map.Rooms[Globals.Rng.Next(map.Rooms.Count)];
+                var point = room.GetRandomPointInsideRoom();
+                if (!map.IsMonsterTile(point.X, point.Y, out _))
+                {
+                    var item = Globals.AssetManager.CreateRandomItem();
+                    item.SetMapPosition(map, point.X, point.Y);
+                    map.SetTileType(point.X, point.Y, TileType.Walkable);
+                    map.Items.Add(item);
                 }
             }
         }
@@ -159,20 +172,18 @@ namespace RoguelikeGame
             var rooms = map.Rooms;
             var startingRoom = rooms[Globals.Rng.Next(rooms.Count - 1)];
             var point = startingRoom.GetRandomPointInsideRoom();
-            map.Player.SetMapPosition(point.X, point.Y);
+            map.Player.SetMapPosition(map, point.X, point.Y);
             map.PlayerMapPosition = new Vec2Int(point.X, point.Y);
         }
 
-        private bool IsUpperCornerTile(int x, int y)
+        private bool IsUpperCornerTile(Map map, int x, int y)
         {
-            return (_tiles[x - 1, y].TileType == TileType.Solid &&
-                _tiles[x, y + 1].TileType == TileType.Solid &&
-                _tiles[x - 1, y + 1].TileType == TileType.Walkable) ||
-                (_tiles[x + 1, y].TileType == TileType.Solid &&
-                _tiles[x, y + 1].TileType == TileType.Solid &&
-                _tiles[x + 1, y + 1].TileType == TileType.Walkable);
-
+            return (map.Tiles[x - 1, y].TileType == TileType.Solid &&
+                map.Tiles[x, y + 1].TileType == TileType.Solid &&
+                map.Tiles[x - 1, y + 1].TileType == TileType.Walkable) ||
+                (map.Tiles[x + 1, y].TileType == TileType.Solid &&
+                map.Tiles[x, y + 1].TileType == TileType.Solid &&
+                map.Tiles[x + 1, y + 1].TileType == TileType.Walkable);
         }
-
     }
 }

@@ -27,6 +27,7 @@ namespace RoguelikeGame
         public static Texture2D SpriteSheet { get; set; }
         public static SpriteFont Font { get; set; }
         public static Map Map {get; set;}
+        public static MapGenerator MapGenerator {get; set;}
         public static Random Rng { get; set; }
         public static AssetManager AssetManager { get; set; }
         public static CombatManager CombatManager { get; set; }

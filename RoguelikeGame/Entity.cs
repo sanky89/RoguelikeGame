@@ -21,7 +21,7 @@ namespace RoguelikeGame
 
         public virtual void Update(GameTime gameTime) { }
 
-        public virtual void SetMapPosition(int x, int y)
+        public virtual void SetMapPosition(Map map, int x, int y)
         {
             MapX = x;
             MapY = y;
