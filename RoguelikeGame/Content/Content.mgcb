@@ -35,6 +35,18 @@
 /processorParam:RuntimeType=RoguelikeGame.MonstersDataModelReader,RoguelikeGame
 /build:Data/monsters.json
 
+#begin Data/random_map_config.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:RuntimeType=RoguelikeGame.MapConfigurationReader,RoguelikeGame
+/build:Data/random_map_config.json
+
+#begin Data/test_room.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:RuntimeType=RoguelikeGame.MapConfigurationReader,RoguelikeGame
+/build:Data/test_room.json
+
 #begin fontsheet.png
 /importer:TextureImporter
 /processor:TextureProcessor

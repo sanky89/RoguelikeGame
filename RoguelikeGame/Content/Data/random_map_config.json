@@ -1,0 +1,9 @@
+{
+  "Rows": 100,
+  "Cols": 100,
+  "MaxRooms": 30,
+  "MinRoomSize" : 10,
+  "MaxRoomSize": 20,
+  "MaxMonstersCount": 50,
+  "MaxItemsCount": 50
+}

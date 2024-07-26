@@ -24,9 +24,9 @@ namespace RoguelikeGame
         private Player _player;
         public Player Player => _player;
         public Vec2Int PlayerMapPosition { get; set; }
-        public List<Monster> VisibleMonsters { get; set; }
         public List<Room> Rooms { get; set; }
         public List<Monster> Monsters { get; set; }
+        public List<Monster> VisibleMonsters { get; set; }
         public List<Item> Items { get; set; }
 
         public Map(int rows, int cols, Player player)

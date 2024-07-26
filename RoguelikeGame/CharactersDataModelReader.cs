@@ -1,4 +1,4 @@
-﻿using JsonContentPipeline;
+﻿ using JsonContentPipeline;
 
 namespace RoguelikeGame
 {

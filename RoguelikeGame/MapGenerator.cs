@@ -6,17 +6,12 @@ namespace RoguelikeGame
 {
     public class MapGenerator
     {
-        public const int ROWS = 80;
-        public const int COLS = 140;
-        private const int MAX_ROOMS = 30;
-        private const int MIN_ROOM_SIZE = 8;
-        private const int MAX_ROOM_SIZE = 20;
-        private const int MAX_MONSTERS = 50;
-        private const int MAX_ITEMS = 50;
-
-        public Map GenerateMap(Player player)
+        private MapConfiguration _mapConfig;
+        public Map GenerateMap(MapConfiguration config, Player player)
         {
-            Map map = new Map(ROWS, COLS, player);
+            _mapConfig = config;
+            System.Console.WriteLine($"Loading map config: Rows:{_mapConfig.Rows} Cols:{_mapConfig.Cols}");
+            Map map = new Map(_mapConfig.Rows, _mapConfig.Cols, player);
             GenerateRooms(map);
             DropPlayerInRandomRoom(map);
             GenerateMonsters(map);
@@ -27,9 +22,9 @@ namespace RoguelikeGame
         private void GenerateRooms(Map map)
         {
             map.Rooms = new List<Room>();
-            for (int y = 0; y < ROWS; y++)
+            for (int y = 0; y < _mapConfig.Rows; y++)
             {
-                for (int x = 0; x < COLS; x++)
+                for (int x = 0; x < _mapConfig.Cols; x++)
                 {
 
                     map.Tiles[x, y] = new Tile(new Character(Glyphs.MediumFill, Color.White, 1, 21), TileType.Solid);
@@ -39,12 +34,12 @@ namespace RoguelikeGame
             int count = 0;
             int failedAttempts = 0;
             int maxFailedAttempts = 500;
-            while (count < MAX_ROOMS)
+            while (count < _mapConfig.MaxRooms)
             {
-                int width = Globals.Rng.Next(MIN_ROOM_SIZE, MAX_ROOM_SIZE);
-                int height = Globals.Rng.Next(MIN_ROOM_SIZE, MAX_ROOM_SIZE);
-                int x = Globals.Rng.Next(COLS - width - 1);
-                int y = Globals.Rng.Next(ROWS - height - 1);
+                int width = Globals.Rng.Next(_mapConfig.MinRoomSize, _mapConfig.MaxRoomSize);
+                int height = Globals.Rng.Next(_mapConfig.MinRoomSize, _mapConfig.MaxRoomSize);
+                int x = Globals.Rng.Next(_mapConfig.Cols - width - 1);
+                int y = Globals.Rng.Next(_mapConfig.Rows - height - 1);
                 Room room = new Room(x, y, width, height);
                 bool intersects = false;
                 foreach (var room1 in map.Rooms)
@@ -84,9 +79,9 @@ namespace RoguelikeGame
 
             GenerateCorridors(map, map.Rooms);
 
-            for (int y = 1; y < ROWS - 1; y++)
+            for (int y = 1; y < _mapConfig.Rows - 1; y++)
             {
-                for (int x = 1; x < COLS - 1; x++)
+                for (int x = 1; x < _mapConfig.Cols - 1; x++)
                 {
                     if (map.Tiles[x, y].TileType == TileType.Solid &&
                         map.Tiles[x - 1, y].TileType == TileType.Solid &&
@@ -136,7 +131,7 @@ namespace RoguelikeGame
 
         private void GenerateMonsters(Map map)
         {
-            for (int i = 0; i < MAX_MONSTERS; i++)
+            for (int i = 0; i < _mapConfig.MaxMonstersCount; i++)
             {
                 var room = map.Rooms[Globals.Rng.Next(map.Rooms.Count)];
                 var point = room.GetRandomPointInsideRoom();
@@ -153,7 +148,7 @@ namespace RoguelikeGame
 
         private void GenerateItems(Map map)
         {
-            for (int i = 0; i < MAX_ITEMS; i++)
+            for (int i = 0; i < _mapConfig.MaxItemsCount; i++)
             {
                 var room = map.Rooms[Globals.Rng.Next(map.Rooms.Count)];
                 var point = room.GetRandomPointInsideRoom();

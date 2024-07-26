@@ -64,7 +64,9 @@ namespace RoguelikeGame
             //Globals.Map = new Map(_player);
             //Globals.Map.GenerateMap();
             Globals.MapGenerator = new();
-            Globals.Map = Globals.MapGenerator.GenerateMap(_player);
+            //MapConfiguration mapConfiguration = Content.Load<MapConfiguration>("Data/random_map_config");
+            MapConfiguration mapConfiguration = Content.Load<MapConfiguration>("Data/test_room");
+            Globals.Map = Globals.MapGenerator.GenerateMap(mapConfiguration, _player);
             _mapConsole = new MapConsole( "", Globals.MAP_CONSOLE_WIDTH, Globals.MAP_CONSOLE_HEIGHT, ConsoleLocation.TopLeft, BorderStyle.None, Color.Green);
             _statsConsole = new StatsConsole( " Stats", 20, Globals.SCREEN_HEIGHT/Globals.ASCII_SIZE/2, ConsoleLocation.TopRight, BorderStyle.DoubleLine, Color.Yellow);
 
