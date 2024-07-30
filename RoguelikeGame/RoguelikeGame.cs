@@ -64,9 +64,10 @@ namespace RoguelikeGame
             //Globals.Map = new Map(_player);
             //Globals.Map.GenerateMap();
             Globals.MapGenerator = new();
-            //MapConfiguration mapConfiguration = Content.Load<MapConfiguration>("Data/random_map_config");
-            MapConfiguration mapConfiguration = Content.Load<MapConfiguration>("Data/test_room");
+            MapConfiguration mapConfiguration = Content.Load<MapConfiguration>("Data/random_map_config");
+            //MapConfiguration mapConfiguration = Content.Load<MapConfiguration>("Data/test_room");
             Globals.Map = Globals.MapGenerator.GenerateMap(mapConfiguration, _player);
+            Globals.Map.Pathfinder = new Pathfinder();
             _mapConsole = new MapConsole( "", Globals.MAP_CONSOLE_WIDTH, Globals.MAP_CONSOLE_HEIGHT, ConsoleLocation.TopLeft, BorderStyle.None, Color.Green);
             _statsConsole = new StatsConsole( " Stats", 20, Globals.SCREEN_HEIGHT/Globals.ASCII_SIZE/2, ConsoleLocation.TopRight, BorderStyle.DoubleLine, Color.Yellow);
 
@@ -85,6 +86,11 @@ namespace RoguelikeGame
             {
                 _showMap = !_showMap;
                 Globals.Map.ToggleMapVisible(_showMap);
+            }
+
+            if (Globals.InputManager.IsKeyReleased(Keys.D1))
+            {
+                _mapConsole.ShowDebugOverlay = !_mapConsole.ShowDebugOverlay;
             }
 
             base.Update(gameTime);

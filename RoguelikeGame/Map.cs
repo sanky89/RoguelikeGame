@@ -29,6 +29,8 @@ namespace RoguelikeGame
         public List<Monster> VisibleMonsters { get; set; }
         public List<Item> Items { get; set; }
 
+        public Pathfinder Pathfinder;
+
         public Map(int rows, int cols, Player player)
         {
             Rows = rows;

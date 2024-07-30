@@ -8,6 +8,9 @@ namespace RoguelikeGame
     {
         public Vector2 Position => new Vector2(_x+1, _y+1);
         public Vector2 offset = Vector2.Zero;
+        private Texture2D _debugRect;
+
+        public bool ShowDebugOverlay = false;
 
         public MapConsole( string title, int width, int height, ConsoleLocation location, BorderStyle border, Color borderColor) : 
             base(title, width, height, location, border, borderColor)
@@ -23,6 +26,9 @@ namespace RoguelikeGame
             {
                 offset.Y = playerMapPosition.Y - midY;
             }
+
+            _debugRect = new Texture2D(Globals.GraphicsDevice, 1, 1);
+            _debugRect.SetData(new Color[] { Color.Green });
         }
 
         public void CheckScrollMap(InputAction inputAction)
@@ -153,12 +159,15 @@ namespace RoguelikeGame
                             SpriteEffects.None,
                             0);
                     }
-                    else
+
+                    if(ShowDebugOverlay && Globals.Map.Pathfinder.GetNodeCost(y,x) == 1000)
                     {
-                        
+                        var location = (Position - offset + new Vector2(x, y)) * Globals.TILE_SIZE;
+                        Globals.SpriteBatch.Draw(_debugRect, new Rectangle(new Point((int)location.X, (int)location.Y), new Point(Globals.TILE_SIZE, Globals.TILE_SIZE)), Color.White);
                     }
                 }
             }
+
             base.Draw();
         }
     }
