@@ -67,10 +67,19 @@ namespace RoguelikeGame
             MapConfiguration mapConfiguration = Content.Load<MapConfiguration>("Data/random_map_config");
             //MapConfiguration mapConfiguration = Content.Load<MapConfiguration>("Data/test_room");
             Globals.Map = Globals.MapGenerator.GenerateMap(mapConfiguration, _player);
-            Globals.Map.Pathfinder = new Pathfinder();
+            Globals.Map.Pathfinder = new Pathfinder(10, 10);
             _mapConsole = new MapConsole( "", Globals.MAP_CONSOLE_WIDTH, Globals.MAP_CONSOLE_HEIGHT, ConsoleLocation.TopLeft, BorderStyle.None, Color.Green);
             _statsConsole = new StatsConsole( " Stats", 20, Globals.SCREEN_HEIGHT/Globals.ASCII_SIZE/2, ConsoleLocation.TopRight, BorderStyle.DoubleLine, Color.Yellow);
 
+
+            //var start = Globals.Map.Monsters[0];
+            var startNode = new Node(1,1);
+            var endNode = new Node(5,5);
+            var path = Globals.Map.Pathfinder.CalculatePath(startNode, endNode);
+            foreach (var node in path)
+            {
+                System.Console.WriteLine($"Path {node.X} {node.Y} {node.Cost}");
+            }
         }
 
         protected override void Update(GameTime gameTime)

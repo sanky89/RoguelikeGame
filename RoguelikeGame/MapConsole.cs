@@ -28,7 +28,7 @@ namespace RoguelikeGame
             }
 
             _debugRect = new Texture2D(Globals.GraphicsDevice, 1, 1);
-            _debugRect.SetData(new Color[] { Color.Green });
+            _debugRect.SetData(new Color[] { Color.White });
         }
 
         public void CheckScrollMap(InputAction inputAction)
@@ -160,10 +160,11 @@ namespace RoguelikeGame
                             0);
                     }
 
-                    if(ShowDebugOverlay && Globals.Map.Pathfinder.GetNodeCost(y,x) == 1000)
+                    if(ShowDebugOverlay)
                     {
                         var location = (Position - offset + new Vector2(x, y)) * Globals.TILE_SIZE;
-                        Globals.SpriteBatch.Draw(_debugRect, new Rectangle(new Point((int)location.X, (int)location.Y), new Point(Globals.TILE_SIZE, Globals.TILE_SIZE)), Color.White);
+                        var color = Globals.Map.Pathfinder.GetNodeCost(y, x) == 1000 ? new Color(Color.Red, 80) : new Color(Color.Green, 80) ;
+                        Globals.SpriteBatch.Draw(_debugRect, new Rectangle(new Point((int)location.X, (int)location.Y), new Point(Globals.TILE_SIZE-1, Globals.TILE_SIZE-1)), color);
                     }
                 }
             }
