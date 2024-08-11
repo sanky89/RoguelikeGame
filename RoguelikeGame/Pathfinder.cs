@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Xml.Linq;
 
 namespace RoguelikeGame
 {
@@ -44,11 +43,13 @@ namespace RoguelikeGame
 
         public List<Node> CalculatePath(Node start, Node end)
         {
+            PriorityQueue<Node, int> openQueue = new PriorityQueue<Node, int>();
             List<Node> openList = new List<Node>();
             List<Node> closedList = new List<Node>();
             start.GCost = 0;
             start.HCost = 0;
             openList.Add(start);
+            openQueue.Enqueue(start, start.Cost);
             System.Console.WriteLine($"Start: {start.X} {start.Y} {start.Cost}");
             System.Console.WriteLine($"End: {end.X} {end.Y} {end.Cost}");
             while (openList.Count > 0)
@@ -63,11 +64,11 @@ namespace RoguelikeGame
                     }
                 }
 
-                System.Console.WriteLine($"{current.X} {current.Y} {current.Cost}");
+                //System.Console.WriteLine($"{current.X} {current.Y} {current.Cost}");
                 openList.Remove(current);
                 closedList.Add(current);
 
-                if(current == end)
+                if(current.X == end.X && current.Y == end.Y)
                 {
                     return RetracePath(start, current);
                 }
@@ -80,7 +81,7 @@ namespace RoguelikeGame
                         continue;
                     }
 
-                    var newGCost = current.GCost + 1;
+                    var newGCost = current.GCost + GetMovementCost(current, node);
                     bool contains = openList.Contains(node);
                     if (newGCost < node.GCost || !contains)
                     {
@@ -95,6 +96,15 @@ namespace RoguelikeGame
                 }
             }
             return null;
+        }
+
+        private int GetMovementCost(Node current, Node node)
+        {
+            if(current.X == node.X || current.Y == node.Y)
+            {
+                return 1;
+            }
+            return 2;
         }
 
         private List<Node> RetracePath(Node start, Node end)
@@ -143,8 +153,7 @@ namespace RoguelikeGame
 
         private bool Walkable(int x, int y)
         {
-            return true;
-            //return Globals.Map.GetTileType(x, y) == TileType.Solid;
+            return Globals.Map.GetTileType(x, y) != TileType.Solid;
         }
 
         private Node GetLeastCostNode(List<Node> openList)

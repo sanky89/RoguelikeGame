@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace RoguelikeGame
@@ -16,6 +17,8 @@ namespace RoguelikeGame
         private ActionLog _actionLog;
         private bool _showMap = false;
         private int _turns = 0;
+        private List<Node> _path;
+        private Texture2D _pathRect;
 
         public RoguelikeGame()
         {
@@ -38,6 +41,9 @@ namespace RoguelikeGame
             int seed = Environment.TickCount;
             System.Console.WriteLine("Using Seed: " + seed);
             Globals.Rng = new Random(seed);
+
+            _pathRect = new Texture2D(Globals.GraphicsDevice, 1, 1);
+            _pathRect.SetData(new Color[] { Color.White });
             base.Initialize();
         }
 
@@ -67,18 +73,23 @@ namespace RoguelikeGame
             MapConfiguration mapConfiguration = Content.Load<MapConfiguration>("Data/random_map_config");
             //MapConfiguration mapConfiguration = Content.Load<MapConfiguration>("Data/test_room");
             Globals.Map = Globals.MapGenerator.GenerateMap(mapConfiguration, _player);
-            Globals.Map.Pathfinder = new Pathfinder(10, 10);
+            Globals.Map.Pathfinder = new Pathfinder(Globals.Map.Cols, Globals.Map.Rows);
             _mapConsole = new MapConsole( "", Globals.MAP_CONSOLE_WIDTH, Globals.MAP_CONSOLE_HEIGHT, ConsoleLocation.TopLeft, BorderStyle.None, Color.Green);
             _statsConsole = new StatsConsole( " Stats", 20, Globals.SCREEN_HEIGHT/Globals.ASCII_SIZE/2, ConsoleLocation.TopRight, BorderStyle.DoubleLine, Color.Yellow);
 
 
-            //var start = Globals.Map.Monsters[0];
-            var startNode = new Node(1,1);
-            var endNode = new Node(5,5);
-            var path = Globals.Map.Pathfinder.CalculatePath(startNode, endNode);
-            foreach (var node in path)
+            var start = Globals.Map.Monsters[0];
+            var startNode = new Node(start.MapX, start.MapY);
+            var endNode = new Node(_player.MapX, _player.MapY);
+            _path = Globals.Map.Pathfinder.CalculatePath(startNode, endNode);
+            string pathString = "Path: ";
+            if(_path != null)
             {
-                System.Console.WriteLine($"Path {node.X} {node.Y} {node.Cost}");
+                foreach (var node in _path)
+                {
+                    pathString += $" ({node.X},{node.Y}) ->";
+                }
+                System.Console.WriteLine(pathString);
             }
         }
 
@@ -168,6 +179,15 @@ namespace RoguelikeGame
             _mapConsole.Draw();
             _statsConsole.Draw();
             _spriteBatch.DrawString(Globals.Font, _actionLog.LogString, new Vector2(10f, Globals.RENDER_TARGET_HEIGHT - 100f), Color.White);
+
+            if (_path != null && _mapConsole.ShowDebugOverlay)
+            {
+                foreach (var node in _path)
+                {
+                    var location = (_mapConsole.Position - _mapConsole.offset + new Vector2(node.X, node.Y)) * Globals.TILE_SIZE;
+                    _spriteBatch.Draw(_pathRect, new Rectangle(new Point((int)location.X, (int)location.Y), new Point(Globals.TILE_SIZE - 1, Globals.TILE_SIZE - 1)), Color.Yellow);
+                }
+            }
             _spriteBatch.End();
 
             base.Draw(gameTime);
