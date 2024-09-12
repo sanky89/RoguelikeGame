@@ -140,7 +140,6 @@ namespace RoguelikeGame
                 if (monster != null)
                 {
                     monster.SetMapPosition(map, point.X, point.Y);
-                    map.SetTileType(point.X, point.Y, TileType.Entity);
                     map.Monsters.Add(monster);
                 }
             }

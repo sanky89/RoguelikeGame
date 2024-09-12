@@ -22,7 +22,7 @@ namespace RoguelikeGame
         {
             base.SetMapPosition(map, x, y);
             System.Console.WriteLine($"Map Position: {MapX}, {MapY}");
-            _fov = new Fov(map);
+            _fov = new Fov(map, 10);
             _fov.UpdateFov(MapX, MapY);
         }
 

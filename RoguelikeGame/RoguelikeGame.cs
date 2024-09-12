@@ -67,8 +67,6 @@ namespace RoguelikeGame
             Globals.CombatManager = new CombatManager();
             _player = Globals.AssetManager.CreatePlayer();
             _actionLog = new ActionLog();
-            //Globals.Map = new Map(_player);
-            //Globals.Map.GenerateMap();
             Globals.MapGenerator = new();
             MapConfiguration mapConfiguration = Content.Load<MapConfiguration>("Data/random_map_config");
             //MapConfiguration mapConfiguration = Content.Load<MapConfiguration>("Data/test_room");
@@ -78,19 +76,19 @@ namespace RoguelikeGame
             _statsConsole = new StatsConsole( " Stats", 20, Globals.SCREEN_HEIGHT/Globals.ASCII_SIZE/2, ConsoleLocation.TopRight, BorderStyle.DoubleLine, Color.Yellow);
 
 
-            var start = Globals.Map.Monsters[0];
-            var startNode = new Node(start.MapX, start.MapY);
-            var endNode = new Node(_player.MapX, _player.MapY);
-            _path = Globals.Map.Pathfinder.CalculatePath(startNode, endNode);
-            string pathString = "Path: ";
-            if(_path != null)
-            {
-                foreach (var node in _path)
-                {
-                    pathString += $" ({node.X},{node.Y}) ->";
-                }
-                System.Console.WriteLine(pathString);
-            }
+            // var start = Globals.Map.Monsters[0];
+            // var startNode = new Node(start.MapX, start.MapY);
+            // var endNode = new Node(_player.MapX, _player.MapY);
+            // _path = Globals.Map.Pathfinder.CalculatePath(startNode, endNode);
+            // string pathString = "Path: ";
+            // if(_path != null)
+            // {
+            //     foreach (var node in _path)
+            //     {
+            //         pathString += $" ({node.X},{node.Y}) ->";
+            //     }
+            //     System.Console.WriteLine(pathString);
+            // }
         }
 
         protected override void Update(GameTime gameTime)
@@ -141,7 +139,7 @@ namespace RoguelikeGame
         private void PerformTurn(InputAction inputAction)
         {
             var actionResult = _player.PerformAction(inputAction);
-            _turns++;
+            CheckMonstersFov();
             switch (actionResult.ResultType)
             {
                 case ActionResultType.Move:
@@ -169,6 +167,35 @@ namespace RoguelikeGame
                     break;
             }
             _turns++;
+        }
+
+        private void CheckMonstersFov()
+        {
+            foreach(var monster in Globals.Map.Monsters)
+            {
+                if(monster.IsPlayerInFov())
+                {
+                    if(monster.IsPlayerInAttackRange())
+                    {
+                        Globals.CombatManager.ResolveCombat(monster, _player, out var log);
+                        _actionLog.AddLog(log);
+                    }
+                    System.Console.WriteLine($"player is in {monster.Name}_{monster.Id} fov");
+                    var startNode = new Node(monster.MapX, monster.MapY);
+                    var endNode = new Node(_player.MapX, _player.MapY);
+                    var path = Globals.Map.Pathfinder.CalculatePath(startNode, endNode);
+                    if(path != null && path.Count > 0)
+                    {
+                        var pathString = "";
+                        foreach (var node in path)
+                        {
+                            pathString += $" ({node.X},{node.Y}) ->";
+                        }
+                        System.Console.WriteLine(pathString);
+                        monster.Move(Globals.Map, path[0].X, path[0].Y);
+                    }
+                }
+            }
         }
 
         protected override void Draw(GameTime gameTime)

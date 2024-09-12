@@ -17,13 +17,13 @@ namespace RoguelikeGame
 
     public class Fov
     {
-        const int FOV_MAX = 10;
-
         private Map _map;
+        public readonly int FovMax;
 
-        public Fov(Map map)
+        public Fov(Map map, int range)
         {
             _map = map;
+            FovMax = range;
         }
 
         public void UpdateFov(int cx, int cy)
@@ -41,7 +41,7 @@ namespace RoguelikeGame
                 float shadowEnd = 0f;
                 bool prevBlocking = false;
 
-                for (int y = 0; y < FOV_MAX; y++)
+                for (int y = 0; y < FovMax; y++)
                 {
                     prevBlocking = false;
                     for (int x = 0; x <= y; x++)
@@ -131,9 +131,9 @@ namespace RoguelikeGame
             return (x2 - x1) / (y2 - y1);
         }
 
-        private bool IsWithinFovRange(int x, int y)
+        public bool IsWithinFovRange(int x, int y)
         {
-            return x * x + y * y <= FOV_MAX * FOV_MAX;
+            return x * x + y * y <= FovMax * FovMax;
         }
 
         private bool InsideShadow(float slope, List<Shadow> shadows)
