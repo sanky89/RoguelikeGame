@@ -34,6 +34,13 @@
           "maxValue": 50,
           "defaultValue": 50,
           "display": false
+        },
+        {
+          "name": "attackChance",
+          "minValue": 2,
+          "maxValue": 50,
+          "defaultValue": 50,
+          "display": false
         }
       ]
     },
@@ -67,6 +74,13 @@
         },
         {
           "name": "defenseChance",
+          "minValue": 2,
+          "maxValue": 50,
+          "defaultValue": 50,
+          "display": false
+        },
+        {
+          "name": "attackChance",
           "minValue": 2,
           "maxValue": 50,
           "defaultValue": 50,
@@ -108,6 +122,13 @@
           "maxValue": 50,
           "defaultValue": 50,
           "display": false
+        },
+        {
+          "name": "attackChance",
+          "minValue": 2,
+          "maxValue": 50,
+          "defaultValue": 50,
+          "display": false
         }
       ]
     },
@@ -141,6 +162,13 @@
         },
         {
           "name": "defenseChance",
+          "minValue": 2,
+          "maxValue": 50,
+          "defaultValue": 50,
+          "display": false
+        },
+        {
+          "name": "attackChance",
           "minValue": 2,
           "maxValue": 50,
           "defaultValue": 50,
@@ -182,6 +210,13 @@
           "maxValue": 50,
           "defaultValue": 50,
           "display": false
+        },
+        {
+          "name": "attackChance",
+          "minValue": 2,
+          "maxValue": 50,
+          "defaultValue": 50,
+          "display": false
         }
       ]
     },
@@ -215,6 +250,13 @@
         },
         {
           "name": "defenseChance",
+          "minValue": 2,
+          "maxValue": 50,
+          "defaultValue": 50,
+          "display": false
+        },
+        {
+          "name": "attackChance",
           "minValue": 2,
           "maxValue": 50,
           "defaultValue": 50,

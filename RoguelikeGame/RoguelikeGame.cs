@@ -68,8 +68,9 @@ namespace RoguelikeGame
             _player = Globals.AssetManager.CreatePlayer();
             _actionLog = new ActionLog();
             Globals.MapGenerator = new();
-            MapConfiguration mapConfiguration = Content.Load<MapConfiguration>("Data/random_map_config");
-            //MapConfiguration mapConfiguration = Content.Load<MapConfiguration>("Data/test_room");
+            //string mapConfig = "Data/random_map_config";
+            string mapConfig = "Data/test_room";
+            MapConfiguration mapConfiguration = Content.Load<MapConfiguration>(mapConfig);
             Globals.Map = Globals.MapGenerator.GenerateMap(mapConfiguration, _player);
             Globals.Map.Pathfinder = new Pathfinder(Globals.Map.Cols, Globals.Map.Rows);
             _mapConsole = new MapConsole( "", Globals.MAP_CONSOLE_WIDTH, Globals.MAP_CONSOLE_HEIGHT, ConsoleLocation.TopLeft, BorderStyle.None, Color.Green);
@@ -152,7 +153,10 @@ namespace RoguelikeGame
                     if(actionResult.Entity is Monster m)
                     {
                         Globals.CombatManager.ResolveCombat(_player, m, out var log);
-                        _actionLog.AddLog(log);
+                        if(!string.IsNullOrEmpty(log))
+                        {
+                            _actionLog.AddLog(log);
+                        }
                     }
                     break;
                 case ActionResultType.CollectItem:
@@ -177,10 +181,11 @@ namespace RoguelikeGame
                 {
                     if(monster.IsPlayerInAttackRange())
                     {
-                        Globals.CombatManager.ResolveCombat(monster, _player, out var log);
+                        System.Console.WriteLine($"player is in {monster.Name}_{monster.Id} fov");
+                        Globals.CombatManager.ResolveCombat(_player, monster, out var log, false);
                         _actionLog.AddLog(log);
+                        return;
                     }
-                    System.Console.WriteLine($"player is in {monster.Name}_{monster.Id} fov");
                     var startNode = new Node(monster.MapX, monster.MapY);
                     var endNode = new Node(_player.MapX, _player.MapY);
                     var path = Globals.Map.Pathfinder.CalculatePath(startNode, endNode);

@@ -33,6 +33,13 @@
           "maxValue": 50,
           "defaultValue": 10,
           "display": true
+        },
+        {
+          "name": "defenseChance",
+          "minValue": 10,
+          "maxValue": 100,
+          "defaultValue": 20,
+          "display": false
         }
       ]
     },
@@ -69,6 +76,13 @@
           "maxValue": 50,
           "defaultValue": 10,
           "display": true
+        },
+        {
+          "name": "defenseChance",
+          "minValue": 10,
+          "maxValue": 100,
+          "defaultValue": 20,
+          "display": false
         }
       ]
     },
@@ -105,6 +119,13 @@
           "maxValue": 50,
           "defaultValue": 20,
           "display": true
+        },
+        {
+          "name": "defenseChance",
+          "minValue": 10,
+          "maxValue": 100,
+          "defaultValue": 20,
+          "display": false
         }
       ]
     },
@@ -141,6 +162,13 @@
           "maxValue": 50,
           "defaultValue": 10,
           "display": true
+        },
+        {
+          "name": "defenseChance",
+          "minValue": 10,
+          "maxValue": 100,
+          "defaultValue": 20,
+          "display": false
         }
       ]
     }

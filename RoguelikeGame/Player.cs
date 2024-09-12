@@ -72,8 +72,8 @@ namespace RoguelikeGame
             if (actionResult.ResultType == ActionResultType.Move ||
                 actionResult.ResultType == ActionResultType.CollectItem)
             {
-                MapX += dx;
-                MapY += dy;
+                Globals.Map.SetTileType(MapX, MapY, TileType.Walkable);
+                base.SetMapPosition(Globals.Map, newX, newY);
                 _fov.UpdateFov(MapX, MapY);
                 System.Console.WriteLine($"Map Index: {MapX}, {MapY}");
             }
