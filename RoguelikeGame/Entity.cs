@@ -25,6 +25,7 @@ namespace RoguelikeGame
         {
             MapX = x;
             MapY = y;
+            map.SetTileType(x,y,TileType.Entity);
         }
     }
 }

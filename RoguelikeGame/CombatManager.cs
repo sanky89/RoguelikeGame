@@ -9,44 +9,65 @@ namespace RoguelikeGame
     public class CombatManager
     {
 
-        public void ResolveCombat(Player player, Monster monster, out string log)
+        public void ResolveCombat(Player player, Monster monster, out string log, bool playerAttacks = true)
         {
             int attackChance = Globals.Rng.Next(100);
             int defenseChance = Globals.Rng.Next(100);
             System.Console.WriteLine($"attackChance={attackChance} defenseChance={defenseChance}");
             int hitAmount = 0;
             log = "";
-            var playerStats = player.Stats;
-            var monsterStats = monster.Stats;
-            if (attackChance <= playerStats["attackChance"].CurrentValue)
+            var attackerStats = player.Stats;
+            var defenderStats = monster.Stats;
+            if(!playerAttacks)
+            {
+                attackerStats = monster.Stats;
+                defenderStats = player.Stats;
+            }
+            if (attackChance <= attackerStats["attackChance"].CurrentValue)
             {
 
-                hitAmount = playerStats["attack"].CurrentValue;
+                hitAmount = attackerStats["attack"].CurrentValue;
                 System.Console.WriteLine($"hitAmount inital= {hitAmount}");
-                if(defenseChance <= monsterStats["defenseChance"].CurrentValue)
+
+                if(defenseChance <= defenderStats["defenseChance"].CurrentValue)
                 {
-                    hitAmount -= monsterStats["defense"].CurrentValue;
+                    hitAmount -= defenderStats["defense"].CurrentValue;
                 }
                 System.Console.WriteLine($"hitAmount= {hitAmount}");
-                if(hitAmount == 0)
+                if (playerAttacks)
                 {
-                    log = $"{monster.Name} dodged your attack";
+                    if (hitAmount == 0)
+                    {
+                        log = $"{monster.Name} dodged your attack";
 
+                    }
+                    else if (hitAmount < 0)
+                    {
+                        log += $"{monster.Name} attacked you for {-hitAmount} damage";
+                        player.Stats["health"].CurrentValue += hitAmount;
+                    }
+                    else
+                    {
+                        log = $"You hit {monster.Name} for {hitAmount} damage";
+                        monster.Stats["health"].CurrentValue += -hitAmount;
+                    }
                 }
-                else if(hitAmount < 0)
+                else 
                 {
-                    log += $"{monster.Name} attacked you for {-hitAmount} damage";
-                    player.Stats["health"].CurrentValue += hitAmount;
+                    if (hitAmount < 0)
+                    {
+                        log += $"{monster.Name} attacked you for {-hitAmount} damage";
+                        player.Stats["health"].CurrentValue += hitAmount;
+                    }
                 }
-                else
-                {
-                    log = $"You hit {monster.Name} for {hitAmount} damage";
-                    monster.Stats["health"].CurrentValue += -hitAmount;
-                }
+            }
+            else if(playerAttacks)
+            {
+                log = $"{monster.Name} dodged your attack";
             }
             else
             {
-                log = $"{monster.Name} dodged your attack";
+                log = $"You dodged {monster.Name}'s attack";
             }
             ResolveDeath(monster);
         }

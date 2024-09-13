@@ -4,6 +4,6 @@
   "MaxRooms": 1,
   "MinRoomSize": 16,
   "MaxRoomSize": 16,
-  "MaxMonstersCount": 5,
+  "MaxMonstersCount": 1,
   "MaxItemsCount": 5
 }

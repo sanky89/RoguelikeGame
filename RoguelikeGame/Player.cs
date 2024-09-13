@@ -22,7 +22,7 @@ namespace RoguelikeGame
         {
             base.SetMapPosition(map, x, y);
             System.Console.WriteLine($"Map Position: {MapX}, {MapY}");
-            _fov = new Fov(map);
+            _fov = new Fov(map, 10);
             _fov.UpdateFov(MapX, MapY);
         }
 
@@ -72,8 +72,8 @@ namespace RoguelikeGame
             if (actionResult.ResultType == ActionResultType.Move ||
                 actionResult.ResultType == ActionResultType.CollectItem)
             {
-                MapX += dx;
-                MapY += dy;
+                Globals.Map.SetTileType(MapX, MapY, TileType.Walkable);
+                base.SetMapPosition(Globals.Map, newX, newY);
                 _fov.UpdateFov(MapX, MapY);
                 System.Console.WriteLine($"Map Index: {MapX}, {MapY}");
             }

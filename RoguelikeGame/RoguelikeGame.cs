@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace RoguelikeGame
@@ -16,6 +17,8 @@ namespace RoguelikeGame
         private ActionLog _actionLog;
         private bool _showMap = false;
         private int _turns = 0;
+        private List<Node> _path;
+        private Texture2D _pathRect;
 
         public RoguelikeGame()
         {
@@ -38,6 +41,9 @@ namespace RoguelikeGame
             int seed = Environment.TickCount;
             System.Console.WriteLine("Using Seed: " + seed);
             Globals.Rng = new Random(seed);
+
+            _pathRect = new Texture2D(Globals.GraphicsDevice, 1, 1);
+            _pathRect.SetData(new Color[] { Color.White });
             base.Initialize();
         }
 
@@ -61,15 +67,29 @@ namespace RoguelikeGame
             Globals.CombatManager = new CombatManager();
             _player = Globals.AssetManager.CreatePlayer();
             _actionLog = new ActionLog();
-            //Globals.Map = new Map(_player);
-            //Globals.Map.GenerateMap();
             Globals.MapGenerator = new();
-            //MapConfiguration mapConfiguration = Content.Load<MapConfiguration>("Data/random_map_config");
-            MapConfiguration mapConfiguration = Content.Load<MapConfiguration>("Data/test_room");
+            //string mapConfig = "Data/random_map_config";
+            string mapConfig = "Data/test_room";
+            MapConfiguration mapConfiguration = Content.Load<MapConfiguration>(mapConfig);
             Globals.Map = Globals.MapGenerator.GenerateMap(mapConfiguration, _player);
+            Globals.Map.Pathfinder = new Pathfinder(Globals.Map.Cols, Globals.Map.Rows);
             _mapConsole = new MapConsole( "", Globals.MAP_CONSOLE_WIDTH, Globals.MAP_CONSOLE_HEIGHT, ConsoleLocation.TopLeft, BorderStyle.None, Color.Green);
             _statsConsole = new StatsConsole( " Stats", 20, Globals.SCREEN_HEIGHT/Globals.ASCII_SIZE/2, ConsoleLocation.TopRight, BorderStyle.DoubleLine, Color.Yellow);
 
+
+            // var start = Globals.Map.Monsters[0];
+            // var startNode = new Node(start.MapX, start.MapY);
+            // var endNode = new Node(_player.MapX, _player.MapY);
+            // _path = Globals.Map.Pathfinder.CalculatePath(startNode, endNode);
+            // string pathString = "Path: ";
+            // if(_path != null)
+            // {
+            //     foreach (var node in _path)
+            //     {
+            //         pathString += $" ({node.X},{node.Y}) ->";
+            //     }
+            //     System.Console.WriteLine(pathString);
+            // }
         }
 
         protected override void Update(GameTime gameTime)
@@ -85,6 +105,11 @@ namespace RoguelikeGame
             {
                 _showMap = !_showMap;
                 Globals.Map.ToggleMapVisible(_showMap);
+            }
+
+            if (Globals.InputManager.IsKeyReleased(Keys.D1))
+            {
+                _mapConsole.ShowDebugOverlay = !_mapConsole.ShowDebugOverlay;
             }
 
             base.Update(gameTime);
@@ -115,7 +140,7 @@ namespace RoguelikeGame
         private void PerformTurn(InputAction inputAction)
         {
             var actionResult = _player.PerformAction(inputAction);
-            _turns++;
+            CheckMonstersFov();
             switch (actionResult.ResultType)
             {
                 case ActionResultType.Move:
@@ -128,7 +153,10 @@ namespace RoguelikeGame
                     if(actionResult.Entity is Monster m)
                     {
                         Globals.CombatManager.ResolveCombat(_player, m, out var log);
-                        _actionLog.AddLog(log);
+                        if(!string.IsNullOrEmpty(log))
+                        {
+                            _actionLog.AddLog(log);
+                        }
                     }
                     break;
                 case ActionResultType.CollectItem:
@@ -145,6 +173,36 @@ namespace RoguelikeGame
             _turns++;
         }
 
+        private void CheckMonstersFov()
+        {
+            foreach(var monster in Globals.Map.Monsters)
+            {
+                if(monster.IsPlayerInFov())
+                {
+                    if(monster.IsPlayerInAttackRange())
+                    {
+                        System.Console.WriteLine($"player is in {monster.Name}_{monster.Id} fov");
+                        Globals.CombatManager.ResolveCombat(_player, monster, out var log, false);
+                        _actionLog.AddLog(log);
+                        return;
+                    }
+                    var startNode = new Node(monster.MapX, monster.MapY);
+                    var endNode = new Node(_player.MapX, _player.MapY);
+                    var path = Globals.Map.Pathfinder.CalculatePath(startNode, endNode);
+                    if(path != null && path.Count > 0)
+                    {
+                        var pathString = "";
+                        foreach (var node in path)
+                        {
+                            pathString += $" ({node.X},{node.Y}) ->";
+                        }
+                        System.Console.WriteLine(pathString);
+                        monster.Move(Globals.Map, path[0].X, path[0].Y);
+                    }
+                }
+            }
+        }
+
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
@@ -153,6 +211,15 @@ namespace RoguelikeGame
             _mapConsole.Draw();
             _statsConsole.Draw();
             _spriteBatch.DrawString(Globals.Font, _actionLog.LogString, new Vector2(10f, Globals.RENDER_TARGET_HEIGHT - 100f), Color.White);
+
+            if (_path != null && _mapConsole.ShowDebugOverlay)
+            {
+                foreach (var node in _path)
+                {
+                    var location = (_mapConsole.Position - _mapConsole.offset + new Vector2(node.X, node.Y)) * Globals.TILE_SIZE;
+                    _spriteBatch.Draw(_pathRect, new Rectangle(new Point((int)location.X, (int)location.Y), new Point(Globals.TILE_SIZE - 1, Globals.TILE_SIZE - 1)), Color.Yellow);
+                }
+            }
             _spriteBatch.End();
 
             base.Draw(gameTime);
