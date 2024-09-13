@@ -19,6 +19,7 @@ namespace RoguelikeGame
         MOVE_NE,
         MOVE_SW,
         MOVE_SE,
+        REST,
         ESCAPE
     }
     public class InputManager
@@ -66,6 +67,7 @@ namespace RoguelikeGame
                  { Keys.NumPad1, InputAction.MOVE_SW},
                  { Keys.OemQuestion, InputAction.MOVE_SE},
                  { Keys.NumPad3, InputAction.MOVE_SE},
+                 { Keys.R, InputAction.REST},
                  { Keys.Escape, InputAction.ESCAPE},
             };
             

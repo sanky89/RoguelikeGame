@@ -75,21 +75,6 @@ namespace RoguelikeGame
             Globals.Map.Pathfinder = new Pathfinder(Globals.Map.Cols, Globals.Map.Rows);
             _mapConsole = new MapConsole( "", Globals.MAP_CONSOLE_WIDTH, Globals.MAP_CONSOLE_HEIGHT, ConsoleLocation.TopLeft, BorderStyle.None, Color.Green);
             _statsConsole = new StatsConsole( " Stats", 20, Globals.SCREEN_HEIGHT/Globals.ASCII_SIZE/2, ConsoleLocation.TopRight, BorderStyle.DoubleLine, Color.Yellow);
-
-
-            // var start = Globals.Map.Monsters[0];
-            // var startNode = new Node(start.MapX, start.MapY);
-            // var endNode = new Node(_player.MapX, _player.MapY);
-            // _path = Globals.Map.Pathfinder.CalculatePath(startNode, endNode);
-            // string pathString = "Path: ";
-            // if(_path != null)
-            // {
-            //     foreach (var node in _path)
-            //     {
-            //         pathString += $" ({node.X},{node.Y}) ->";
-            //     }
-            //     System.Console.WriteLine(pathString);
-            // }
         }
 
         protected override void Update(GameTime gameTime)
@@ -130,6 +115,7 @@ namespace RoguelikeGame
                 case InputAction.MOVE_NE:
                 case InputAction.MOVE_SW:
                 case InputAction.MOVE_SE:
+                case InputAction.REST:
                     PerformTurn(inputAction);
                     break;
                 default:
@@ -166,6 +152,10 @@ namespace RoguelikeGame
                         _actionLog.AddLog($"You collected {item.Amount} {item.Name}");
                         item.OnPickup();
                     }
+                    break;
+                case ActionResultType.Rest:
+                    System.Console.WriteLine("Resting");
+                    
                     break;
                 default:
                     break;

@@ -45,8 +45,8 @@ namespace RoguelikeGame
         public bool IsPlayerInAttackRange()
         {
             var target = Globals.Map.Player;
-            return Math.Abs(MapX - target.MapX) == 1 ||
-                   Math.Abs(MapY - target.MapY) == 1;
+            return Math.Abs(MapX - target.MapX) <= 1 &&
+                   Math.Abs(MapY - target.MapY) <= 1;
         }
     }
 }

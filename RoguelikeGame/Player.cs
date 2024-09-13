@@ -61,6 +61,10 @@ namespace RoguelikeGame
                     dx = 1;
                     dy = 1;
                     break;
+                case InputAction.REST:
+                    dx = 0;
+                    dy = 0;
+                    break;
                 default:
                     break;
             }
@@ -68,7 +72,7 @@ namespace RoguelikeGame
             // System.Console.WriteLine($"{(int)_position.X + Globals.Map.colStartIndex}");
             var newX = MapX + dx;
             var newY = MapY + dy;
-            var actionResult = Globals.Map.CanMove(newX, newY);
+            var actionResult = GetActionResult(dx, dy, newX, newY);
             if (actionResult.ResultType == ActionResultType.Move ||
                 actionResult.ResultType == ActionResultType.CollectItem)
             {
@@ -78,6 +82,15 @@ namespace RoguelikeGame
                 System.Console.WriteLine($"Map Index: {MapX}, {MapY}");
             }
             return actionResult;
+        }
+
+        private ActionResult GetActionResult(int dx, int dy, int newX, int newY)
+        {
+            if(dx == 0 && dy == 0)
+            {
+                return new ActionResult(ActionResultType.Rest, null);
+            }
+            return Globals.Map.CanMove(newX, newY);
         }
     }
 }
