@@ -14,11 +14,13 @@ namespace RoguelikeGame
         private Player _player;
         private MapConsole _mapConsole;
         private StatsConsole _statsConsole;
+        private InventoryConsole _inventoryConsole;
         private ActionLog _actionLog;
         private bool _showMap = false;
         private int _turns = 0;
         private List<Node> _path;
         private Texture2D _pathRect;
+        private Inventory _inventory;
 
         public RoguelikeGame()
         {
@@ -73,8 +75,11 @@ namespace RoguelikeGame
             MapConfiguration mapConfiguration = Content.Load<MapConfiguration>(mapConfig);
             Globals.Map = Globals.MapGenerator.GenerateMap(mapConfiguration, _player);
             Globals.Map.Pathfinder = new Pathfinder(Globals.Map.Cols, Globals.Map.Rows);
+            _inventory = new();
+
             _mapConsole = new MapConsole( "", Globals.MAP_CONSOLE_WIDTH, Globals.MAP_CONSOLE_HEIGHT, ConsoleLocation.TopLeft, BorderStyle.None, Color.Green);
             _statsConsole = new StatsConsole( " Stats", 20, Globals.SCREEN_HEIGHT/Globals.ASCII_SIZE/2, ConsoleLocation.TopRight, BorderStyle.DoubleLine, Color.Yellow);
+            _inventoryConsole = new InventoryConsole(_inventory, " Inventory", 20, Globals.SCREEN_HEIGHT/Globals.ASCII_SIZE/2 - 2, ConsoleLocation.BottomRight, BorderStyle.DoubleLine, Color.Yellow);
         }
 
         protected override void Update(GameTime gameTime)
@@ -150,7 +155,7 @@ namespace RoguelikeGame
                     if(actionResult.Entity is Item item)
                     {
                         _actionLog.AddLog($"You collected {item.Amount} {item.Name}");
-                        item.OnPickup();
+                        Item.RaiseItemPickup(item);
                     }
                     break;
                 case ActionResultType.Rest:
@@ -200,6 +205,7 @@ namespace RoguelikeGame
             _spriteBatch.Begin();
             _mapConsole.Draw();
             _statsConsole.Draw();
+            _inventoryConsole.Draw();
             _spriteBatch.DrawString(Globals.Font, _actionLog.LogString, new Vector2(10f, Globals.RENDER_TARGET_HEIGHT - 100f), Color.White);
 
             if (_path != null && _mapConsole.ShowDebugOverlay)
