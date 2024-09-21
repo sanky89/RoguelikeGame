@@ -31,6 +31,7 @@ namespace RoguelikeGame
         public static Random Rng { get; set; }
         public static AssetManager AssetManager { get; set; }
         public static CombatManager CombatManager { get; set; }
+        public static Inventory Inventory { get; set; }
 
         public static int Rows { get; set; }
         public static int Columns { get; set; }

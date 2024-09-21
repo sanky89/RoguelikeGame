@@ -16,6 +16,15 @@ namespace RoguelikeGame
         public Player(Character character, Stats stats) : base( character)
         {
             Stats = stats;
+            Item.OnPickup += HandleItemPickup;
+        }
+
+        private void HandleItemPickup(Item item)
+        {
+            if(item.Name == "gold")
+            {
+                Stats["gold"].CurrentValue += item.Amount;
+            }
         }
 
         public override void SetMapPosition(Map map, int x, int y)
@@ -64,6 +73,12 @@ namespace RoguelikeGame
                 case InputAction.REST:
                     dx = 0;
                     dy = 0;
+                    break;
+                case InputAction.USE_ITEM_1:
+                    Globals.Inventory.UseItem(1);
+                    break;
+                case InputAction.USE_ITEM_2:
+                    Globals.Inventory.UseItem(2);
                     break;
                 default:
                     break;

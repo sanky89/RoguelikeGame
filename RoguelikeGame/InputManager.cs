@@ -20,6 +20,11 @@ namespace RoguelikeGame
         MOVE_SW,
         MOVE_SE,
         REST,
+        USE_ITEM_1,
+        USE_ITEM_2,
+        USE_ITEM_3,
+        USE_ITEM_4,
+        USE_ITEM_5,
         ESCAPE
     }
     public class InputManager
@@ -68,6 +73,11 @@ namespace RoguelikeGame
                  { Keys.OemQuestion, InputAction.MOVE_SE},
                  { Keys.NumPad3, InputAction.MOVE_SE},
                  { Keys.R, InputAction.REST},
+                 { Keys.D1, InputAction.USE_ITEM_1},
+                 { Keys.D2, InputAction.USE_ITEM_2},
+                 { Keys.D3, InputAction.USE_ITEM_3},
+                 { Keys.D4, InputAction.USE_ITEM_4},
+                 { Keys.D5, InputAction.USE_ITEM_5},
                  { Keys.Escape, InputAction.ESCAPE},
             };
             

@@ -24,17 +24,29 @@ namespace RoguelikeGame
                 _amount = Inventory.MaxAmount;
             }
         }
+
+        public void SubtractAmount(int amount)
+        {
+            _amount -= amount;
+            if (_amount < 0)
+            {
+                _amount = 0;
+            }
+        }
     }
 
     public class Inventory
     {
         private Dictionary<string, InventoryItem> _inventory;
-
+        private Dictionary<int, string> _actionsIventoryItemsMap;
         public Dictionary<string, InventoryItem> Data => _inventory;
+        public static int MaxAmount => 20;
+        private static int Count = 0;
 
         public Inventory()
         {
             _inventory = new Dictionary<string, InventoryItem>();
+            _actionsIventoryItemsMap = new Dictionary<int, string>();
             Item.OnPickup += HandleItemPickedUp;
         }
 
@@ -46,7 +58,6 @@ namespace RoguelikeGame
             }
         }
 
-        public static int MaxAmount => 20;
 
         public void AddItem(Item item, int count)
         {
@@ -58,8 +69,27 @@ namespace RoguelikeGame
             }
             else
             {
+                Count++;
                 _inventory[key] = new InventoryItem(item, count);
+                _actionsIventoryItemsMap[Count] = key;
             }
+        }
+
+        public void UseItem(int inputAction)
+        {
+            if(!_actionsIventoryItemsMap.TryGetValue(inputAction, out var itemName))
+            {
+                return;
+            }
+            var inventoryItem = _inventory[itemName];
+            Item.RaiseItemUse(inventoryItem.Item);
+            inventoryItem.SubtractAmount(1);
+            if(inventoryItem.Amount <= 0)
+            {
+                _inventory.Remove(itemName);
+                _actionsIventoryItemsMap.Remove(inputAction);
+            }
+
         }
     }
 }

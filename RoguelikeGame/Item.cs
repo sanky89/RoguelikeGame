@@ -14,6 +14,7 @@ namespace RoguelikeGame
         public readonly Tuple<int, int> AmountRange;
 
         public static event Action<Item> OnPickup;
+        public static event Action<Item> OnUse;
 
         public Item(Character character, string name, Tuple<int, int> amountRange, string affectedStat, int amountAffected) : base(character)
         {
@@ -30,12 +31,15 @@ namespace RoguelikeGame
             {
                 OnPickup(item);
             }
-/*            if(string.IsNullOrEmpty(item.AffectedStat))
-            {
-                return;
-            }
-
-            Globals.Map.Player.Stats[item.AffectedStat].CurrentValue += item.Amount;*/
         }
+
+        public static void RaiseItemUse(Item item)
+        {
+            if (OnUse != null)
+            {
+                OnUse(item);
+            }
+        }
+
     }
 }

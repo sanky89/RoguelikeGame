@@ -7,6 +7,13 @@
       "col": 0,
       "stats": [
         {
+          "name": "gold",
+          "minValue": 0,
+          "maxValue": 100,
+          "defaultValue": 10,
+          "display": true
+        },
+        {
           "name": "health",
           "minValue": 0,
           "maxValue": 100,
@@ -49,6 +56,13 @@
       "row": 0,
       "col": 1,
       "stats": [
+        {
+          "name": "gold",
+          "minValue": 0,
+          "maxValue": 100,
+          "defaultValue": 10,
+          "display": true
+        },
         {
           "name": "health",
           "minValue": 0,
@@ -93,6 +107,13 @@
       "col": 2,
       "stats": [
         {
+          "name": "gold",
+          "minValue": 0,
+          "maxValue": 100,
+          "defaultValue": 10,
+          "display": true
+        },
+        {
           "name": "health",
           "minValue": 0,
           "maxValue": 100,
@@ -135,6 +156,13 @@
       "row": 0,
       "col": 3,
       "stats": [
+        {
+          "name": "gold",
+          "minValue": 0,
+          "maxValue": 100,
+          "defaultValue": 10,
+          "display": true
+        },
         {
           "name": "health",
           "minValue": 0,

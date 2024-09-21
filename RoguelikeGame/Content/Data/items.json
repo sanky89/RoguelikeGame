@@ -15,7 +15,7 @@
       "name": "small potion",
       "glyph": 1,
       "row": 19,
-      "col": 16,
+      "col": 15,
       "minAmount": 1,
       "maxAmount": 1,
       "affectedStat": "health",
