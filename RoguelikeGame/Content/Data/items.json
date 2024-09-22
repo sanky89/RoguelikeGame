@@ -31,6 +31,39 @@
       "maxAmount": 1,
       "affectedStat": "health",
       "amountAffected": 10
+    },
+    {
+      "id": "health_potion_3",
+      "name": "large potion 3",
+      "glyph": 1,
+      "row": 19,
+      "col": 16,
+      "minAmount": 1,
+      "maxAmount": 1,
+      "affectedStat": "health",
+      "amountAffected": 10
+    },
+    {
+      "id": "health_potion_4",
+      "name": "large potion 4",
+      "glyph": 1,
+      "row": 19,
+      "col": 16,
+      "minAmount": 1,
+      "maxAmount": 1,
+      "affectedStat": "health",
+      "amountAffected": 10
+    },
+    {
+      "id": "health_potion_5",
+      "name": "large potion 5",
+      "glyph": 1,
+      "row": 19,
+      "col": 16,
+      "minAmount": 1,
+      "maxAmount": 1,
+      "affectedStat": "health",
+      "amountAffected": 10
     }
   ]
 }

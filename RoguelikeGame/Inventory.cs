@@ -37,27 +37,18 @@ namespace RoguelikeGame
 
     public class Inventory
     {
-        private Dictionary<string, InventoryItem> _inventory;
-        private Dictionary<int, string> _actionsIventoryItemsMap;
+        public const int NumSlots = 5;
+        public const int MaxAmount = 20;
         public Dictionary<string, InventoryItem> Data => _inventory;
-        public static int MaxAmount => 20;
-        private static int Count = 0;
+        private Dictionary<string, InventoryItem> _inventory;
+        private InventoryItem[] _slots = new InventoryItem[NumSlots];
+        private int _count = 0;
 
         public Inventory()
         {
             _inventory = new Dictionary<string, InventoryItem>();
-            _actionsIventoryItemsMap = new Dictionary<int, string>();
             Item.OnPickup += HandleItemPickedUp;
         }
-
-        private void HandleItemPickedUp(Item item)
-        {
-            if(!string.IsNullOrEmpty(item.AffectedStat))
-            {
-               AddItem(item, item.Amount);
-            }
-        }
-
 
         public void AddItem(Item item, int count)
         {
@@ -69,27 +60,67 @@ namespace RoguelikeGame
             }
             else
             {
-                Count++;
                 _inventory[key] = new InventoryItem(item, count);
-                _actionsIventoryItemsMap[Count] = key;
+                var slot = GetFreeSlot();
+                if(slot != -1)
+                {
+                    _slots[slot] = _inventory[key];
+                }
             }
         }
 
-        public void UseItem(int inputAction)
+        public void UseItem(int index)
         {
-            if(!_actionsIventoryItemsMap.TryGetValue(inputAction, out var itemName))
+            if(index < 0 || index >= NumSlots)
             {
                 return;
             }
-            var inventoryItem = _inventory[itemName];
+            var inventoryItem = _slots[index];
+            if(inventoryItem == null)
+            {
+                return;
+            }
+
             Item.RaiseItemUse(inventoryItem.Item);
             inventoryItem.SubtractAmount(1);
             if(inventoryItem.Amount <= 0)
             {
-                _inventory.Remove(itemName);
-                _actionsIventoryItemsMap.Remove(inputAction);
+                _inventory.Remove(inventoryItem.Item.Name);
+                _slots[index] = null;
+            }
+        }
+
+        public bool GetItemInSlot(int index, out InventoryItem item)
+        {
+            item = null;
+            if(_slots[index] != null)
+            {
+                item = _slots[index];
+                return true;
             }
 
+            return false;
+        }
+        
+
+        private void HandleItemPickedUp(Item item)
+        {
+            if(!string.IsNullOrEmpty(item.AffectedStat))
+            {
+               AddItem(item, item.Amount);
+            }
+        }
+
+        private int GetFreeSlot()
+        {
+            for(int i=0; i<NumSlots; i++)
+            {
+                if(_slots[i] == null)
+                {
+                    return i;
+                }
+            }
+            return -1;
         }
     }
 }

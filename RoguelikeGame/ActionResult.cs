@@ -15,6 +15,7 @@ namespace RoguelikeGame
         HitWall,
         HitEntity,
         CollectItem,
+        UseItem,
         Count
     }
 

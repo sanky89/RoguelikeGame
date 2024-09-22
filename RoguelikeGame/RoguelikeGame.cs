@@ -122,6 +122,9 @@ namespace RoguelikeGame
                 case InputAction.REST:
                 case InputAction.USE_ITEM_1:
                 case InputAction.USE_ITEM_2:
+                case InputAction.USE_ITEM_3:
+                case InputAction.USE_ITEM_4:
+                case InputAction.USE_ITEM_5:
                     PerformTurn(inputAction);
                     break;
                 default:

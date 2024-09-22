@@ -23,10 +23,17 @@ namespace RoguelikeGame
         {
             base.Draw();
             _inventoryString = "";
-            foreach(var kvp in _inventory.Data)
+            for(int i=0; i < Inventory.NumSlots; i++)
             {
+                if(_inventory.GetItemInSlot(i, out var item))
+                {
+                    _inventoryString += $"[{i+1}] {item.Item.Name} X{item.Amount} \n";                    
+                }
+                else
+                {
+                    _inventoryString += $"[{i+1}] <empty>\n";
+                }
                 //_sb.AppendLine();
-                _inventoryString += kvp.Key + " X" + kvp.Value.Amount + "\n";
             }
 
             Globals.SpriteBatch.DrawString(Globals.Font, _inventoryString,

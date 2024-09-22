@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
 using System.Security;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -17,6 +18,7 @@ namespace RoguelikeGame
         {
             Stats = stats;
             Item.OnPickup += HandleItemPickup;
+            Item.OnUse += HandleItemUsed;
         }
 
         private void HandleItemPickup(Item item)
@@ -25,6 +27,12 @@ namespace RoguelikeGame
             {
                 Stats["gold"].CurrentValue += item.Amount;
             }
+        }
+
+        private void HandleItemUsed(Item item)
+        {
+            var affectedStat = item.AffectedStat;
+            Stats[affectedStat].CurrentValue += item.AmountAffected;
         }
 
         public override void SetMapPosition(Map map, int x, int y)
@@ -71,14 +79,21 @@ namespace RoguelikeGame
                     dy = 1;
                     break;
                 case InputAction.REST:
-                    dx = 0;
-                    dy = 0;
                     break;
                 case InputAction.USE_ITEM_1:
-                    Globals.Inventory.UseItem(1);
+                    Globals.Inventory.UseItem(0);
                     break;
                 case InputAction.USE_ITEM_2:
+                    Globals.Inventory.UseItem(1);
+                    break;
+                case InputAction.USE_ITEM_3:
                     Globals.Inventory.UseItem(2);
+                    break;
+                case InputAction.USE_ITEM_4:
+                    Globals.Inventory.UseItem(3);
+                    break;
+                case InputAction.USE_ITEM_5:
+                    Globals.Inventory.UseItem(4);
                     break;
                 default:
                     break;
@@ -87,7 +102,7 @@ namespace RoguelikeGame
             // System.Console.WriteLine($"{(int)_position.X + Globals.Map.colStartIndex}");
             var newX = MapX + dx;
             var newY = MapY + dy;
-            var actionResult = GetActionResult(dx, dy, newX, newY);
+            var actionResult = GetActionResult(action, newX, newY);            
             if (actionResult.ResultType == ActionResultType.Move ||
                 actionResult.ResultType == ActionResultType.CollectItem)
             {
@@ -96,12 +111,21 @@ namespace RoguelikeGame
                 _fov.UpdateFov(MapX, MapY);
                 System.Console.WriteLine($"Map Index: {MapX}, {MapY}");
             }
+            else if (actionResult.ResultType == ActionResultType.Rest)
+            {
+                Stats["health"].CurrentValue += 1;
+            }
             return actionResult;
         }
 
-        private ActionResult GetActionResult(int dx, int dy, int newX, int newY)
+        private ActionResult GetActionResult(InputAction action, int newX, int newY)
         {
-            if(dx == 0 && dy == 0)
+            if(ActionHelper.IsUseItemAction(action))
+            {
+                return new ActionResult(ActionResultType.UseItem, null);
+            }
+
+            if(action is InputAction.REST)
             {
                 return new ActionResult(ActionResultType.Rest, null);
             }
