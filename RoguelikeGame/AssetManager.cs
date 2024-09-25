@@ -109,7 +109,6 @@ namespace RoguelikeGame
         public int health { get; set; }
         public List<StatDataModel> stats { get; set; }
     }
-
     public class MonsterDataModel : CharacterDataModel
     {
     }

@@ -10,13 +10,14 @@ namespace RoguelikeGame
     {
         public readonly string Name;
         public readonly Stats Stats;
-        private int _range = 4;
+        public readonly int Fov;
 
         public Monster(Character character, string name, int id, Stats stats) : base(character)
         {
             Id = id;
             Name = name;
             Stats = stats;
+            Fov = Stats["fov"].CurrentValue;
         }
 
         public override void SetMapPosition(Map map, int x, int y)
@@ -34,7 +35,7 @@ namespace RoguelikeGame
         {
             var target = Globals.Map.Player;
             var distanceSq = Vec2Int.DistanceSquared(new Vec2Int(MapX, MapY),new Vec2Int(target.MapX, target.MapY));
-            return distanceSq <= _range * _range;
+            return distanceSq <= Fov * Fov;
         }
 
         public bool IsPlayerInAttackRange()

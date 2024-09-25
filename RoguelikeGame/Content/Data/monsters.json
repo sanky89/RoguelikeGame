@@ -41,6 +41,13 @@
           "maxValue": 50,
           "defaultValue": 50,
           "display": false
+        },
+        {
+          "name": "fov",
+          "minValue": 4,
+          "maxValue": 4,
+          "defaultValue": 4,
+          "display": false
         }
       ]
     },
@@ -84,6 +91,13 @@
           "minValue": 2,
           "maxValue": 50,
           "defaultValue": 50,
+          "display": false
+        },
+        {
+          "name": "fov",
+          "minValue": 4,
+          "maxValue": 4,
+          "defaultValue": 4,
           "display": false
         }
       ]
@@ -129,6 +143,13 @@
           "maxValue": 50,
           "defaultValue": 50,
           "display": false
+        },
+        {
+          "name": "fov",
+          "minValue": 4,
+          "maxValue": 4,
+          "defaultValue": 4,
+          "display": false
         }
       ]
     },
@@ -172,6 +193,13 @@
           "minValue": 2,
           "maxValue": 50,
           "defaultValue": 50,
+          "display": false
+        },
+        {
+          "name": "fov",
+          "minValue": 4,
+          "maxValue": 4,
+          "defaultValue": 4,
           "display": false
         }
       ]
@@ -217,6 +245,13 @@
           "maxValue": 50,
           "defaultValue": 50,
           "display": false
+        },
+        {
+          "name": "fov",
+          "minValue": 4,
+          "maxValue": 4,
+          "defaultValue": 4,
+          "display": false
         }
       ]
     },
@@ -260,6 +295,13 @@
           "minValue": 2,
           "maxValue": 50,
           "defaultValue": 50,
+          "display": false
+        },
+        {
+          "name": "fov",
+          "minValue": 4,
+          "maxValue": 4,
+          "defaultValue": 4,
           "display": false
         }
       ]
