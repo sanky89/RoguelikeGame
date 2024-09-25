@@ -10,8 +10,6 @@ namespace RoguelikeGame
 {
     public class Player : Entity
     {
-        public const int FOV_SIZE = 20;
-
         private Fov _fov;
         public readonly Stats Stats;
         public Player(Character character, Stats stats) : base( character)
@@ -39,7 +37,7 @@ namespace RoguelikeGame
         {
             base.SetMapPosition(map, x, y);
             System.Console.WriteLine($"Map Position: {MapX}, {MapY}");
-            _fov = new Fov(map, 10);
+            _fov = new Fov(map, 6);
             _fov.UpdateFov(MapX, MapY);
         }
 
