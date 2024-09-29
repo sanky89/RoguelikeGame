@@ -10,13 +10,17 @@ namespace RoguelikeGame
 {
     public class Player : Entity
     {
-        private Fov _fov;
         public readonly Stats Stats;
+        private Direction _facing;
+        private Fov _fov;
+
+        public Direction Facing => _facing;
         public Player(Character character, Stats stats) : base( character)
         {
             Stats = stats;
             Item.OnPickup += HandleItemPickup;
             Item.OnUse += HandleItemUsed;
+            _facing = Direction.LEFT;
         }
 
         private void HandleItemPickup(Item item)
@@ -50,9 +54,11 @@ namespace RoguelikeGame
             {
                 case InputAction.MOVE_LEFT:
                     dx = -1;
+                    _facing = Direction.LEFT;
                     break;
                 case InputAction.MOVE_RIGHT:
                     dx = 1;
+                    _facing = Direction.RIGHT;
                     break;
                 case InputAction.MOVE_UP:
                     dy = -1;
@@ -63,18 +69,22 @@ namespace RoguelikeGame
                 case InputAction.MOVE_NW:
                     dx = -1;
                     dy = -1;
+                    _facing = Direction.LEFT;
                     break;
                 case InputAction.MOVE_NE:
                     dx = 1;
                     dy = -1;
+                    _facing = Direction.RIGHT;
                     break;
                 case InputAction.MOVE_SW:
                     dx = -1;
                     dy = 1;
+                    _facing = Direction.LEFT;
                     break;
                 case InputAction.MOVE_SE:
                     dx = 1;
                     dy = 1;
+                    _facing = Direction.RIGHT;
                     break;
                 case InputAction.REST:
                     break;

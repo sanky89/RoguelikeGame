@@ -11,6 +11,9 @@ namespace RoguelikeGame
         public readonly string Name;
         public readonly Stats Stats;
         public readonly int Fov;
+        private Direction _facing;
+        
+        public Direction Facing => _facing;
 
         public Monster(Character character, string name, int id, Stats stats) : base(character)
         {
@@ -18,6 +21,7 @@ namespace RoguelikeGame
             Name = name;
             Stats = stats;
             Fov = Stats["fov"].CurrentValue;
+            _facing = Direction.LEFT;
         }
 
         public override void SetMapPosition(Map map, int x, int y)
@@ -28,6 +32,15 @@ namespace RoguelikeGame
         public void Move(Map map, int x, int y)
         {
             map.SetTileType(MapX, MapY, TileType.Walkable);
+            if(map.Player.MapX < MapX)
+            {
+                _facing = Direction.LEFT;
+            }
+            else if(map.Player.MapX > MapX)
+            {
+                _facing = Direction.RIGHT;
+            }
+            
             base.SetMapPosition(map, x, y);
         }
 

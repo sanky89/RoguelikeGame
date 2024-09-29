@@ -125,6 +125,8 @@ namespace RoguelikeGame
 
                     if (Globals.Map.IsPlayerTile(x,y))
                     {
+                        var facing = Globals.Map.Player.Facing;
+                        var flip = facing == Direction.RIGHT ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
                         Globals.SpriteBatch.Draw(Globals.SpriteSheet, 
                             (Position - offset + new Vector2(x, y)) * Globals.TILE_SIZE * Scale,
                             Globals.Map.Player.SourceRect,
@@ -132,11 +134,12 @@ namespace RoguelikeGame
                             0f,
                             Vector2.Zero,
                             Scale,
-                            SpriteEffects.None,
+                            flip,
                             0);
                     }
                     else if(Globals.Map.IsMonsterTile(x, y, out var m) && tile.Visible)
                     {
+                        var flip = m.Facing == Direction.RIGHT ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
                         Globals.SpriteBatch.Draw(Globals.SpriteSheet,
                             (Position - offset + new Vector2(x, y)) * Globals.TILE_SIZE * Scale,
                             m.SourceRect,
@@ -144,7 +147,7 @@ namespace RoguelikeGame
                             0f,
                             Vector2.Zero,
                             Scale,
-                            SpriteEffects.None,
+                            flip,
                             0);
                     }
                     else if(Globals.Map.ContainsItem(x,y, out var item) && tile.Visible)
