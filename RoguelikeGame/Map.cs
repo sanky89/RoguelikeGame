@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace RoguelikeGame
@@ -28,8 +27,7 @@ namespace RoguelikeGame
         public List<Monster> Monsters { get; set; }
         public List<Monster> VisibleMonsters { get; set; }
         public List<Item> Items { get; set; }
-
-        public Pathfinder Pathfinder;
+        public Pathfinder Pathfinder { get; private set; }
 
         public Map(int rows, int cols, Player player)
         {
@@ -40,6 +38,7 @@ namespace RoguelikeGame
             Monsters = new List<Monster>();
             VisibleMonsters = new List<Monster>();
             Items = new List<Item>();
+            Pathfinder = new Pathfinder(cols, rows);
         }
 
         public Tile GetTileAtIndex(int x, int y)

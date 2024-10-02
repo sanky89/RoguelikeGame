@@ -20,6 +20,7 @@ namespace RoguelikeGame
         private int _turns = 0;
         private List<Node> _path;
         private Texture2D _pathRect;
+        private MapConfiguration _mapConfig;
 
         public RoguelikeGame()
         {
@@ -71,9 +72,8 @@ namespace RoguelikeGame
             Globals.MapGenerator = new();
             //string mapConfig = "Data/random_map_config";
             string mapConfig = "Data/test_room";
-            MapConfiguration mapConfiguration = Content.Load<MapConfiguration>(mapConfig);
-            Globals.Map = Globals.MapGenerator.GenerateMap(mapConfiguration, _player);
-            Globals.Map.Pathfinder = new Pathfinder(Globals.Map.Cols, Globals.Map.Rows);
+            _mapConfig = Content.Load<MapConfiguration>(mapConfig);
+            Globals.Map = Globals.MapGenerator.GenerateMap(_mapConfig, _player);
             Globals.Inventory = new();
             
             _mapConsole = new MapConsole( "", Globals.MAP_CONSOLE_WIDTH, Globals.MAP_CONSOLE_HEIGHT, ConsoleLocation.TopLeft, BorderStyle.None, Color.Green);
@@ -88,7 +88,7 @@ namespace RoguelikeGame
             //Debug actions
             if (Globals.InputManager.IsKeyReleased(Keys.M))
             {
-                //Globals.Map.RegenerateMap();
+                Globals.Map = Globals.MapGenerator.GenerateMap(_mapConfig, _player, true);
             }
             if (Globals.InputManager.IsKeyReleased(Keys.OemTilde))
             {
@@ -96,10 +96,10 @@ namespace RoguelikeGame
                 Globals.Map.ToggleMapVisible(_showMap);
             }
 
-            //if (Globals.InputManager.IsKeyReleased(Keys.D1))
-            //{
-            //    _mapConsole.ShowDebugOverlay = !_mapConsole.ShowDebugOverlay;
-            //}
+            if (Globals.InputManager.IsKeyReleased(Keys.D0))
+            {
+                _mapConsole.ShowDebugOverlay = !_mapConsole.ShowDebugOverlay;
+            }
 
             base.Update(gameTime);
         }

@@ -7,16 +7,36 @@ namespace RoguelikeGame
     public class MapGenerator
     {
         private MapConfiguration _mapConfig;
-        public Map GenerateMap(MapConfiguration config, Player player)
+
+        public Map GenerateMap(MapConfiguration config, Player player, bool regenerate = false)
         {
             _mapConfig = config;
             System.Console.WriteLine($"Loading map config: Rows:{_mapConfig.Rows} Cols:{_mapConfig.Cols}");
+            if(regenerate)
+            {
+                ClearMap(Globals.Map);
+            }
             Map map = new Map(_mapConfig.Rows, _mapConfig.Cols, player);
             GenerateRooms(map);
             DropPlayerInRandomRoom(map);
             GenerateMonsters(map);
             GenerateItems(map);
             return map;
+        }
+
+        private void ClearMap(Map map)
+        {
+            for (int y = 0; y < _mapConfig.Rows; y++)
+            {
+                for (int x = 0; x < _mapConfig.Cols; x++)
+                {
+
+                    map.Tiles[x, y] = null;
+                }
+            }
+            map.Rooms.Clear();
+            map.Monsters.Clear();
+            map.Items.Clear();
         }
 
         private void GenerateRooms(Map map)
