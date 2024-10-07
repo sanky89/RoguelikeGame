@@ -48,6 +48,13 @@
           "maxValue": 4,
           "defaultValue": 4,
           "display": false
+        },
+        {
+          "name": "energyGain",
+          "minValue": 10,
+          "maxValue": 10,
+          "defaultValue": 10,
+          "display": false
         }
       ]
     },
@@ -98,6 +105,13 @@
           "minValue": 4,
           "maxValue": 4,
           "defaultValue": 4,
+          "display": false
+        },
+        {
+          "name": "energyGain",
+          "minValue": 5,
+          "maxValue": 5,
+          "defaultValue": 5,
           "display": false
         }
       ]
@@ -150,6 +164,13 @@
           "maxValue": 4,
           "defaultValue": 4,
           "display": false
+        },
+        {
+          "name": "energyGain",
+          "minValue": 20,
+          "maxValue": 20,
+          "defaultValue": 20,
+          "display": false
         }
       ]
     },
@@ -200,6 +221,13 @@
           "minValue": 4,
           "maxValue": 4,
           "defaultValue": 4,
+          "display": false
+        },
+        {
+          "name": "energyGain",
+          "minValue": 15,
+          "maxValue": 15,
+          "defaultValue": 15,
           "display": false
         }
       ]
@@ -252,6 +280,13 @@
           "maxValue": 4,
           "defaultValue": 4,
           "display": false
+        },
+        {
+          "name": "energyGain",
+          "minValue": 10,
+          "maxValue": 10,
+          "defaultValue": 10,
+          "display": false
         }
       ]
     },
@@ -302,6 +337,13 @@
           "minValue": 4,
           "maxValue": 4,
           "defaultValue": 4,
+          "display": false
+        },
+        {
+          "name": "energyGain",
+          "minValue": 10,
+          "maxValue": 10,
+          "defaultValue": 10,
           "display": false
         }
       ]

@@ -4,7 +4,7 @@ namespace RoguelikeGame
 {
     public class Entity
     {
-
+        public const int ENERGY_THRESHOLD = 20;
         protected Character _character;
 
         public int Id { get; set; }
@@ -25,6 +25,10 @@ namespace RoguelikeGame
             MapX = x;
             MapY = y;
             map.SetTileType(x,y,TileType.Entity);
+        }
+
+        public virtual void PerformAction()
+        {
         }
     }
 }

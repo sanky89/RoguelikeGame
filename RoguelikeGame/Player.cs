@@ -40,7 +40,7 @@ namespace RoguelikeGame
         public override void SetMapPosition(Map map, int x, int y)
         {
             base.SetMapPosition(map, x, y);
-            System.Console.WriteLine($"Map Position: {MapX}, {MapY}");
+            //System.Console.WriteLine($"Map Position: {MapX}, {MapY}");
             _fov = new Fov(map, 6);
             _fov.UpdateFov(MapX, MapY);
         }
@@ -117,7 +117,7 @@ namespace RoguelikeGame
                 Globals.Map.SetTileType(MapX, MapY, TileType.Walkable);
                 base.SetMapPosition(Globals.Map, newX, newY);
                 _fov.UpdateFov(MapX, MapY);
-                System.Console.WriteLine($"Map Index: {MapX}, {MapY}");
+                //System.Console.WriteLine($"Map Index: {MapX}, {MapY}");
             }
             else if (actionResult.ResultType == ActionResultType.Rest)
             {

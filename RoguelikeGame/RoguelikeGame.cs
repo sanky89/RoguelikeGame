@@ -15,7 +15,6 @@ namespace RoguelikeGame
         private MapConsole _mapConsole;
         private StatsConsole _statsConsole;
         private InventoryConsole _inventoryConsole;
-        private ActionLog _actionLog;
         private bool _showMap = false;
         private int _turns = 0;
         private List<Node> _path;
@@ -68,7 +67,7 @@ namespace RoguelikeGame
             Globals.AssetManager = new AssetManager(charactersData, monstersData, itemsData);
             Globals.CombatManager = new CombatManager();
             _player = Globals.AssetManager.CreatePlayer();
-            _actionLog = new ActionLog();
+            Globals.ActionLog = new ActionLog();
             Globals.MapGenerator = new();
             //string mapConfig = "Data/random_map_config";
             string mapConfig = "Data/test_room";
@@ -135,14 +134,17 @@ namespace RoguelikeGame
         private void PerformTurn(InputAction inputAction)
         {
             var actionResult = _player.PerformAction(inputAction);
-            CheckMonstersFov();
+            foreach(var monster in Globals.Map.Monsters)
+            {
+                monster.PerformAction();    
+            }
             switch (actionResult.ResultType)
             {
                 case ActionResultType.Move:
                     _mapConsole.CheckScrollMap(inputAction);
                     break;
                 case ActionResultType.HitWall:
-                    _actionLog.AddLog("You Hit a Wall");
+                    Globals.ActionLog.AddLog("You Hit a Wall");
                     break;
                 case ActionResultType.HitEntity:
                     if(actionResult.Entity is Monster m)
@@ -150,7 +152,7 @@ namespace RoguelikeGame
                         Globals.CombatManager.ResolveCombat(_player, m, out var log);
                         if(!string.IsNullOrEmpty(log))
                         {
-                            _actionLog.AddLog(log);
+                            Globals.ActionLog.AddLog(log);
                         }
                     }
                     break;
@@ -158,7 +160,7 @@ namespace RoguelikeGame
                     _mapConsole.CheckScrollMap(inputAction);
                     if(actionResult.Entity is Item item)
                     {
-                        _actionLog.AddLog($"You collected {item.Amount} {item.Name}");
+                        Globals.ActionLog.AddLog($"You collected {item.Amount} {item.Name}");
                         Item.RaiseItemPickup(item);
                     }
                     break;
@@ -172,36 +174,6 @@ namespace RoguelikeGame
             _turns++;
         }
 
-        private void CheckMonstersFov()
-        {
-            foreach(var monster in Globals.Map.Monsters)
-            {
-                if(monster.IsPlayerInFov())
-                {
-                    if(monster.IsPlayerInAttackRange())
-                    {
-                        System.Console.WriteLine($"player is in {monster.Name}_{monster.Id} fov");
-                        Globals.CombatManager.ResolveCombat(_player, monster, out var log, false);
-                        _actionLog.AddLog(log);
-                        return;
-                    }
-                    var startNode = new Node(monster.MapX, monster.MapY);
-                    var endNode = new Node(_player.MapX, _player.MapY);
-                    var path = Globals.Map.Pathfinder.CalculatePath(startNode, endNode);
-                    if(path != null && path.Count > 0)
-                    {
-                        var pathString = "";
-                        foreach (var node in path)
-                        {
-                            pathString += $" ({node.X},{node.Y}) ->";
-                        }
-                        System.Console.WriteLine(pathString);
-                        monster.Move(Globals.Map, path[0].X, path[0].Y);
-                    }
-                }
-            }
-        }
-
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
@@ -210,7 +182,7 @@ namespace RoguelikeGame
             _mapConsole.Draw();
             _statsConsole.Draw();
             _inventoryConsole.Draw();
-            _spriteBatch.DrawString(Globals.Font, _actionLog.LogString, new Vector2(10f, Globals.RENDER_TARGET_HEIGHT - 100f), Color.White);
+            _spriteBatch.DrawString(Globals.Font, Globals.ActionLog.LogString, new Vector2(10f, Globals.RENDER_TARGET_HEIGHT - 100f), Color.White);
 
             if (_path != null && _mapConsole.ShowDebugOverlay)
             {

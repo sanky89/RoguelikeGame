@@ -32,6 +32,8 @@ namespace RoguelikeGame
         public static CombatManager CombatManager { get; set; }
         public static Inventory Inventory { get; set; }
 
+        public static ActionLog ActionLog {get; set; }
+
         public static int Rows { get; set; }
         public static int Columns { get; set; }
         public static int AsciiRows { get; set; }
