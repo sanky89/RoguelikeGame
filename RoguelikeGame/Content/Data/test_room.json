@@ -1,9 +1,10 @@
 {
-  "Rows": 40,
-  "Cols": 40,
+  "Rows": 20,
+  "Cols": 20,
   "MaxRooms": 1,
-  "MinRoomSize": 20,
-  "MaxRoomSize": 20,
-  "MaxMonstersCount": 4,
-  "MaxItemsCount": 20
+  "MinRoomSize": 16,
+  "MaxRoomSize": 16,
+  "MaxMonstersCount": 20,
+  "MaxItemsCount": 2,
+  "Layout": ""
 }

@@ -153,7 +153,7 @@ namespace RoguelikeGame
 
         private bool Walkable(int x, int y)
         {
-            return Globals.Map.GetTileType(x, y) != TileType.Solid;
+            return Globals.Map.GetTileType(x, y) == TileType.Walkable || Globals.Map.IsPlayerTile(x,y);
         }
 
         private Node GetLeastCostNode(List<Node> openList)

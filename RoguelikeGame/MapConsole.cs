@@ -165,10 +165,10 @@ namespace RoguelikeGame
 
                     if(ShowDebugOverlay)
                     {
-                        var location = (Position - offset + new Vector2(x, y)) * Globals.TILE_SIZE;
+                        //var location = (Position - offset + new Vector2(x, y)) * Globals.TILE_SIZE;
                         //var color = Globals.Map.Pathfinder.GetNodeCost(y, x) == 1000 ? new Color(Color.Red, 80) : new Color(Color.Green, 80) ;
-                        var color = tile.TileType == TileType.Walkable ? Color.Green : Color.Red;
-                        Globals.SpriteBatch.Draw(_debugRect, new Rectangle(new Point((int)location.X, (int)location.Y), new Point(Globals.TILE_SIZE-1, Globals.TILE_SIZE-1)), color);
+                        //var color = tile.TileType == TileType.Walkable ? Color.Green : Color.Red;
+                        //Globals.SpriteBatch.Draw(_debugRect, new Rectangle(new Point((int)location.X, (int)location.Y), new Point(Globals.TILE_SIZE-1, Globals.TILE_SIZE-1)), color);
                     }
                 }
             }

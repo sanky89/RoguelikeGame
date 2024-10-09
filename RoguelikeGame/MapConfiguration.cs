@@ -15,5 +15,6 @@ namespace RoguelikeGame
         public int MaxRoomSize { get; set; }
         public int MaxMonstersCount{ get; set; }
         public int MaxItemsCount { get; set; }
+        public string Layout { get; set; }
     }
 }
