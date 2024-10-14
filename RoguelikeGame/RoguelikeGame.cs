@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Core.SceneManagement;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -20,6 +21,7 @@ namespace RoguelikeGame
         private List<Node> _path;
         private Texture2D _pathRect;
         private MapConfiguration _mapConfig;
+        private SceneManager _sceneManager;
 
         public RoguelikeGame()
         {
@@ -35,6 +37,9 @@ namespace RoguelikeGame
             IsFixedTimeStep = true;
             //SetFullScreen(true);
             _graphics.ApplyChanges();
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            _sceneManager = new SceneManager(Content, GraphicsDevice, _spriteBatch);
+            _sceneManager.Initialize();
             Globals.GraphicsDevice = GraphicsDevice;
             Globals.Content = Content;
             Globals.InputManager = new InputManager();
@@ -50,7 +55,7 @@ namespace RoguelikeGame
 
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            _sceneManager.LoadContent();
             Globals.SpriteBatch = _spriteBatch;
             Globals.AsciiTexture = Content.Load<Texture2D>("fontsheet");
             Globals.SpriteSheet = Content.Load<Texture2D>("spritesheet");
@@ -69,8 +74,8 @@ namespace RoguelikeGame
             _player = Globals.AssetManager.CreatePlayer();
             Globals.ActionLog = new ActionLog();
             Globals.MapGenerator = new();
-            //string mapConfig = "Data/random_map_config";
-            string mapConfig = "Data/test_room";
+            string mapConfig = "Data/random_map_config";
+            //string mapConfig = "Data/test_room";
             _mapConfig = Content.Load<MapConfiguration>(mapConfig);
             Globals.Map = Globals.MapGenerator.GenerateMap(_mapConfig, _player);
             Globals.Inventory = new();
@@ -83,7 +88,7 @@ namespace RoguelikeGame
         protected override void Update(GameTime gameTime)
         {
             Globals.Update(gameTime);
-
+            _sceneManager.Update(gameTime);
             //Debug actions
             if (Globals.InputManager.IsKeyReleased(Keys.M))
             {
@@ -177,21 +182,21 @@ namespace RoguelikeGame
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-
             _spriteBatch.Begin();
-            _mapConsole.Draw();
-            _statsConsole.Draw();
-            _inventoryConsole.Draw();
-            _spriteBatch.DrawString(Globals.Font, Globals.ActionLog.LogString, new Vector2(10f, Globals.RENDER_TARGET_HEIGHT - 100f), Color.White);
+            _sceneManager.Draw(gameTime);
+            // _mapConsole.Draw();
+            // _statsConsole.Draw();
+            // _inventoryConsole.Draw();
+            // _spriteBatch.DrawString(Globals.Font, Globals.ActionLog.LogString, new Vector2(10f, Globals.RENDER_TARGET_HEIGHT - 100f), Color.White);
 
-            if (_path != null && _mapConsole.ShowDebugOverlay)
-            {
-                foreach (var node in _path)
-                {
-                    var location = (_mapConsole.Position - _mapConsole.offset + new Vector2(node.X, node.Y)) * Globals.TILE_SIZE;
-                    _spriteBatch.Draw(_pathRect, new Rectangle(new Point((int)location.X, (int)location.Y), new Point(Globals.TILE_SIZE - 1, Globals.TILE_SIZE - 1)), Color.Yellow);
-                }
-            }
+            // if (_path != null && _mapConsole.ShowDebugOverlay)
+            // {
+            //     foreach (var node in _path)
+            //     {
+            //         var location = (_mapConsole.Position - _mapConsole.offset + new Vector2(node.X, node.Y)) * Globals.TILE_SIZE;
+            //         _spriteBatch.Draw(_pathRect, new Rectangle(new Point((int)location.X, (int)location.Y), new Point(Globals.TILE_SIZE - 1, Globals.TILE_SIZE - 1)), Color.Yellow);
+            //     }
+            // }
             _spriteBatch.End();
 
             base.Draw(gameTime);
