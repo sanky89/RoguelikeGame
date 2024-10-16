@@ -15,6 +15,9 @@ namespace Core.SceneManagement
         private int _activeSceneIndex = 0;
 
         public IScene ActiveScene {get; private set;}
+        public ContentManager Content => _content;
+        public GraphicsDevice Graphics => _graphics;
+        public SpriteBatch Batch => _batch;
 
         public SceneManager(ContentManager content, GraphicsDevice graphics, SpriteBatch batch)
         {
@@ -40,8 +43,8 @@ namespace Core.SceneManagement
                 return;
             }
             ActiveScene = _scenes[++_activeSceneIndex];
-            ActiveScene.Load();
             ActiveScene.Initialize(this,_graphics);
+            ActiveScene.Load();
         }
 
         public void SwitchToPreviousScene()
@@ -56,8 +59,8 @@ namespace Core.SceneManagement
             }
 
             ActiveScene = _scenes[--_activeSceneIndex];
-            ActiveScene.Load();
             ActiveScene.Initialize(this, _graphics);
+            ActiveScene.Load();
         }
 
         public void LoadContent()
