@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using RoguelikeGame;
 
 namespace Core.SceneManagement
 {
@@ -15,14 +16,16 @@ namespace Core.SceneManagement
         private int _activeSceneIndex = 0;
         private ContentManager content;
         private GraphicsDevice graphicsDevice;
+        private GameRoot _gameRoot;
 
         public IScene ActiveScene {get; private set;}
         public ContentManager Content => _content;
         public GraphicsDevice Graphics => _graphics;
         public SpriteBatch Batch => _batch;
 
-        public SceneManager(ContentManager content, GraphicsDevice graphics, SpriteBatch batch)
+        public SceneManager(GameRoot gameRoot, ContentManager content, GraphicsDevice graphics, SpriteBatch batch)
         {
+            _gameRoot = gameRoot;
             _content = content;
             _graphics = graphics;
             _batch = batch;
@@ -32,12 +35,6 @@ namespace Core.SceneManagement
                 new GameScene()
             };
             ActiveScene = _scenes[_activeSceneIndex];
-        }
-
-        public SceneManager(ContentManager content, GraphicsDevice graphicsDevice)
-        {
-            this.content = content;
-            this.graphicsDevice = graphicsDevice;
         }
 
         public void SwitchToNextScene()
@@ -51,7 +48,7 @@ namespace Core.SceneManagement
                 return;
             }
             ActiveScene = _scenes[++_activeSceneIndex];
-            ActiveScene.Initialize(this,_graphics);
+            ActiveScene.Initialize(_gameRoot,_graphics);
             ActiveScene.Load();
         }
 
@@ -67,7 +64,7 @@ namespace Core.SceneManagement
             }
 
             ActiveScene = _scenes[--_activeSceneIndex];
-            ActiveScene.Initialize(this, _graphics);
+            ActiveScene.Initialize(_gameRoot, _graphics);
             ActiveScene.Load();
         }
 
@@ -78,11 +75,17 @@ namespace Core.SceneManagement
 
         public void Initialize()
         {
-            ActiveScene.Initialize(this, _graphics);
+            if(ActiveScene == null)
+            {
+                System.Console.WriteLine("Active Scene is null");
+                return;
+            }
+            ActiveScene.Initialize(_gameRoot, _graphics);
         }
 
         public void Update(GameTime gameTime)
         {
+            
             ActiveScene.Update(gameTime);
         }
 

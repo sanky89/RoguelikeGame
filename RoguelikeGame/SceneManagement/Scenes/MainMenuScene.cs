@@ -28,9 +28,10 @@ namespace Core.SceneManagement
         }
 
         public void Update(GameTime gameTime)
-        {
+        {            
             if (_gameRoot.InputManager.IsKeyReleased(Keys.Enter))
             {
+                System.Console.WriteLine("Next Scene");
                 _sceneManager.SwitchToNextScene();
             }
         }

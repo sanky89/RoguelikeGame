@@ -38,7 +38,7 @@ namespace RoguelikeGame
             Monsters = new List<Monster>();
             VisibleMonsters = new List<Monster>();
             Items = new List<Item>();
-            Pathfinder = new Pathfinder(cols, rows);
+            Pathfinder = new Pathfinder(this, cols, rows);
         }
 
         public Tile GetTileAtIndex(int x, int y)

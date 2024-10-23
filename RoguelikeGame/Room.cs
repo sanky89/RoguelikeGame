@@ -41,7 +41,7 @@ namespace RoguelikeGame
 
         public Vec2Int GetRandomPointInsideRoom()
         {
-            return new Vec2Int(_rng.Next(RoomRect.X + 1, RoomRect.Right), GameConstants.Rng.Next(RoomRect.Y + 1, RoomRect.Bottom));
+            return new Vec2Int(_rng.Next(RoomRect.X + 1, RoomRect.Right), _rng.Next(RoomRect.Y + 1, RoomRect.Bottom));
         }
     }
 }

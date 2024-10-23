@@ -35,7 +35,7 @@ namespace Core.SceneManagement
             _gameRoot.AsciiColumns = _asciiTexture.Height / GameConstants.ASCII_SIZE;
         
 
-            _combatManager = new CombatManager();
+            _combatManager = _gameRoot.CombatManager;
             _player = _gameRoot.AssetManager.CreatePlayer();
             _actionLog = new ActionLog();
             string mapConfig = "Data/random_map_config";
@@ -64,7 +64,7 @@ namespace Core.SceneManagement
                         //Debug actions
             if (_gameRoot.InputManager.IsKeyReleased(Keys.M))
             {
-                _gameRoot.Map = _gameRoot.MapGenerator.GenerateMap(_mapConfig, _player, true);
+                _gameRoot.Map = _gameRoot.MapGenerator.GenerateMap(_gameRoot, _mapConfig, _player, true);
             }
             if (_gameRoot.InputManager.IsKeyReleased(Keys.OemTilde))
             {
@@ -80,9 +80,9 @@ namespace Core.SceneManagement
 
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            _mapConsole.Draw();
-            _statsConsole.Draw();
-            _inventoryConsole.Draw();
+            _mapConsole.Draw(spriteBatch);
+            _statsConsole.Draw(spriteBatch);
+            _inventoryConsole.Draw(spriteBatch);
             _gameRoot.SceneManager.Batch.DrawString(_gameRoot.Font, _gameRoot.ActionLog.LogString, new Vector2(10f, GameConstants.RENDER_TARGET_HEIGHT - 100f), Color.White);
 
         }

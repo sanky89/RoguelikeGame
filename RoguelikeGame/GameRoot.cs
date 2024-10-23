@@ -11,7 +11,6 @@ namespace RoguelikeGame
     {
         private bool _isAscii;
         private SpriteFont _font;
-        private Map _map;
         private MapGenerator _mapGenerator;
         private AssetManager _assetManager;
         //private List<Node> _path;
@@ -26,7 +25,7 @@ namespace RoguelikeGame
         public readonly CombatManager CombatManager;
 
         public MapGenerator MapGenerator => _mapGenerator;
-        public Map Map => _map;
+        public Map Map {get;set;}
         public AssetManager AssetManager => _assetManager;
         public SceneManager SceneManager => _sceneManager;
         public SpriteFont Font => _font;
@@ -50,7 +49,7 @@ namespace RoguelikeGame
             Inventory = new();
             ActionLog = new();
             CombatManager = new(this);
-            _sceneManager = new SceneManager(game.Content, game.GraphicsDevice);
+            _sceneManager = new SceneManager(this, game.Content, game.GraphicsDevice, SpriteBatch);
             _sceneManager.Initialize();
             //_pathRect = new Texture2D(game.GraphicsDevice, 1, 1);
             //_pathRect.SetData(new Color[] { Color.White });
@@ -68,6 +67,7 @@ namespace RoguelikeGame
 
         public void Update(GameTime gameTime)
         {
+            InputManager.Update(gameTime);
             _sceneManager.Update(gameTime);
         }
 
