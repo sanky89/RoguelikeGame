@@ -10,8 +10,12 @@ namespace RoguelikeGame
         private List<CharacterDataModel> _characterModels;
         private List<MonsterDataModel> _monsterModels;
         private List<ItemDataModel> _itemModels;
-        public  AssetManager(CharactersDataModel charactersData, MonstersDataModel monstersData, ItemsDataModel itemsData)
+        private GameRoot _gameRoot;
+
+
+        public AssetManager(GameRoot gameRoot, CharactersDataModel charactersData, MonstersDataModel monstersData, ItemsDataModel itemsData)
         {
+            _gameRoot = gameRoot;
             _characterModels = new List<CharacterDataModel>(charactersData.characters);
             _monsterModels = new List<MonsterDataModel>(monstersData.monsters);
             _itemModels = new List<ItemDataModel>(itemsData.items);
@@ -21,16 +25,16 @@ namespace RoguelikeGame
         {
             var playerData = _characterModels[3];
             Stats statsDict = CreateStatsDict(playerData.stats);
-            var player = new Player(new Character((Glyphs)playerData.glyph, Color.Yellow, playerData.row, playerData.col), statsDict);
+            var player = new Player(_gameRoot, new Character((Glyphs)playerData.glyph, Color.Yellow, playerData.row, playerData.col), statsDict);
             return player;
         }
 
         public Monster CreateRandomMonster(int id)
         {
-            var monsterData = _monsterModels[Globals.Rng.Next(0, _monsterModels.Count)];
+            var monsterData = _monsterModels[_gameRoot.Rng.Next(0, _monsterModels.Count)];
             Stats statsDict = CreateStatsDict(monsterData.stats);
             var character = new Character((Glyphs)monsterData.glyph, Color.White, monsterData.row, monsterData.col);
-            return new Monster(character, monsterData.name, id, statsDict);
+            return new Monster(_gameRoot, character, monsterData.name, id, statsDict);
         }
 
         public Monster CreateMonster(string id)
@@ -41,7 +45,7 @@ namespace RoguelikeGame
                 return null;
             }
             Stats statsDict = CreateStatsDict(monsterData.stats);
-            return new Monster(new Character((Glyphs)monsterData.glyph, Color.White, monsterData.row, monsterData.col), monsterData.name, 0, statsDict);
+            return new Monster(_gameRoot, new Character((Glyphs)monsterData.glyph, Color.White, monsterData.row, monsterData.col), monsterData.name, 0, statsDict);
         }
 
         private Stats CreateStatsDict(List<StatDataModel> statsData)
@@ -63,9 +67,9 @@ namespace RoguelikeGame
 
         public Item CreateRandomItem()
         {
-            var itemData = _itemModels[Globals.Rng.Next(0, _itemModels.Count)];
+            var itemData = _itemModels[_gameRoot.Rng.Next(0, _itemModels.Count)];
             var character = new Character((Glyphs)itemData.glyph, Color.Green, itemData.row, itemData.col);
-            return new Item(character, itemData.name, new Tuple<int, int>(itemData.minAmount, itemData.maxAmount), itemData.affectedStat, itemData.amountAffected);
+            return new Item(_gameRoot, character, itemData.name, new Tuple<int, int>(itemData.minAmount, itemData.maxAmount), itemData.affectedStat, itemData.amountAffected);
         }
 
         public Item CreateItem(string id)
@@ -76,7 +80,7 @@ namespace RoguelikeGame
                 return null;
             }
             var character = new Character((Glyphs)itemData.glyph, Color.Green, itemData.row, itemData.col);
-            return new Item(character, itemData.name, new Tuple<int, int>(itemData.minAmount, itemData.maxAmount), itemData.affectedStat, itemData.amountAffected);
+            return new Item(_gameRoot, character, itemData.name, new Tuple<int, int>(itemData.minAmount, itemData.maxAmount), itemData.affectedStat, itemData.amountAffected);
         }
     }
 

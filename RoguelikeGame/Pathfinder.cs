@@ -23,14 +23,18 @@ namespace RoguelikeGame
             Parent = null;
         }
     }
+
     public class Pathfinder
     {
+
+        private Map _map;
         public readonly Node[,] Nodes;
         public int Width => Nodes.GetLength(0);
         public int Height => Nodes.GetLength(1);
 
-        public Pathfinder(int width, int height)
+        public Pathfinder(Map map, int width, int height)
         {
+            _map = map;
             Nodes = new Node[width, height];
             for (int y = 0; y < height; y++)
             {
@@ -153,7 +157,7 @@ namespace RoguelikeGame
 
         private bool Walkable(int x, int y)
         {
-            return Globals.Map.GetTileType(x, y) == TileType.Walkable || Globals.Map.IsPlayerTile(x,y);
+            return _map.GetTileType(x, y) == TileType.Walkable || _map.IsPlayerTile(x,y);
         }
 
         private Node GetLeastCostNode(List<Node> openList)

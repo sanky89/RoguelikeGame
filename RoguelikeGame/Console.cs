@@ -40,9 +40,16 @@ namespace RoguelikeGame
         private int _titleStartIndex = 0;
         private int _titleEndIndex = 0;
         private Character[] _titleCharacters;
+        protected GameRoot _gameRoot;
+        private Texture2D _asciiTexture;
 
-        public Console(string title, int width, int height, ConsoleLocation location, BorderStyle border = BorderStyle.None, Color borderColor = default)
+        public int AsciiColumns => _gameRoot.AsciiColumns;
+        public int AsciiRows => _gameRoot.AsciiRows;
+
+        public Console(GameRoot gameRoot, Texture2D asciiTexture, string title, int width, int height, ConsoleLocation location, BorderStyle border = BorderStyle.None, Color borderColor = default)
         {
+            _gameRoot = gameRoot;
+            _asciiTexture = asciiTexture;
             Title = title;
             Width = width;
             Height = height;
@@ -63,7 +70,7 @@ namespace RoguelikeGame
                 _titleEndIndex = _titleStartIndex + Title.Length - 1;
                 for (int i = 0; i < Title.Length; i++)
                 {
-                    _titleCharacters[i] = new Character(Title[i], BorderColor);
+                    _titleCharacters[i] = new Character(this, Title[i], BorderColor);
                 }
             }
         }
@@ -77,21 +84,21 @@ namespace RoguelikeGame
 
             if (Border == BorderStyle.SingleLine)
             {
-                _vertical = new Character(Glyphs.BarUpDown, BorderColor);
-                _horizontal = new Character(Glyphs.BarLeftRight, BorderColor);
-                _upperLeftCorner = new Character(Glyphs.BarDownRight, BorderColor); 
-                _upperRightCorner = new Character(Glyphs.BarDownLeft, BorderColor);
-                _lowerLeftCorner = new Character(Glyphs.BarUpRight, BorderColor);
-                _lowerRightCorner = new Character(Glyphs.BarUpLeft, BorderColor);
+                _vertical =         new Character(this, Glyphs.BarUpDown, BorderColor);
+                _horizontal =       new Character(this, Glyphs.BarLeftRight, BorderColor);
+                _upperLeftCorner =  new Character(this, Glyphs.BarDownRight, BorderColor); 
+                _upperRightCorner = new Character(this, Glyphs.BarDownLeft, BorderColor);
+                _lowerLeftCorner =  new Character(this, Glyphs.BarUpRight, BorderColor);
+                _lowerRightCorner = new Character(this, Glyphs.BarUpLeft, BorderColor);
             }
             else
             {
-                _vertical = new Character(Glyphs.BarDoubleUpDown, BorderColor);
-                _horizontal = new Character(Glyphs.BarDoubleLeftRight, BorderColor);
-                _upperLeftCorner = new Character(Glyphs.BarDoubleDownRight, BorderColor);
-                _upperRightCorner = new Character(Glyphs.BarDoubleDownLeft, BorderColor);
-                _lowerLeftCorner = new Character(Glyphs.BarDoubleUpRight, BorderColor);
-                _lowerRightCorner = new Character(Glyphs.BarDoubleUpLeft, BorderColor);
+                _vertical =         new Character(this, Glyphs.BarDoubleUpDown, BorderColor);
+                _horizontal =       new Character(this, Glyphs.BarDoubleLeftRight, BorderColor);
+                _upperLeftCorner =  new Character(this, Glyphs.BarDoubleDownRight, BorderColor);
+                _upperRightCorner = new Character(this, Glyphs.BarDoubleDownLeft, BorderColor);
+                _lowerLeftCorner =  new Character(this, Glyphs.BarDoubleUpRight, BorderColor);
+                _lowerRightCorner = new Character(this, Glyphs.BarDoubleUpLeft, BorderColor);
             }
 
         }
@@ -105,16 +112,16 @@ namespace RoguelikeGame
                     _y = 0;
                     break;
                 case ConsoleLocation.TopRight:
-                    _x = Globals.SCREEN_WIDTH/Globals.ASCII_SIZE - Width;
+                    _x = GameConstants.SCREEN_WIDTH/GameConstants.ASCII_SIZE - Width;
                     _y = 0;
                     break;
                 case ConsoleLocation.BottomLeft:
                     _x = 0;
-                    _y = Globals.SCREEN_HEIGHT / Globals.ASCII_SIZE - Height-1;
+                    _y = GameConstants.SCREEN_HEIGHT / GameConstants.ASCII_SIZE - Height-1;
                     break;
                 case ConsoleLocation.BottomRight:
-                    _x = Globals.SCREEN_WIDTH / Globals.ASCII_SIZE - Width;
-                    _y = Globals.SCREEN_HEIGHT / Globals.ASCII_SIZE - Height-1;
+                    _x = GameConstants.SCREEN_WIDTH / GameConstants.ASCII_SIZE - Width;
+                    _y = GameConstants.SCREEN_HEIGHT / GameConstants.ASCII_SIZE - Height-1;
                     break;
                 default:
                     return;
@@ -124,15 +131,15 @@ namespace RoguelikeGame
         private void DrawTitle(int x)
         {
             if(!string.IsNullOrEmpty(Title))
-                Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(x, _y) * Globals.ASCII_SIZE, _titleCharacters[x - _titleStartIndex].GetAsciiSourceRect(), BorderColor, 0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0);
+                _gameRoot.SpriteBatch.Draw(_asciiTexture, new Vector2(x, _y) * GameConstants.ASCII_SIZE, _titleCharacters[x - _titleStartIndex].GetAsciiSourceRect(), BorderColor, 0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0);
         }
 
         private void DrawTitleString(int x)
         {
-            Globals.SpriteBatch.DrawString(Globals.Font, Title, new Vector2(x, _y) * Globals.ASCII_SIZE, BorderColor);
+            _gameRoot.SpriteBatch.DrawString(_gameRoot.Font, Title, new Vector2(x, _y) * GameConstants.ASCII_SIZE, BorderColor);
         }
 
-        public virtual void Draw()
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
             if(Border == BorderStyle.None)
             {
@@ -144,21 +151,21 @@ namespace RoguelikeGame
             {
                 if (x < _titleStartIndex || x > _titleEndIndex)
                 {
-                    Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(x, _y) * Globals.ASCII_SIZE, _horizontal.GetAsciiSourceRect(), BorderColor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
+                    _gameRoot.SpriteBatch.Draw(_asciiTexture, new Vector2(x, _y) * GameConstants.ASCII_SIZE, _horizontal.GetAsciiSourceRect(), BorderColor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
                 }
-                Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(x, _y + Height) * Globals.ASCII_SIZE, _horizontal.GetAsciiSourceRect(), BorderColor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
+                _gameRoot.SpriteBatch.Draw(_asciiTexture, new Vector2(x, _y + Height) * GameConstants.ASCII_SIZE, _horizontal.GetAsciiSourceRect(), BorderColor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
             }
 
             for (int y = _y+1; y < _y + Height; y++)
             {
-                Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(_x, y) * Globals.ASCII_SIZE, _vertical.GetAsciiSourceRect(), BorderColor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
-                Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(_x + Width, y) * Globals.ASCII_SIZE, _vertical.GetAsciiSourceRect(), BorderColor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
+                _gameRoot.SpriteBatch.Draw(_asciiTexture, new Vector2(_x, y) * GameConstants.ASCII_SIZE, _vertical.GetAsciiSourceRect(), BorderColor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
+                _gameRoot.SpriteBatch.Draw(_asciiTexture, new Vector2(_x + Width, y) * GameConstants.ASCII_SIZE, _vertical.GetAsciiSourceRect(), BorderColor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
             }
 
-            Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(_x,_y) * Globals.ASCII_SIZE, _upperLeftCorner.GetAsciiSourceRect(), BorderColor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
-            Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(_x+Width, _y) * Globals.ASCII_SIZE, _upperRightCorner.GetAsciiSourceRect(), BorderColor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
-            Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(_x, _y+Height) * Globals.ASCII_SIZE, _lowerLeftCorner.GetAsciiSourceRect(), BorderColor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
-            Globals.SpriteBatch.Draw(Globals.AsciiTexture, new Vector2(_x+Width, _y+Height) * Globals.ASCII_SIZE, _lowerRightCorner.GetAsciiSourceRect(), BorderColor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
+            _gameRoot.SpriteBatch.Draw(_asciiTexture, new Vector2(_x,_y) * GameConstants.ASCII_SIZE, _upperLeftCorner.GetAsciiSourceRect(), BorderColor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
+            _gameRoot.SpriteBatch.Draw(_asciiTexture, new Vector2(_x+Width, _y) * GameConstants.ASCII_SIZE, _upperRightCorner.GetAsciiSourceRect(), BorderColor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
+            _gameRoot.SpriteBatch.Draw(_asciiTexture, new Vector2(_x, _y+Height) * GameConstants.ASCII_SIZE, _lowerLeftCorner.GetAsciiSourceRect(), BorderColor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
+            _gameRoot.SpriteBatch.Draw(_asciiTexture, new Vector2(_x+Width, _y+Height) * GameConstants.ASCII_SIZE, _lowerRightCorner.GetAsciiSourceRect(), BorderColor, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
         }
     }
 }

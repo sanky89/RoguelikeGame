@@ -9,18 +9,22 @@ namespace RoguelikeGame
 {
     public class Room
     {
+        private Random _rng;
+
         public Rectangle RoomRect { get; private set; }
 
         public Rectangle PaddedRoomRect { get; private set; }
 
-        public Room(Rectangle rect)
+        public Room(Random rng, Rectangle rect)
         {
+            _rng = rng;
             RoomRect = rect;
             PaddedRoomRect = new Rectangle(rect.X-1, rect.Y-1, rect.Width+1, rect.Height+1);
         }
 
-        public Room(int x, int y, int w, int h)
+        public Room(Random rng, int x, int y, int w, int h)
         {
+            _rng=rng;
             RoomRect = new Rectangle(x, y, w, h);
             PaddedRoomRect = new Rectangle(x - 1, y - 1, w + 1, h + 1);
         }
@@ -37,7 +41,7 @@ namespace RoguelikeGame
 
         public Vec2Int GetRandomPointInsideRoom()
         {
-            return new Vec2Int(Globals.Rng.Next(RoomRect.X + 1, RoomRect.Right), Globals.Rng.Next(RoomRect.Y + 1, RoomRect.Bottom));
+            return new Vec2Int(_rng.Next(RoomRect.X + 1, RoomRect.Right), _rng.Next(RoomRect.Y + 1, RoomRect.Bottom));
         }
     }
 }

@@ -7,14 +7,16 @@ namespace RoguelikeGame
     public class MapGenerator
     {
         private MapConfiguration _mapConfig;
+        private GameRoot _gameRoot;
 
-        public Map GenerateMap(MapConfiguration config, Player player, bool regenerate = false)
+        public Map GenerateMap(GameRoot gameRoot, MapConfiguration config, Player player, bool regenerate = false)
         {
             _mapConfig = config;
+            _gameRoot = gameRoot;
             System.Console.WriteLine($"Loading map config: Rows:{_mapConfig.Rows} Cols:{_mapConfig.Cols}");
             if(regenerate)
             {
-                ClearMap(Globals.Map);
+                ClearMap(_gameRoot.Map);
             }
             Map map = new Map(_mapConfig.Rows, _mapConfig.Cols, player);
             GenerateRooms(map);
@@ -56,11 +58,11 @@ namespace RoguelikeGame
             int maxFailedAttempts = 500;
             while (count < _mapConfig.MaxRooms)
             {
-                int width = Globals.Rng.Next(_mapConfig.MinRoomSize, _mapConfig.MaxRoomSize);
-                int height = Globals.Rng.Next(_mapConfig.MinRoomSize, _mapConfig.MaxRoomSize);
-                int x = Globals.Rng.Next(_mapConfig.Cols - width - 1);
-                int y = Globals.Rng.Next(_mapConfig.Rows - height - 1);
-                Room room = new Room(x, y, width, height);
+                int width = _gameRoot.Rng.Next(_mapConfig.MinRoomSize, _mapConfig.MaxRoomSize);
+                int height = _gameRoot.Rng.Next(_mapConfig.MinRoomSize, _mapConfig.MaxRoomSize);
+                int x = _gameRoot.Rng.Next(_mapConfig.Cols - width - 1);
+                int y = _gameRoot.Rng.Next(_mapConfig.Rows - height - 1);
+                Room room = new Room(_gameRoot.Rng, x, y, width, height);
                 bool intersects = false;
                 foreach (var room1 in map.Rooms)
                 {
@@ -153,9 +155,9 @@ namespace RoguelikeGame
         {
             for (int i = 0; i < _mapConfig.MaxMonstersCount; i++)
             {
-                var room = map.Rooms[Globals.Rng.Next(map.Rooms.Count)];
+                var room = map.Rooms[_gameRoot.Rng.Next(map.Rooms.Count)];
                 var point = room.GetRandomPointInsideRoom();
-                Monster monster = Globals.AssetManager.CreateRandomMonster(i);
+                Monster monster = _gameRoot.AssetManager.CreateRandomMonster(i);
 
                 if (monster != null)
                 {
@@ -169,11 +171,11 @@ namespace RoguelikeGame
         {
             for (int i = 0; i < _mapConfig.MaxItemsCount; i++)
             {
-                var room = map.Rooms[Globals.Rng.Next(map.Rooms.Count)];
+                var room = map.Rooms[_gameRoot.Rng.Next(map.Rooms.Count)];
                 var point = room.GetRandomPointInsideRoom();
                 if (!map.IsMonsterTile(point.X, point.Y, out _))
                 {
-                    var item = Globals.AssetManager.CreateRandomItem();
+                    var item = _gameRoot.AssetManager.CreateRandomItem();
                     item.SetMapPosition(map, point.X, point.Y);
                     map.SetTileType(point.X, point.Y, TileType.Walkable);
                     map.Items.Add(item);
@@ -184,7 +186,7 @@ namespace RoguelikeGame
         private void DropPlayerInRandomRoom(Map map)
         {
             var rooms = map.Rooms;
-            var startingRoom = rooms[Globals.Rng.Next(rooms.Count - 1)];
+            var startingRoom = rooms[_gameRoot.Rng.Next(rooms.Count - 1)];
             var point = startingRoom.GetRandomPointInsideRoom();
             map.Player.SetMapPosition(map, point.X, point.Y);
             map.PlayerMapPosition = new Vec2Int(point.X, point.Y);

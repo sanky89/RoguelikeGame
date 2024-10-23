@@ -8,11 +8,17 @@ namespace RoguelikeGame
 {
     public class CombatManager
     {
+        private GameRoot _gameRoot;
+
+        public CombatManager(GameRoot gameRoot)
+        {
+            _gameRoot = gameRoot;
+        }
 
         public void ResolveCombat(Player player, Monster monster, out string log, bool playerAttacks = true)
         {
-            int attackChance = Globals.Rng.Next(100);
-            int defenseChance = Globals.Rng.Next(100);
+            int attackChance = _gameRoot.Rng.Next(100);
+            int defenseChance = _gameRoot.Rng.Next(100);
             System.Console.WriteLine($"attackChance={attackChance} defenseChance={defenseChance}");
             int hitAmount = 0;
             log = "";
@@ -76,7 +82,7 @@ namespace RoguelikeGame
         {
             if(m.Stats["health"].CurrentValue <= 0)
             {
-                Globals.Map.RemoveMonster(m);
+                _gameRoot.Map.RemoveMonster(m);
             }
         }
     }

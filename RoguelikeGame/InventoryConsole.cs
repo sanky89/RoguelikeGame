@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,16 +13,17 @@ namespace RoguelikeGame
         private Inventory _inventory;
         private StringBuilder _sb;
         private string _inventoryString = "";
+        private GameRoot _gameRoot;
 
-        public InventoryConsole(Inventory inventory, string title, int width, int height, ConsoleLocation location, BorderStyle border = BorderStyle.None, Color borderColor = default) : base(title, width, height, location, border, borderColor)
+        public InventoryConsole(GameRoot gameRoot, Texture2D asciiTexture, string title, int width, int height, ConsoleLocation location, BorderStyle border = BorderStyle.None, Color borderColor = default) : base(gameRoot, asciiTexture, title, width, height, location, border, borderColor)
         {
-            _inventory = inventory;
+            _gameRoot = gameRoot;
+            _inventory = gameRoot.Inventory;
             _sb = new StringBuilder();
         }
 
-        public override void Draw()
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            base.Draw();
             _inventoryString = "";
             for(int i=0; i < Inventory.NumSlots; i++)
             {
@@ -35,9 +37,10 @@ namespace RoguelikeGame
                 }
                 //_sb.AppendLine();
             }
+            base.Draw(spriteBatch);
 
-            Globals.SpriteBatch.DrawString(Globals.Font, _inventoryString,
-            new Vector2((_x + 2) * Globals.ASCII_SIZE, (_y + 2) * Globals.ASCII_SIZE), Color.White);
+            _gameRoot.SpriteBatch.DrawString(_gameRoot.Font, _inventoryString,
+            new Vector2((_x + 2) * GameConstants.ASCII_SIZE, (_y + 2) * GameConstants.ASCII_SIZE), Color.White);
         }
     }
 }

@@ -16,11 +16,11 @@ namespace RoguelikeGame
         public static event Action<Item> OnPickup;
         public static event Action<Item> OnUse;
 
-        public Item(Character character, string name, Tuple<int, int> amountRange, string affectedStat, int amountAffected) : base(character)
+        public Item(GameRoot gameRoot, Character character, string name, Tuple<int, int> amountRange, string affectedStat, int amountAffected) : base(gameRoot, character)
         {
             Name = name;
             AmountRange = amountRange;
-            Amount = Globals.Rng.Next(AmountRange.Item1, AmountRange.Item2);
+            Amount = _gameRoot.Rng.Next(AmountRange.Item1, AmountRange.Item2);
             AffectedStat = affectedStat;
             AmountAffected = amountAffected;
         }
