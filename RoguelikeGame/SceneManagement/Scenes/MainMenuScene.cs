@@ -10,16 +10,18 @@ namespace Core.SceneManagement
     {
         private Texture2D _texture;
         private SceneManager _sceneManager;
+        private GameRoot _gameRoot;
         private Tuple<string,Rectangle> _button;
 
         public void Load()
         {
-            Globals.Font = _sceneManager.Content.Load<SpriteFont>("rogue_font");
+            
         }
 
-        public void Initialize(SceneManager sceneManager, GraphicsDevice graphics)
+        public void Initialize(GameRoot gameRoot, GraphicsDevice graphics)
         {
-            _sceneManager = sceneManager;
+            _gameRoot = gameRoot;
+            _sceneManager = gameRoot.SceneManager;
             _texture = new Texture2D(graphics, 1, 1);
             _texture.SetData(new Color[] { Color.White });
             _button = new Tuple<string, Rectangle>("New Game", new Rectangle(100,100,100,50));
@@ -27,7 +29,7 @@ namespace Core.SceneManagement
 
         public void Update(GameTime gameTime)
         {
-            if (Globals.InputManager.IsKeyReleased(Keys.Enter))
+            if (_gameRoot.InputManager.IsKeyReleased(Keys.Enter))
             {
                 _sceneManager.SwitchToNextScene();
             }
@@ -37,7 +39,7 @@ namespace Core.SceneManagement
         {
             //System.Console.WriteLine("Main menu Draw");
             spriteBatch.Draw(_texture, _button.Item2, Color.White);
-            spriteBatch.DrawString(Globals.Font, _button.Item1, new Vector2(_button.Item2.Left + 5.0f, _button.Item2.Top + 5.0f), Color.Black);
+            spriteBatch.DrawString(_gameRoot.Font, _button.Item1, new Vector2(_button.Item2.Left + 5.0f, _button.Item2.Top + 5.0f), Color.Black);
         }
     }
 }

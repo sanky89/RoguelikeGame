@@ -13,6 +13,8 @@ namespace Core.SceneManagement
         private GraphicsDevice _graphics;
         private SpriteBatch _batch;
         private int _activeSceneIndex = 0;
+        private ContentManager content;
+        private GraphicsDevice graphicsDevice;
 
         public IScene ActiveScene {get; private set;}
         public ContentManager Content => _content;
@@ -30,6 +32,12 @@ namespace Core.SceneManagement
                 new GameScene()
             };
             ActiveScene = _scenes[_activeSceneIndex];
+        }
+
+        public SceneManager(ContentManager content, GraphicsDevice graphicsDevice)
+        {
+            this.content = content;
+            this.graphicsDevice = graphicsDevice;
         }
 
         public void SwitchToNextScene()

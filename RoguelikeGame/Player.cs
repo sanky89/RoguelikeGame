@@ -15,7 +15,7 @@ namespace RoguelikeGame
         private Fov _fov;
 
         public Direction Facing => _facing;
-        public Player(Character character, Stats stats) : base( character)
+        public Player(GameRoot gameRoot, Character character, Stats stats) : base(gameRoot, character)
         {
             Stats = stats;
             Item.OnPickup += HandleItemPickup;
@@ -89,19 +89,19 @@ namespace RoguelikeGame
                 case InputAction.REST:
                     break;
                 case InputAction.USE_ITEM_1:
-                    Globals.Inventory.UseItem(0);
+                    _gameRoot.Inventory.UseItem(0);
                     break;
                 case InputAction.USE_ITEM_2:
-                    Globals.Inventory.UseItem(1);
+                    _gameRoot.Inventory.UseItem(1);
                     break;
                 case InputAction.USE_ITEM_3:
-                    Globals.Inventory.UseItem(2);
+                    _gameRoot.Inventory.UseItem(2);
                     break;
                 case InputAction.USE_ITEM_4:
-                    Globals.Inventory.UseItem(3);
+                    _gameRoot.Inventory.UseItem(3);
                     break;
                 case InputAction.USE_ITEM_5:
-                    Globals.Inventory.UseItem(4);
+                    _gameRoot.Inventory.UseItem(4);
                     break;
                 default:
                     break;
@@ -114,8 +114,8 @@ namespace RoguelikeGame
             if (actionResult.ResultType == ActionResultType.Move ||
                 actionResult.ResultType == ActionResultType.CollectItem)
             {
-                Globals.Map.SetTileType(MapX, MapY, TileType.Walkable);
-                base.SetMapPosition(Globals.Map, newX, newY);
+                _gameRoot.Map.SetTileType(MapX, MapY, TileType.Walkable);
+                base.SetMapPosition(_gameRoot.Map, newX, newY);
                 _fov.UpdateFov(MapX, MapY);
                 //System.Console.WriteLine($"Map Index: {MapX}, {MapY}");
             }
@@ -137,7 +137,7 @@ namespace RoguelikeGame
             {
                 return new ActionResult(ActionResultType.Rest, null);
             }
-            return Globals.Map.CanMove(newX, newY);
+            return _gameRoot.Map.CanMove(newX, newY);
         }
     }
 }

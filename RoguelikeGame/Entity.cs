@@ -6,15 +6,17 @@ namespace RoguelikeGame
     {
         public const int ENERGY_THRESHOLD = 20;
         protected Character _character;
+        protected GameRoot _gameRoot;
 
         public int Id { get; set; }
-        public Color Color => Globals.IsAscii ? _character.Color : Color.White;
+        public Color Color => _gameRoot.IsAscii ? _character.Color : Color.White;
         public Rectangle SourceRect => _character.GetSourceRect();
         public int MapX { get; protected set; }
         public int MapY { get; protected set; }
 
-        public Entity(Character character)
+        public Entity(GameRoot gameRoot, Character character)
         {
+            _gameRoot = gameRoot;
             _character = character;
         }
 

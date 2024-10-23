@@ -12,7 +12,7 @@ namespace RoguelikeGame
 
         private int _energy;
 
-        public Monster(Character character, string name, int id, Stats stats) : base(character)
+        public Monster(GameRoot gameRoot, Character character, string name, int id, Stats stats) : base(gameRoot, character)
         {
             Id = id;
             Name = name;
@@ -40,13 +40,13 @@ namespace RoguelikeGame
                 if(IsPlayerInAttackRange())
                 {
                     //System.Console.WriteLine($"player is in {Name}_{Id} fov");
-                    Globals.CombatManager.ResolveCombat(Globals.Map.Player, this, out var log, false);
-                    Globals.ActionLog.AddLog(log);
+                    _gameRoot.CombatManager.ResolveCombat(_gameRoot.Map.Player, this, out var log, false);
+                    _gameRoot.ActionLog.AddLog(log);
                     return;
                 }
                 var startNode = new Node(MapX, MapY);
-                var endNode = new Node(Globals.Map.Player.MapX, Globals.Map.Player.MapY);
-                var path = Globals.Map.Pathfinder.CalculatePath(startNode, endNode);
+                var endNode = new Node(_gameRoot.Map.Player.MapX, _gameRoot.Map.Player.MapY);
+                var path = _gameRoot.Map.Pathfinder.CalculatePath(startNode, endNode);
                 if(path != null && path.Count > 0)
                 {
                     var pathString = "";
@@ -55,7 +55,7 @@ namespace RoguelikeGame
                         pathString += $" ({node.X},{node.Y}) ->";
                     }
                     //System.Console.WriteLine(pathString);
-                    Move(Globals.Map, path[0].X, path[0].Y);
+                    Move(_gameRoot.Map, path[0].X, path[0].Y);
                 }
             }
 
@@ -79,14 +79,14 @@ namespace RoguelikeGame
 
         public bool IsPlayerInFov()
         {
-            var target = Globals.Map.Player;
+            var target = _gameRoot.Map.Player;
             var distanceSq = Vec2Int.DistanceSquared(new Vec2Int(MapX, MapY),new Vec2Int(target.MapX, target.MapY));
             return distanceSq <= Fov * Fov;
         }
 
         public bool IsPlayerInAttackRange()
         {
-            var target = Globals.Map.Player;
+            var target = _gameRoot.Map.Player;
             return Math.Abs(MapX - target.MapX) <= 1 &&
                    Math.Abs(MapY - target.MapY) <= 1;
         }

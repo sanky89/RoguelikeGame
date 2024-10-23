@@ -9,27 +9,26 @@ namespace RoguelikeGame
         private int _lineNumber = 0;
         private const int SPACING = 20;
 
-
-        public StatsConsole(string title, int width, int height, ConsoleLocation location, BorderStyle border = BorderStyle.None, Color borderColor = default) : base(title, width, height, location, border, borderColor)
+        public StatsConsole(GameRoot gameRoot, Texture2D asciiTexture, string title, int width, int height, ConsoleLocation location, BorderStyle border = BorderStyle.None, Color borderColor = default) : base(gameRoot, asciiTexture, title, width, height, location, border, borderColor)
         {
-            _playerStats = Globals.Map.Player.Stats;
+            _playerStats = _gameRoot.Map.Player.Stats;
         }
 
-        public override void Draw()
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            base.Draw();
-            DrawStats(_playerStats, Color.White);
+            DrawStats(spriteBatch, _playerStats, Color.White);
 
             _lineNumber += 2;
-            for (int i = 0; i < Globals.Map.VisibleMonsters.Count; i++)
+            for (int i = 0; i < _gameRoot.Map.VisibleMonsters.Count; i++)
             {
-                Monster m = Globals.Map.VisibleMonsters[i];
-                DrawStats(m.Stats, Color.Red, m.Name);
+                Monster m = _gameRoot.Map.VisibleMonsters[i];
+                DrawStats(spriteBatch, m.Stats, Color.Red, m.Name);
             }
             _lineNumber = 0;
+            base.Draw(spriteBatch);
         }
 
-        private void DrawStats(Stats stats, Color color, string overrideDisplayId = null)
+        private void DrawStats(SpriteBatch spriteBatch, Stats stats, Color color, string overrideDisplayId = null)
         {
             foreach (var kvp in stats)
             {
@@ -39,9 +38,9 @@ namespace RoguelikeGame
                     continue;
                 }
                 var text = $"{overrideDisplayId ?? stat.Name}: {stat.CurrentValue}/{stat.MaxValue}";
-                Globals.SpriteBatch.DrawString(Globals.Font,
+                spriteBatch.DrawString(_gameRoot.Font,
                     text,
-                    new Vector2((_x+2) * Globals.ASCII_SIZE, (_y+2) * Globals.ASCII_SIZE + _lineNumber++ * SPACING),
+                    new Vector2((_x+2) * GameConstants.ASCII_SIZE, (_y+2) * GameConstants.ASCII_SIZE + _lineNumber++ * SPACING),
                     color);
             }
         }

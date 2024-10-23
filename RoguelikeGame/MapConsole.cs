@@ -9,13 +9,19 @@ namespace RoguelikeGame
         public Vector2 Position => new Vector2(_x+1, _y+1);
         public Vector2 offset = Vector2.Zero;
         private Texture2D _debugRect;
+        private Map _map;
+        private GameRoot _gameRoot;
+        private Texture2D _spriteSheet;
 
         public bool ShowDebugOverlay = false;
 
-        public MapConsole( string title, int width, int height, ConsoleLocation location, BorderStyle border, Color borderColor) : 
-            base(title, width, height, location, border, borderColor)
+        public MapConsole(GameRoot gameRoot, Texture2D spriteSheet, Texture2D asciiTexture, string title, int width, int height, ConsoleLocation location, BorderStyle border, Color borderColor) : 
+            base(gameRoot, asciiTexture, title, width, height, location, border, borderColor)
         {
-            var playerMapPosition = Globals.Map.PlayerMapPosition;
+            _gameRoot = gameRoot;
+            _map = gameRoot.Map;
+            _spriteSheet = spriteSheet;
+            var playerMapPosition = _map.PlayerMapPosition;
             var midX = Width/2;
             var midY = Height/2;
             if (playerMapPosition.X >= Width)
@@ -27,8 +33,8 @@ namespace RoguelikeGame
                 offset.Y = playerMapPosition.Y - midY;
             }
 
-            _debugRect = new Texture2D(Globals.GraphicsDevice, 1, 1);
-            _debugRect.SetData(new Color[] { Color.White });
+            //_debugRect = new Texture2D(_gameRoot.GraphicsDevice, 1, 1);
+            //_debugRect.SetData(new Color[] { Color.White });
         }
 
         public void CheckScrollMap(InputAction inputAction)
@@ -37,28 +43,28 @@ namespace RoguelikeGame
             if ((inputAction == InputAction.MOVE_RIGHT ||
                 inputAction == InputAction.MOVE_NE ||
                 inputAction == InputAction.MOVE_SE) 
-                && Width - Globals.Map.Player.MapX + offset.X  <= 5)
+                && Width - _map.Player.MapX + offset.X  <= 5)
             {
                 ScrollMap(Direction.RIGHT);
             }
             if ((inputAction == InputAction.MOVE_LEFT ||
                 inputAction == InputAction.MOVE_NW ||
                 inputAction == InputAction.MOVE_SW) &&
-                Globals.Map.Player.MapX - offset.X <= 5)
+                _map.Player.MapX - offset.X <= 5)
             {
                 ScrollMap(Direction.LEFT);
             }
             if ((inputAction == InputAction.MOVE_UP ||
                 inputAction == InputAction.MOVE_NW ||
                 inputAction == InputAction.MOVE_NE) &&
-                Globals.Map.Player.MapY - offset.Y <= 5)
+                _map.Player.MapY - offset.Y <= 5)
             {
                 ScrollMap(Direction.DOWN);
             }
             if ((inputAction == InputAction.MOVE_DOWN ||
                 inputAction == InputAction.MOVE_SW ||
                 inputAction == InputAction.MOVE_SE) &&
-                Height - Globals.Map.Player.MapY + offset.Y <= 5)
+                Height - _map.Player.MapY + offset.Y <= 5)
             {
                 ScrollMap(Direction.UP);
             }
@@ -74,11 +80,11 @@ namespace RoguelikeGame
                     break;
                 case Direction.RIGHT:
                     offset.X++;
-                    offset.X = Math.Min(offset.X, Globals.Map.Cols);
+                    offset.X = Math.Min(offset.X, _map.Cols);
                     break;
                 case Direction.UP:
                     offset.Y++;
-                    offset.Y = Math.Min(offset.Y, Globals.Map.Rows);
+                    offset.Y = Math.Min(offset.Y, _map.Rows);
                     break;
                 case Direction.DOWN:
                     offset.Y--;
@@ -89,32 +95,32 @@ namespace RoguelikeGame
             }
         }
 
-        public override void Draw()
+        public override void Draw(SpriteBatch spriteBatch)
         {
             int startX = (int)offset.X;
             int startY = (int)offset.Y;
             int endX = startX + Width;
-            if(endX > Globals.Map.Cols)
+            if(endX > _map.Cols)
             {
-                endX = Globals.Map.Cols;
+                endX = _map.Cols;
             }
             int endY = startY + Height;
-            if(endY > Globals.Map.Rows)
+            if(endY > _map.Rows)
             {
-                endY = Globals.Map.Rows;
+                endY = _map.Rows;
             }
             for (int y = startY; y < endY; y++)
             {
                 for (int x = startX; x < endX; x++)
                 {
-                    var tile = Globals.Map.GetTileAtIndex(x, y);
+                    var tile = _map.GetTileAtIndex(x, y);
                     if (!tile.Visible && !tile.Visited)
                     {
                         continue;
                     }
 
-                    Globals.SpriteBatch.Draw(Globals.SpriteSheet,
-                        (Position - offset + new Vector2(x, y)) * Globals.TILE_SIZE * Scale, 
+                    _gameRoot.SpriteBatch.Draw(_spriteSheet,
+                        (Position - offset + new Vector2(x, y)) * GameConstants.TILE_SIZE * Scale, 
                         tile.SourceRect,
                         tile.DisplayColor,
                         0f,
@@ -123,25 +129,25 @@ namespace RoguelikeGame
                         SpriteEffects.None,
                         0);
 
-                    if (Globals.Map.IsPlayerTile(x,y))
+                    if (_map.IsPlayerTile(x,y))
                     {
-                        var facing = Globals.Map.Player.Facing;
+                        var facing = _map.Player.Facing;
                         var flip = facing == Direction.RIGHT ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-                        Globals.SpriteBatch.Draw(Globals.SpriteSheet, 
-                            (Position - offset + new Vector2(x, y)) * Globals.TILE_SIZE * Scale,
-                            Globals.Map.Player.SourceRect,
-                            Globals.Map.Player.Color,
+                        spriteBatch.Draw(_spriteSheet, 
+                            (Position - offset + new Vector2(x, y)) * GameConstants.TILE_SIZE * Scale,
+                            _map.Player.SourceRect,
+                            _map.Player.Color,
                             0f,
                             Vector2.Zero,
                             Scale,
                             flip,
                             0);
                     }
-                    else if(Globals.Map.IsMonsterTile(x, y, out var m) && tile.Visible)
+                    else if(_map.IsMonsterTile(x, y, out var m) && tile.Visible)
                     {
                         var flip = m.Facing == Direction.RIGHT ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-                        Globals.SpriteBatch.Draw(Globals.SpriteSheet,
-                            (Position - offset + new Vector2(x, y)) * Globals.TILE_SIZE * Scale,
+                        spriteBatch.Draw(_spriteSheet,
+                            (Position - offset + new Vector2(x, y)) * GameConstants.TILE_SIZE * Scale,
                             m.SourceRect,
                             m.Color,
                             0f,
@@ -150,10 +156,10 @@ namespace RoguelikeGame
                             flip,
                             0);
                     }
-                    else if(Globals.Map.ContainsItem(x,y, out var item) && tile.Visible)
+                    else if(_map.ContainsItem(x,y, out var item) && tile.Visible)
                     {
-                        Globals.SpriteBatch.Draw(Globals.SpriteSheet,
-                            (Position - offset + new Vector2(x, y)) * Globals.TILE_SIZE * Scale,
+                        spriteBatch.Draw(_spriteSheet,
+                            (Position - offset + new Vector2(x, y)) * GameConstants.TILE_SIZE * Scale,
                             item.SourceRect,
                             item.Color,
                             0f,
@@ -173,7 +179,7 @@ namespace RoguelikeGame
                 }
             }
 
-            base.Draw();
+            base.Draw(spriteBatch);
         }
     }
 }
